@@ -42,7 +42,10 @@ jobs:
         run: cargo install dioxus-cli --version 0.7.6 --locked
 
       - name: Build
-        run: dx build --release --platform web --debug-symbols false
+        run: dx build --release --platform web --debug-symbols false --base-path /mamut-studio-pages
+
+      - name: Remove custom domain marker
+        run: rm -f target/dx/mamut-sint-hw/release/web/public/CNAME
 
       - name: Add SPA fallback
         run: cp target/dx/mamut-sint-hw/release/web/public/index.html target/dx/mamut-sint-hw/release/web/public/404.html
