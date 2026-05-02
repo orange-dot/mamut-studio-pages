@@ -1,0 +1,12 @@
+[application]
+name = "mamut-sint-hw"
+default_platform = "web"
+out_dir = "dist"
+asset_dir = "public"
+
+[web.app]
+title = "Mamut EPM"
+
+[web.watcher]
+reload_html = true
+watch_path = ["src", "public", "docs", "README.md"]

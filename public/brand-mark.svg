@@ -1,0 +1,42 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">mamut-studio hard minimal mammoth mark</title>
+  <desc id="desc">A front-facing, symmetrical, geometric mammoth logo with no trunk or inner detail, rendered as thin dark orange strokes on a pure black background.</desc>
+  <rect width="1024" height="1024" fill="#000000"/>
+
+  <g fill="none" stroke="#E65100" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Head contour: single outer silhouette only -->
+    <path d="
+      M 512 214
+      C 474 224, 438 238, 410 258
+      C 390 273, 379 297, 383 327
+      L 344 343
+      L 392 431
+      C 423 489, 450 548, 458 620
+    "/>
+
+    <path d="
+      M 512 214
+      C 550 224, 586 238, 614 258
+      C 634 273, 645 297, 641 327
+      L 680 343
+      L 632 431
+      C 601 489, 574 548, 566 620
+    "/>
+
+    <!-- Left tusk: controlled engineered arc -->
+    <path d="
+      M 408 492
+      C 366 546, 325 595, 279 612
+      C 244 624, 221 610, 215 580
+      C 205 527, 232 471, 304 417
+    "/>
+
+    <!-- Right tusk: mirrored -->
+    <path d="
+      M 616 492
+      C 658 546, 699 595, 745 612
+      C 780 624, 803 610, 809 580
+      C 819 527, 792 471, 720 417
+    "/>
+  </g>
+</svg>

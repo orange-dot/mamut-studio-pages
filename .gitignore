@@ -1,0 +1,61 @@
+# KiCad
+*.kicad_prl
+*.kicad_sch-bak
+*.kicad_pcb-bak
+*.bak
+*-backups/
+*.000
+*.001
+*.002
+*.003
+*.004
+*.005
+
+# SPICE / simulation outputs
+*.raw
+*.log
+*.out
+*.csv
+*.dat
+*.plt
+*.op.raw
+*.tran.raw
+*.ac.raw
+
+# Python
+__pycache__/
+*.pyc
+
+# Local env / editor noise
+.venv/
+.idea/
+.vscode/
+*~
+job-hunt/
+
+# Rust / Dioxus
+target/
+dist/
+tmp/
+
+# Pages-only repo excludes local lab and legacy deployment material.
+.codex
+.dockerignore
+.gcloudignore
+.playwright-mcp/
+Dockerfile
+Dockerfile.builder
+Makefile
+README.md
+nginx.conf
+bench/
+docs/
+hardware/
+k8s/
+models/
+notes/
+sim/
+tools/
+
+# Local reference material
+docs/modernC.pdf
