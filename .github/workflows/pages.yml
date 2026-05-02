@@ -39,7 +39,12 @@ jobs:
           key: cargo-${{ runner.os }}-${{ hashFiles('Cargo.lock') }}
 
       - name: Install Dioxus CLI
-        run: cargo install dioxus-cli --version 0.7.6 --locked --force
+        run: |
+          if command -v dx >/dev/null 2>&1 && dx --version | grep -q "0.7.6"; then
+            dx --version
+          else
+            cargo install dioxus-cli --version 0.7.6 --locked --force
+          fi
 
       - name: Build
         run: dx build --release --platform web --debug-symbols false --base-path /mamut-studio-pages
