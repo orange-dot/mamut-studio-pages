@@ -8,7 +8,7 @@ use dioxus::prelude::*;
 
 const SITE_NAME: &str = "Mamut EPM";
 const SITE_DESCRIPTION: &str = "Public home for Mamut EPM: play the current software instrument, read working notes, and track the hardware study path.";
-const SITE_BASE_URL: &str = "https://mamut-studio.com";
+const DEFAULT_SITE_BASE_URL: &str = "https://mamut-studio.com";
 const PREVIEW_IMAGE_PATH: &str = "/background-clean-final.png";
 const HERO_PREVIEW_STEPS: [(&str, bool); 16] = [
     ("C2", true),
@@ -293,7 +293,9 @@ fn PageFrame(title: String, description: String, current: Route, children: Eleme
     let og_description = description.clone();
     let twitter_description = description;
     let canonical_url = route_url(&current);
-    let preview_image = format!("{SITE_BASE_URL}{PREVIEW_IMAGE_PATH}");
+    let preview_image = format!("{}{}", site_base_url(), PREVIEW_IMAGE_PATH);
+    let stylesheet_path = public_path("site.css");
+    let brand_mark_path = public_path("brand-mark.svg");
 
     rsx! {
         document::Title { "{full_title}" }
@@ -317,8 +319,8 @@ fn PageFrame(title: String, description: String, current: Route, children: Eleme
             rel: "stylesheet",
             href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap",
         }
-        link { rel: "stylesheet", href: "/site.css" }
-        link { rel: "icon", href: "/brand-mark.svg", r#type: "image/svg+xml" }
+        link { rel: "stylesheet", href: "{stylesheet_path}" }
+        link { rel: "icon", href: "{brand_mark_path}", r#type: "image/svg+xml" }
 
         div { class: "page-shell",
             a { class: "skip-link", href: "#content", "Skip to content" }
@@ -332,11 +334,13 @@ fn PageFrame(title: String, description: String, current: Route, children: Eleme
 
 #[component]
 fn SiteHeader(current: Route) -> Element {
+    let brand_mark_path = public_path("brand-mark.svg");
+
     rsx! {
         header { class: "site-header",
             nav { class: "site-nav",
                 Link { class: "brand", to: Route::Home {},
-                    img { class: "brand-mark", src: "/brand-mark.svg", alt: "Mamut EPM mark" }
+                    img { class: "brand-mark", src: "{brand_mark_path}", alt: "Mamut EPM mark" }
                     div { class: "brand-copy",
                         span { class: "brand-kicker", "Current build" }
                         span { class: "brand-title", "{SITE_NAME}" }
@@ -681,7 +685,20 @@ fn route_path(route: &Route) -> String {
 }
 
 fn route_url(route: &Route) -> String {
-    format!("{SITE_BASE_URL}{}", route_path(route))
+    format!("{}{}", site_base_url(), route_path(route))
+}
+
+fn site_base_url() -> &'static str {
+    option_env!("MAMUT_SITE_BASE_URL").unwrap_or(DEFAULT_SITE_BASE_URL)
+}
+
+fn public_path(path: &str) -> String {
+    let base_path = option_env!("MAMUT_PUBLIC_BASE_PATH").unwrap_or("");
+    if base_path.is_empty() {
+        format!("/{path}")
+    } else {
+        format!("{}/{path}", base_path.trim_end_matches('/'))
+    }
 }
 
 fn hero_preview_step_class(index: usize, enabled: bool) -> &'static str {

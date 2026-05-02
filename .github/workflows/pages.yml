@@ -47,7 +47,7 @@ jobs:
           fi
 
       - name: Build
-        run: dx build --release --platform web --debug-symbols false --base-path /mamut-studio-pages
+        run: MAMUT_PUBLIC_BASE_PATH=/mamut-studio-pages dx build --release --platform web --debug-symbols false --base-path /mamut-studio-pages
 
       - name: Remove custom domain marker
         run: rm -f target/dx/mamut-sint-hw/release/web/public/CNAME
