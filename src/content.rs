@@ -90,6 +90,14 @@ pub struct AdjacentProject {
     pub bullets: &'static [&'static str],
 }
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub struct DrumEngineTrack {
+    pub title: &'static str,
+    pub url: &'static str,
+    pub note: &'static str,
+    pub track_id: &'static str,
+}
+
 pub const HERO: HeroContent = HeroContent {
     eyebrow: "Mamut EPM",
     title: "Current software instrument.",
@@ -259,6 +267,123 @@ pub const PC4_BRIDGE: AdjacentProject = AdjacentProject {
         "Dedicated infrastructure for the performance setup.",
     ],
 };
+
+pub const DRUM_ENGINE_FEATURED_TRACK_ID: &str = "2332273322";
+
+pub const DRUM_ENGINE_PRESET_CONTROLS: &[Stat] = &[
+    Stat {
+        label: "Tempo",
+        value: "143 BPM",
+    },
+    Stat {
+        label: "Chunk",
+        value: "4 bars",
+    },
+    Stat {
+        label: "Mode",
+        value: "Groove-led",
+    },
+    Stat {
+        label: "Energy",
+        value: "0.88",
+    },
+    Stat {
+        label: "Density",
+        value: "0.82",
+    },
+    Stat {
+        label: "Risk",
+        value: "0.95",
+    },
+    Stat {
+        label: "Fill",
+        value: "0.60",
+    },
+    Stat {
+        label: "Surface",
+        value: "0.80",
+    },
+    Stat {
+        label: "Humanize",
+        value: "0.42",
+    },
+    Stat {
+        label: "Timing",
+        value: "0.19",
+    },
+    Stat {
+        label: "Velocity",
+        value: "0.92",
+    },
+    Stat {
+        label: "Anti-repeat",
+        value: "0.90",
+    },
+    Stat {
+        label: "Loose",
+        value: "0.20",
+    },
+];
+
+pub const DRUM_ENGINE_EVIDENCE: &[LabCard] = &[
+    LabCard {
+        label: "Intent",
+        title: "ADG/AIG layer",
+        body: "The engine keeps groove intent and drummer behavior above raw MIDI events, then lowers the decision into a PC4-playable performance.",
+        detail: "Semantic groove representation before MIDI output.",
+    },
+    LabCard {
+        label: "Play",
+        title: "PC4 rig loop",
+        body: "The current operator path sends AIG/ADG drum decisions through mioXM to the Kurzweil PC4, then monitors the result through the Yamaha AG03 audio path.",
+        detail: "Local MIDI and audio playback tied to the real rig.",
+    },
+    LabCard {
+        label: "Authority",
+        title: "Manual corpus",
+        body: "The system treats selected manual material, live controls, traces, and comparisons as authority instead of presenting every variation as equally good.",
+        detail: "Profile-led and intake-led decisions remain inspectable.",
+    },
+    LabCard {
+        label: "Memory",
+        title: "Feedback loop",
+        body: "Training adjustments and comparison records let the drummer companion remember what worked without taking authorship away from the player.",
+        detail: "Learning is framed as correction and preference under player authority.",
+    },
+];
+
+pub const DRUM_ENGINE_TRACKS: &[DrumEngineTrack] = &[
+    DrumEngineTrack {
+        title: "jeans-instability-experiment-moises-ai-guitar-stem",
+        url: "https://soundcloud.com/mamut_studio/jeans-instability-experiment",
+        note: "Moises AI guitar stem experiment take.",
+        track_id: "2332306544",
+    },
+    DrumEngineTrack {
+        title: "jeans instability release candidate 1",
+        url: "https://soundcloud.com/mamut_studio/jeans-instability-release",
+        note: "Featured release candidate from the reference Drum Engine live set.",
+        track_id: DRUM_ENGINE_FEATURED_TRACK_ID,
+    },
+    DrumEngineTrack {
+        title: "jeans instability jam 3",
+        url: "https://soundcloud.com/mamut_studio/jeans-instability-jam-3",
+        note: "Later live jam take from the same public series.",
+        track_id: "2332264673",
+    },
+    DrumEngineTrack {
+        title: "Jeans Instability v2",
+        url: "https://soundcloud.com/mamut_studio/jeans-instability-v2",
+        note: "Earlier version with Moises AI bass track stem added.",
+        track_id: "2330361851",
+    },
+    DrumEngineTrack {
+        title: "Jeans Instability",
+        url: "https://soundcloud.com/mamut_studio/jeans-instability",
+        note: "Original organic take in the public SoundCloud set.",
+        track_id: "2318818655",
+    },
+];
 
 pub const BLOG_POSTS: &[BlogPost] = &[
     BlogPost {

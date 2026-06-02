@@ -1,13 +1,14 @@
 use crate::content::{
-    BLOG_INTRO, BLOG_POSTS, DOC_CATEGORIES, EPM2_PUBLIC_REPO_URL, HERO, HOME_FEATURES, LAB_INTRO,
-    LAB_NEXT_STEPS, LAB_RESULTS, LAB_STAGES, PC4_BRIDGE, PRODUCT_LINES, PRODUCTS_INTRO, RepoKind,
-    STATS, blog_post_by_slug, pc4_microkit_studio_url, repo_root_url, source_url,
+    BLOG_INTRO, BLOG_POSTS, DOC_CATEGORIES, DRUM_ENGINE_EVIDENCE, DRUM_ENGINE_FEATURED_TRACK_ID,
+    DRUM_ENGINE_PRESET_CONTROLS, DRUM_ENGINE_TRACKS, EPM2_PUBLIC_REPO_URL, HERO, HOME_FEATURES,
+    LAB_INTRO, LAB_NEXT_STEPS, LAB_RESULTS, LAB_STAGES, PC4_BRIDGE, PRODUCT_LINES, PRODUCTS_INTRO,
+    RepoKind, STATS, blog_post_by_slug, pc4_microkit_studio_url, repo_root_url, source_url,
 };
 use crate::play::PlayPage;
 use dioxus::prelude::*;
 
 const SITE_NAME: &str = "Mamut EPM";
-const SITE_DESCRIPTION: &str = "Public home for Mamut EPM: play the current software instrument, read working notes, and track the hardware study path.";
+const SITE_DESCRIPTION: &str = "Public home for Mamut EPM: play the current software instrument, read working notes, follow the Drum Engine case study, and track the hardware study path.";
 const DEFAULT_SITE_BASE_URL: &str = "https://mamut-studio.com";
 const PREVIEW_IMAGE_PATH: &str = "/background-clean-final.png";
 const HERO_PREVIEW_STEPS: [(&str, bool); 16] = [
@@ -49,6 +50,8 @@ pub enum Route {
     Docs {},
     #[route("/play")]
     Play {},
+    #[route("/drum-engine")]
+    DrumEngine {},
 }
 
 #[component]
@@ -77,6 +80,7 @@ fn Home() -> Element {
                 }
             }
             HomeUtilitySection {}
+            DrumEngineCaseSection {}
             AdjacentProjectSection {}
         }
     }
@@ -281,6 +285,148 @@ fn Play() -> Element {
 }
 
 #[component]
+fn DrumEngine() -> Element {
+    let soundcloud_embed_src = format!(
+        "https://w.soundcloud.com/player/?visual=true&url=https%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F{}&show_artwork=true",
+        DRUM_ENGINE_FEATURED_TRACK_ID
+    );
+    let featured_track = DRUM_ENGINE_TRACKS
+        .iter()
+        .find(|track| track.track_id == DRUM_ENGINE_FEATURED_TRACK_ID);
+
+    rsx! {
+        PageFrame {
+            title: "Authorial Drum Engine".to_string(),
+            description: "A portfolio case study for the PC4-playable Drum Engine: semantic ADG/AIG intent, responsive drummer behavior, MIDI output, and public listening evidence.".to_string(),
+            current: Route::DrumEngine {},
+            section { class: "drum-case-hero",
+                div { class: "section-copy",
+                    span { class: "eyebrow", "Portfolio case" }
+                    h1 { "Authorial Drum Engine" }
+                    p { class: "hero-body", "A responsive drummer engine for the PC4 rig: it keeps groove intent in an ADG/AIG layer, locks a performance posture, lowers it into MIDI, routes through mioXM, and is monitored through the Yamaha AG03 path." }
+                    p { class: "hero-status", "Drummer companion behavior: it proposes, remembers feedback, and keeps authorship with the person shaping the track." }
+                    div { class: "hero-actions",
+                        a {
+                            class: "button button-primary",
+                            href: "https://soundcloud.com/mamut_studio/jeans-instability-release",
+                            target: "_blank",
+                            rel: "noopener noreferrer",
+                            "Listen"
+                        }
+                        Link { class: "button button-secondary", to: Route::Play {}, "Open EPM play" }
+                    }
+                }
+                div { class: "drum-flow-panel",
+                    div { class: "card-topline", "Current loop" }
+                    h2 { "ADG/AIG to MIDI to PC4" }
+                    p { "The operator path starts from a drummer intent layer, resolves it through the active profile, exports MIDI events, routes them through mioXM to the Kurzweil PC4, and monitors the result through the Yamaha AG03 audio path." }
+                    div { class: "drum-flow-steps",
+                        article { class: "drum-flow-step",
+                            span { "Intent" }
+                            strong { "Groove shape" }
+                            p { "ADG/AIG keeps density, fill pressure, surface, timing feel, and drummer posture visible before note output." }
+                        }
+                        article { class: "drum-flow-step",
+                            span { "Profile" }
+                            strong { "Authority layer" }
+                            p { "The live preset and manual corpus steer how tightly the drummer locks in, adapts, and shapes fills." }
+                        }
+                        article { class: "drum-flow-step",
+                            span { "mioXM" }
+                            strong { "MIDI bridge" }
+                            p { "Generated note, velocity, timing, and fill decisions are lowered into MIDI and sent through the rig interface." }
+                        }
+                        article { class: "drum-flow-step",
+                            span { "PC4 + AG03" }
+                            strong { "Rig audition" }
+                            p { "The Kurzweil PC4 plays the take locally while the Yamaha AG03 path makes the performance chain audible and recordable." }
+                        }
+                    }
+                }
+            }
+
+            section { class: "drum-preset-section",
+                div { class: "section-copy",
+                    span { class: "section-kicker", "Reference live set" }
+                    h2 { "Reference live preset." }
+                    p { "These controls are the saved startup profile from the release-candidate flow, shown as implementation evidence for the PC4, mioXM, and Yamaha AG03 drummer workflow." }
+                }
+                div { class: "drum-control-grid",
+                    for control in DRUM_ENGINE_PRESET_CONTROLS {
+                        article { class: "drum-control-cell",
+                            span { class: "stat-label", "{control.label}" }
+                            strong { "{control.value}" }
+                        }
+                    }
+                }
+            }
+
+            section { class: "doc-category",
+                div { class: "section-copy",
+                    span { class: "section-kicker", "System shape" }
+                    h2 { "What the case demonstrates." }
+                    p { "The useful proof is vertical: semantic groove intent, hardware playback, manual authority, and feedback records all point at one drummer workflow." }
+                }
+                div { class: "drum-evidence-grid",
+                    for card in DRUM_ENGINE_EVIDENCE {
+                        article { class: "drum-evidence-card",
+                            div { class: "card-topline", "{card.label}" }
+                            h3 { "{card.title}" }
+                            p { "{card.body}" }
+                            div { class: "repo-meta",
+                                span { class: "repo-label", "Proof angle" }
+                                code { "{card.detail}" }
+                            }
+                        }
+                    }
+                }
+            }
+
+            section { class: "listen-section",
+                div { class: "section-copy",
+                    span { class: "section-kicker", "Listen" }
+                    h2 { "Public takes from the Drum Engine direction." }
+                    p { "The release candidate is embedded as the primary listening artifact. The rest of the series stays available as linked takes so the page remains fast and focused." }
+                }
+                div { class: "soundcloud-frame-shell",
+                    iframe {
+                        class: "soundcloud-frame",
+                        title: "SoundCloud player for jeans instability release candidate 1",
+                        src: "{soundcloud_embed_src}",
+                        allow: "autoplay"
+                    }
+                }
+                div { class: "track-list",
+                    for track in DRUM_ENGINE_TRACKS {
+                        article { class: "track-card",
+                            div { class: "card-topline",
+                                if track.track_id == DRUM_ENGINE_FEATURED_TRACK_ID {
+                                    "Featured"
+                                } else {
+                                    "SoundCloud"
+                                }
+                            }
+                            h3 { "{track.title}" }
+                            p { "{track.note}" }
+                            a {
+                                class: "source-link",
+                                href: "{track.url}",
+                                target: "_blank",
+                                rel: "noopener noreferrer",
+                                "Open track"
+                            }
+                        }
+                    }
+                }
+                if let Some(featured_track) = featured_track {
+                    p { class: "source-hint", "Featured source: {featured_track.url}" }
+                }
+            }
+        }
+    }
+}
+
+#[component]
 fn PageFrame(title: String, description: String, current: Route, children: Element) -> Element {
     let full_title = if title == SITE_NAME {
         SITE_NAME.to_string()
@@ -349,6 +495,7 @@ fn SiteHeader(current: Route) -> Element {
                 div { class: "nav-links",
                     Link { class: nav_link_class(&current, "home"), to: Route::Home {}, "Home" }
                     Link { class: nav_link_class(&current, "play"), to: Route::Play {}, "Play" }
+                    Link { class: nav_link_class(&current, "drums"), to: Route::DrumEngine {}, "Drums" }
                     Link { class: nav_link_class(&current, "notes"), to: Route::Notes {}, "Notes" }
                     Link { class: nav_link_class(&current, "lines"), to: Route::Lines {}, "Lines" }
                     Link { class: nav_link_class(&current, "lab"), to: Route::Lab {}, "Lab" }
@@ -363,6 +510,7 @@ fn nav_link_class(current: &Route, key: &str) -> &'static str {
     let active = match (key, current) {
         ("home", Route::Home {}) => true,
         ("play", Route::Play {}) => true,
+        ("drums", Route::DrumEngine {}) => true,
         ("notes", Route::Notes {} | Route::NotePost { .. }) => true,
         ("lines", Route::Lines {}) => true,
         ("lab", Route::Lab {}) => true,
@@ -374,6 +522,42 @@ fn nav_link_class(current: &Route, key: &str) -> &'static str {
         "nav-link is-active"
     } else {
         "nav-link"
+    }
+}
+
+#[component]
+fn DrumEngineCaseSection() -> Element {
+    rsx! {
+        section { class: "drum-engine-band",
+            div { class: "section-copy",
+                span { class: "section-kicker", "Hero case" }
+                h2 { "Authorial Drum Engine for the PC4 rig." }
+                p { "A separate PC4 Microkit Studio path now has a concrete drummer workflow: ADG/AIG intent, profile-led decisions, MIDI output through mioXM, PC4 playback, Yamaha AG03 monitoring, manual authority, and public listening artifacts." }
+                div { class: "utility-links",
+                    Link { class: "button button-primary", to: Route::DrumEngine {}, "Open Drum Engine" }
+                    a {
+                        class: "button button-secondary",
+                        href: "https://soundcloud.com/mamut_studio",
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        "Open SoundCloud"
+                    }
+                }
+            }
+            div { class: "drum-case-summary",
+                div { class: "card-topline", "Reference profile" }
+                h3 { "Jeans Instability release candidate" }
+                p { "143 BPM, four-bar chunks, groove-led mode, high energy, dense surface, and deliberate humanization. The controls are saved as an operator preset for the current PC4, mioXM, and AG03 drummer workflow." }
+                div { class: "drum-mini-controls",
+                    for control in DRUM_ENGINE_PRESET_CONTROLS.iter().take(6) {
+                        span {
+                            strong { "{control.value}" }
+                            small { "{control.label}" }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -681,6 +865,7 @@ fn route_path(route: &Route) -> String {
         Route::Lab {} => "/lab".to_string(),
         Route::Docs {} => "/docs".to_string(),
         Route::Play {} => "/play".to_string(),
+        Route::DrumEngine {} => "/drum-engine".to_string(),
     }
 }
 

@@ -360,7 +360,8 @@ p {
 .patch-card:hover,
 .seq-step:hover,
 .step-note-cycle:hover,
-.macro-step:hover {
+.macro-step:hover,
+.track-card:hover {
   transform: translateY(-1px);
   border-color: var(--accent-line);
 }
@@ -398,6 +399,12 @@ p {
 .detail-panel,
 .blog-card,
 .adjacent-card,
+.drum-case-summary,
+.drum-flow-panel,
+.drum-control-cell,
+.drum-evidence-card,
+.soundcloud-frame-shell,
+.track-card,
 .play-stat-card,
 .patch-card,
 .seq-step,
@@ -537,6 +544,10 @@ p {
 .signal-section,
 .utility-band,
 .adjacent-band,
+.drum-engine-band,
+.drum-case-hero,
+.drum-preset-section,
+.listen-section,
 .doc-category,
 .site-footer {
   padding: 1.25rem 0;
@@ -548,8 +559,16 @@ p {
 
 .signal-section,
 .utility-band,
-.adjacent-band {
+.adjacent-band,
+.drum-engine-band,
+.drum-case-hero,
+.drum-preset-section {
   grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  align-items: start;
+}
+
+.listen-section {
+  grid-template-columns: minmax(0, 0.62fr) minmax(320px, 0.92fr) minmax(280px, 0.7fr);
   align-items: start;
 }
 
@@ -574,6 +593,11 @@ p {
 .doc-grid,
 .products-grid,
 .blog-grid,
+.drum-mini-controls,
+.drum-flow-steps,
+.drum-control-grid,
+.drum-evidence-grid,
+.track-list,
 .post-shell,
 .play-shell,
 .play-grid,
@@ -604,12 +628,39 @@ p {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.drum-control-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.drum-evidence-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 0.25rem;
+}
+
+.drum-mini-controls {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.drum-flow-steps {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.track-list {
+  grid-template-columns: 1fr;
+}
+
 .feature-card,
 .doc-card,
 .product-card,
 .detail-panel,
 .blog-card,
-.adjacent-card {
+.adjacent-card,
+.drum-case-summary,
+.drum-flow-panel,
+.drum-control-cell,
+.drum-evidence-card,
+.soundcloud-frame-shell,
+.track-card {
   padding: 1rem;
   display: grid;
   gap: 0.72rem;
@@ -626,7 +677,8 @@ p {
 
 .blog-card p,
 .adjacent-card p,
-.patch-card p {
+.patch-card p,
+.track-card p {
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
@@ -643,11 +695,96 @@ p {
 .doc-card::before,
 .blog-card::before,
 .adjacent-card::before,
+.drum-case-summary::before,
+.drum-flow-panel::before,
+.drum-evidence-card::before,
+.track-card::before,
 .patch-card::before {
   content: "";
   width: 2.6rem;
   height: 2px;
   background: var(--accent);
+}
+
+.drum-case-hero h1 {
+  max-width: 12ch;
+}
+
+.drum-case-summary,
+.drum-flow-panel {
+  min-height: 100%;
+}
+
+.drum-mini-controls span,
+.drum-flow-step {
+  min-height: 4.1rem;
+  padding: 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.035);
+  display: grid;
+  gap: 0.28rem;
+  align-content: center;
+}
+
+.drum-mini-controls strong {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.drum-mini-controls small,
+.drum-flow-step span {
+  font-family: "IBM Plex Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  font-size: 0.6rem;
+  font-weight: 700;
+}
+
+.drum-flow-step {
+  min-height: 9.2rem;
+  align-content: start;
+  background: rgba(239, 108, 0, 0.11);
+}
+
+.drum-flow-step strong {
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.drum-flow-step p {
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.drum-control-cell {
+  min-height: 5.2rem;
+}
+
+.drum-control-cell strong {
+  font-size: 1.18rem;
+  line-height: 1.05;
+}
+
+.soundcloud-frame-shell {
+  padding: 0;
+  overflow: hidden;
+  min-height: 390px;
+}
+
+.soundcloud-frame {
+  display: block;
+  width: 100%;
+  min-height: 390px;
+  border: 0;
+  background: var(--surface-2);
+}
+
+.track-card {
+  transition:
+    transform 0.14s ease,
+    border-color 0.14s ease;
 }
 
 .product-header {
@@ -957,6 +1094,10 @@ p {
   .signal-section,
   .utility-band,
   .adjacent-band,
+  .drum-engine-band,
+  .drum-case-hero,
+  .drum-preset-section,
+  .listen-section,
   .play-hero,
   .play-grid {
     grid-template-columns: 1fr;
@@ -965,7 +1106,9 @@ p {
   .feature-grid,
   .products-grid,
   .blog-grid,
-  .play-patch-grid {
+  .play-patch-grid,
+  .drum-control-grid,
+  .drum-evidence-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -973,7 +1116,8 @@ p {
   .step-grid,
   .macro-grid,
   .hero-preview-ruler,
-  .hero-preview-grid {
+  .hero-preview-grid,
+  .drum-flow-steps {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
@@ -1028,6 +1172,10 @@ p {
   .play-patch-grid,
   .play-status-grid,
   .play-toolbar,
+  .drum-mini-controls,
+  .drum-control-grid,
+  .drum-evidence-grid,
+  .drum-flow-steps,
   .lane-ruler,
   .step-grid,
   .macro-grid,
