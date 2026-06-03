@@ -82,6 +82,13 @@ pub struct BlogPost {
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
+pub struct BlogPostSection {
+    pub title: &'static str,
+    pub body: &'static str,
+    pub bullets: &'static [&'static str],
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub struct AdjacentProject {
     pub kicker: &'static str,
     pub title: &'static str,
@@ -385,7 +392,66 @@ pub const DRUM_ENGINE_TRACKS: &[DrumEngineTrack] = &[
     },
 ];
 
+pub const DRUM_ENGINE_NOTE_SLUGS: &[&str] = &[
+    "drum-engine-companion",
+    "adg-aig-drum-language",
+    "pc4-drum-rig-flow",
+    "drum-engine-feedback-authority",
+];
+
 pub const BLOG_POSTS: &[BlogPost] = &[
+    BlogPost {
+        slug: "drum-engine-companion",
+        series: "Drum Engine",
+        title: "Drummer Companion",
+        intro: "The Drum Engine is the current PC4MS rhythm partner: semantic groove state, live controls, corpus authority, and hardware audition in one loop.",
+        body: "This note documents the product shape behind the Authorial Drum Engine case. The useful unit is a drummer companion that follows material, locks a performance posture, proposes drum behavior, and leaves the decision path inspectable.",
+        bullets: &[
+            "Starts from played material, profile law, and live controls.",
+            "Tracks groove state across chunks so the drummer can lock, adapt, and shape fills.",
+            "Uses the Jeans Instability reference preset as an operator-controlled starting point.",
+            "Keeps proposals tied to traces, generated MIDI, ADG events, and listening artifacts.",
+        ],
+    },
+    BlogPost {
+        slug: "adg-aig-drum-language",
+        series: "Drum Engine",
+        title: "ADG And AIG Drum Language",
+        intro: "ADG and AIG give the drummer workflow a semantic layer before MIDI: groove intent, gesture, surface, density, timing feel, and relation.",
+        body: "The language layer is the bridge between AI-human iteration and hardware playback. ADG keeps drum decisions readable as musical intent; MIDI remains the transport that makes those decisions playable on the current rig.",
+        bullets: &[
+            "AIG is the broader articulated instrument gesture frame.",
+            "ADG is the drum dialect for voice, gesture, contact, energy, role, timing, and relationship.",
+            "Generated MIDI is a lowering step from semantic drum decisions into the PC4-compatible performance path.",
+            "The useful proof is whether semantic edits survive into audible groove changes.",
+        ],
+    },
+    BlogPost {
+        slug: "pc4-drum-rig-flow",
+        series: "Drum Engine",
+        title: "PC4 Drum Rig Flow",
+        intro: "The current rig flow connects the Drum Engine to real hardware: ADG/AIG decisions become MIDI, route through mioXM, play the Kurzweil PC4, and return through Yamaha AG03 monitoring.",
+        body: "This note documents the local performance chain used by the Drum Engine case. The site presents the workflow as a hardware-backed loop because the drum decisions are judged through the same studio path used for the public takes.",
+        bullets: &[
+            "Operator controls shape the live profile and generated drum decision.",
+            "AIG/ADG events lower into MIDI note, velocity, timing, and fill behavior.",
+            "mioXM carries the MIDI path into the Kurzweil PC4.",
+            "Yamaha AG03 monitoring and recording make the result audible as a performance artifact.",
+        ],
+    },
+    BlogPost {
+        slug: "drum-engine-feedback-authority",
+        series: "Drum Engine",
+        title: "Feedback And Authority",
+        intro: "The Drum Engine keeps authorship visible through manual corpus authority, live groove state, traces, comparison records, and training adjustments.",
+        body: "This note documents how feedback becomes system state. The important behavior is that the drummer companion can remember correction and preference while keeping the player in charge of what counts as a better take.",
+        bullets: &[
+            "Manual corpus authority gives selected material more weight than arbitrary variation.",
+            "LiveGrooveState carries locked density, energy, accent cells, coupling, and phase across chunks.",
+            "Training feedback and comparison records preserve why a take was accepted, rejected, or revised.",
+            "Traces and generated artifacts keep the loop inspectable after listening.",
+        ],
+    },
     BlogPost {
         slug: "core-stance",
         series: "Direction",
@@ -689,6 +755,172 @@ pub const DOC_CATEGORIES: &[DocCategory] = &[
 pub fn blog_post_by_slug(slug: &str) -> Option<BlogPost> {
     BLOG_POSTS.iter().copied().find(|post| post.slug == slug)
 }
+
+pub fn blog_post_sections(slug: &str) -> &'static [BlogPostSection] {
+    match slug {
+        "drum-engine-companion" => DRUM_ENGINE_COMPANION_SECTIONS,
+        "adg-aig-drum-language" => ADG_AIG_DRUM_LANGUAGE_SECTIONS,
+        "pc4-drum-rig-flow" => PC4_DRUM_RIG_FLOW_SECTIONS,
+        "drum-engine-feedback-authority" => DRUM_ENGINE_FEEDBACK_AUTHORITY_SECTIONS,
+        _ => &[],
+    }
+}
+
+pub const DRUM_ENGINE_COMPANION_SECTIONS: &[BlogPostSection] = &[
+    BlogPostSection {
+        title: "Product surface",
+        body: "The current product surface is a responsive drummer companion for the PC4MS rig. It listens to material and live controls, then proposes drummer behavior that can be accepted, corrected, or revised.",
+        bullets: &[
+            "The musician remains the author of the track and the take.",
+            "The engine contributes groove behavior, performance posture, and repeatable artifacts.",
+            "The case lives beside EPM because the rig, MIDI, and hardware playback are part of the same studio practice.",
+        ],
+    },
+    BlogPostSection {
+        title: "Implementation nucleus",
+        body: "`crates/drum-engine` already has the center of gravity for this story: profile-led, groove-led, and intake-led modes; live chunk requests; generated MIDI events; ADG gestures; traces; and training records.",
+        bullets: &[
+            "Profile-led behavior gives the drummer a stable identity.",
+            "Intake-led behavior lets captured or played material influence the next drum decision.",
+            "Groove-led behavior blends profile and intake while preserving a performance center.",
+        ],
+    },
+    BlogPostSection {
+        title: "Reference live preset",
+        body: "The Jeans Instability reference preset gives the page a concrete operator state: 143 BPM, four-bar chunks, high energy, dense surface, deliberate humanization, anti-repeat, and controlled looseness.",
+        bullets: &[
+            "The preset is shown as operator evidence, not a generic product setting.",
+            "The same values connect the case page, the public take, and the PC4MS workbench flow.",
+            "The point is repeatable listening context: same rig, same controls, same performance target.",
+        ],
+    },
+    BlogPostSection {
+        title: "Vertical proof",
+        body: "The useful proof is one vertical path rather than a wide feature list: semantic intent, profile authority, generated MIDI, hardware playback, listening evidence, and feedback memory.",
+        bullets: &[
+            "A short public take is more useful here than a broad catalogue of possible features.",
+            "The page should make the reader understand how the drummer decision reaches the rig.",
+            "Follow-up work can deepen this vertical with stronger traces, exports, and A/B listening evidence.",
+        ],
+    },
+];
+
+pub const ADG_AIG_DRUM_LANGUAGE_SECTIONS: &[BlogPostSection] = &[
+    BlogPostSection {
+        title: "Semantic layer",
+        body: "AIG is the general articulated gesture frame. ADG is the drum dialect used to describe drum behavior before it is lowered into transport events.",
+        bullets: &[
+            "The data can carry voice, gesture, energy, timing feel, surface, and phrase role.",
+            "The format gives AI-human iteration a readable object to revise.",
+            "The drummer workflow can preserve intent while changing local output details.",
+        ],
+    },
+    BlogPostSection {
+        title: "Drum gesture fields",
+        body: "ADG gives drum decisions names that match musical work: anchors, ghosts, fills, surfaces, timing feel, density, contact, and relationships between kit elements.",
+        bullets: &[
+            "Kick and snare can carry anchor behavior while hats carry surface and motion.",
+            "Fill pressure and density can change without flattening the entire pattern into louder hits.",
+            "Timing feel can be represented as phrase behavior before it becomes MIDI ticks.",
+        ],
+    },
+    BlogPostSection {
+        title: "Lowering to MIDI",
+        body: "The current rig still needs MIDI because the Kurzweil PC4 is the playback target. The important design choice is that MIDI is produced from semantic drum decisions.",
+        bullets: &[
+            "ADG keeps the authored decision readable.",
+            "Generated MIDI makes the decision playable on the current hardware.",
+            "Trace artifacts connect the high-level decision to the low-level event output.",
+        ],
+    },
+    BlogPostSection {
+        title: "AI-human iteration",
+        body: "The reason to keep ADG/AIG visible is iteration. A player or agent can ask for a tighter lock, more open surface, lower fill pressure, or a different phrase relation while preserving the take identity.",
+        bullets: &[
+            "The edit target is musical language rather than only individual note edits.",
+            "The same representation can drive comparison, training, and future export views.",
+            "The current site should present this as a working language layer, not a completed standard.",
+        ],
+    },
+];
+
+pub const PC4_DRUM_RIG_FLOW_SECTIONS: &[BlogPostSection] = &[
+    BlogPostSection {
+        title: "Operator path",
+        body: "The operator path begins with live controls and a drummer profile. It resolves a drum decision, exports MIDI events, and sends the result through the local hardware chain.",
+        bullets: &[
+            "Live controls shape energy, density, risk, fill pressure, surface, humanization, and looseness.",
+            "The profile and manual corpus provide taste boundaries.",
+            "The exported MIDI carries note, velocity, timing, and fill behavior into the rig.",
+        ],
+    },
+    BlogPostSection {
+        title: "Hardware chain",
+        body: "The current chain is ADG/AIG decision to MIDI, mioXM for MIDI routing, Kurzweil PC4 for playback, and Yamaha AG03 for monitoring and recording.",
+        bullets: &[
+            "mioXM is part of the rig because it turns the generated MIDI into a hardware route.",
+            "The PC4 is the audible instrument for this drummer workflow.",
+            "The AG03 gives the workflow a consistent monitoring and capture path.",
+        ],
+    },
+    BlogPostSection {
+        title: "Listening evidence",
+        body: "The SoundCloud takes are listening artifacts for this rig direction. They make the case inspectable by ear while the code and traces preserve the implementation path.",
+        bullets: &[
+            "The release candidate is the featured take for the case page.",
+            "Related takes show nearby experiments and revisions.",
+            "The public page should keep one embed and a concise track list so the reader stays focused.",
+        ],
+    },
+    BlogPostSection {
+        title: "What the flow proves",
+        body: "The flow proves that the Drum Engine is connected to the studio setup: semantic drum decisions can become a PC4 performance and can be heard through the same local chain used for the published artifacts.",
+        bullets: &[
+            "The implementation story is hardware-backed.",
+            "The output path is specific enough to reproduce locally.",
+            "The site can present the rig as part of the creative system rather than a footnote.",
+        ],
+    },
+];
+
+pub const DRUM_ENGINE_FEEDBACK_AUTHORITY_SECTIONS: &[BlogPostSection] = &[
+    BlogPostSection {
+        title: "Manual corpus authority",
+        body: "Manual corpus authority gives selected material and decisions weight. That lets the drummer companion treat chosen references as stronger evidence than random variation.",
+        bullets: &[
+            "The corpus can steer repeat reduction, event selection, and local law.",
+            "The authority layer connects listening judgment to future generation.",
+            "The site should describe this as taste memory under player control.",
+        ],
+    },
+    BlogPostSection {
+        title: "Live groove state",
+        body: "LiveGrooveState carries groove memory between chunks: locked density, velocity energy, accent cells, coupling, confidence, and the current response phase.",
+        bullets: &[
+            "Learning chunks can observe the material.",
+            "Locked chunks can preserve the groove identity.",
+            "Higher-energy variation can happen while the locked groove remains the reference.",
+        ],
+    },
+    BlogPostSection {
+        title: "Training records",
+        body: "Training feedback records and comparison records preserve what the player preferred and why. That makes future revisions more grounded than a one-off random take.",
+        bullets: &[
+            "Feedback can target a whole take, ADG event, bass event, or comparison side.",
+            "Comparison records preserve winner, confidence, artifact refs, and diff summary.",
+            "Training adjustments remain profile-scoped so taste changes do not leak across unrelated drummer identities.",
+        ],
+    },
+    BlogPostSection {
+        title: "Inspectable loop",
+        body: "The loop is strongest when every audible result can be traced back through profile, live controls, ADG events, generated MIDI, and feedback records.",
+        bullets: &[
+            "Traces support debugging and musical review.",
+            "Generated artifacts make audition and comparison repeatable.",
+            "The player stays able to correct the drummer without losing the history of the take.",
+        ],
+    },
+];
 
 fn configured_url(value: Option<&'static str>) -> Option<&'static str> {
     value.and_then(|value| {

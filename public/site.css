@@ -847,6 +847,25 @@ p {
   font-size: 1.5rem;
 }
 
+.post-section {
+  display: grid;
+  gap: 0.65rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line);
+}
+
+.post-section:first-of-type {
+  margin-top: 0.3rem;
+}
+
+.post-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line);
+}
+
 .footer-inner {
   display: flex;
   align-items: flex-start;

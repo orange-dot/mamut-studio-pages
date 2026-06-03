@@ -1,8 +1,9 @@
 use crate::content::{
     BLOG_INTRO, BLOG_POSTS, DOC_CATEGORIES, DRUM_ENGINE_EVIDENCE, DRUM_ENGINE_FEATURED_TRACK_ID,
-    DRUM_ENGINE_PRESET_CONTROLS, DRUM_ENGINE_TRACKS, EPM2_PUBLIC_REPO_URL, HERO, HOME_FEATURES,
-    LAB_INTRO, LAB_NEXT_STEPS, LAB_RESULTS, LAB_STAGES, PC4_BRIDGE, PRODUCT_LINES, PRODUCTS_INTRO,
-    RepoKind, STATS, blog_post_by_slug, pc4_microkit_studio_url, repo_root_url, source_url,
+    DRUM_ENGINE_NOTE_SLUGS, DRUM_ENGINE_PRESET_CONTROLS, DRUM_ENGINE_TRACKS, EPM2_PUBLIC_REPO_URL,
+    HERO, HOME_FEATURES, LAB_INTRO, LAB_NEXT_STEPS, LAB_RESULTS, LAB_STAGES, PC4_BRIDGE,
+    PRODUCT_LINES, PRODUCTS_INTRO, RepoKind, STATS, blog_post_by_slug, blog_post_sections,
+    pc4_microkit_studio_url, repo_root_url, source_url,
 };
 use crate::play::PlayPage;
 use dioxus::prelude::*;
@@ -116,6 +117,9 @@ fn NotePost(slug: String) -> Element {
     let description = post
         .map(|post| post.body.to_string())
         .unwrap_or_else(|| "Requested note was not found.".to_string());
+    let sections = post
+        .map(|post| blog_post_sections(post.slug))
+        .unwrap_or(&[]);
 
     rsx! {
         PageFrame {
@@ -133,10 +137,29 @@ fn NotePost(slug: String) -> Element {
                     article { class: "detail-panel post-panel",
                         div { class: "card-topline", "{post.series}" }
                         p { "{post.body}" }
+                        if !sections.is_empty() {
+                            for section in sections {
+                                section { class: "post-section",
+                                    h2 { "{section.title}" }
+                                    p { "{section.body}" }
+                                    ul {
+                                        for bullet in section.bullets {
+                                            li { "{bullet}" }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         h2 { "Key points" }
                         ul {
                             for bullet in post.bullets {
                                 li { "{bullet}" }
+                            }
+                        }
+                        if post.series == "Drum Engine" {
+                            div { class: "post-actions",
+                                Link { class: "button button-primary", to: Route::DrumEngine {}, "Open Drum Engine case" }
+                                Link { class: "button button-secondary", to: Route::Notes {}, "All notes" }
                             }
                         }
                     }
@@ -382,6 +405,8 @@ fn DrumEngine() -> Element {
                 }
             }
 
+            DrumEngineNotesSection {}
+
             section { class: "listen-section",
                 div { class: "section-copy",
                     span { class: "section-kicker", "Listen" }
@@ -420,6 +445,26 @@ fn DrumEngine() -> Element {
                 }
                 if let Some(featured_track) = featured_track {
                     p { class: "source-hint", "Featured source: {featured_track.url}" }
+                }
+            }
+        }
+    }
+}
+
+#[component]
+fn DrumEngineNotesSection() -> Element {
+    rsx! {
+        section { class: "doc-category",
+            div { class: "section-copy",
+                span { class: "section-kicker", "Lab notes" }
+                h2 { "Read the implementation trail." }
+                p { "These notes expand the Drum Engine case into the product frame, ADG/AIG language, hardware rig flow, and feedback authority loop." }
+            }
+            div { class: "doc-grid",
+                for slug in DRUM_ENGINE_NOTE_SLUGS {
+                    if let Some(post) = blog_post_by_slug(slug) {
+                        BlogCardView { post }
+                    }
                 }
             }
         }
