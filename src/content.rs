@@ -85,10 +85,19 @@ pub struct BlogPost {
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
+pub struct CodeExample {
+    pub label: &'static str,
+    pub source_path: &'static str,
+    pub language: &'static str,
+    pub code: &'static str,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub struct BlogPostSection {
     pub title: &'static str,
     pub body: &'static str,
     pub bullets: &'static [&'static str],
+    pub examples: &'static [CodeExample],
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -116,25 +125,6 @@ pub const HERO: HeroContent = HeroContent {
     primary_cta: "Play EPM1",
     secondary_cta: "Hear drums",
 };
-
-pub const STATS: &[Stat] = &[
-    Stat {
-        label: "EPM1",
-        value: "Browser + desktop runtime",
-    },
-    Stat {
-        label: "Drums",
-        value: "ADG/AIG to MIDI to PC4",
-    },
-    Stat {
-        label: "PC4MS",
-        value: "mioXM + AG03 rig flow",
-    },
-    Stat {
-        label: "EPM2",
-        value: "Hardware study and bench",
-    },
-];
 
 pub const HOME_WORK_AREAS: &[HomeWorkArea] = &[
     HomeWorkArea {
@@ -265,7 +255,7 @@ pub const PRODUCT_LINES: &[ProductLine] = &[
         title: "Software runtime",
         summary: "Rust runtime for the current software instrument: standalone play, factory patches, live-set behavior, and PC4-oriented MIDI work.",
         status: "Active: runnable software instrument",
-        repo_path: "/home/dev/sel4/mamut-sint-sw",
+        repo_path: "mamut-sint-sw",
         repo: RepoKind::Epm1,
         bullets: &[
             "Core workspace is in place: params, patch, identity, DSP, engine, and standalone.",
@@ -279,7 +269,7 @@ pub const PRODUCT_LINES: &[ProductLine] = &[
         title: "Hardware track",
         summary: "Hardware path for the later physical instrument: desktop analog poly direction, digital control work, simulation, KiCad, and bench notes.",
         status: "Early study, capture, and bench-prep",
-        repo_path: "/home/dev/sel4/mamut-sint-hw",
+        repo_path: "mamut-sint-hw",
         repo: RepoKind::Epm2,
         bullets: &[
             "Desktop analog poly direction with an external MIDI controller.",
@@ -300,7 +290,7 @@ pub const PC4_BRIDGE: AdjacentProject = AdjacentProject {
     kicker: "Related repo",
     title: "PC4 Microkit Studio",
     summary: "A separate repo for PC4 rig integration, playback control, session logs, and local-first flow around the performance setup.",
-    repo_path: "/home/dev/sel4/pc4-microkit-studio",
+    repo_path: "pc4-microkit-studio",
     bullets: &[
         "Keeps rig orchestration and session files outside the instrument repo.",
         "Covers playback control, musical control boundaries, and hardware bench workflow around the PC4 setup.",
@@ -437,52 +427,52 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         slug: "drum-engine-companion",
         series: "Drum Engine",
         title: "Drummer Companion",
-        intro: "The Drum Engine is the current PC4MS rhythm partner: groove state, live controls, selected material, and hardware playback in one loop.",
-        body: "This note follows the Authorial Drum Engine case: a drummer companion listens to the material, locks a posture, shapes drum behavior, and keeps the player in control.",
+        intro: "The Drum Engine is the current PC4MS rhythm partner: PC4 live intake, reactive groove state, selected material, generated drum MIDI, and hardware playback in one loop.",
+        body: "This note follows drum-live-1780432493944, the Jeans release-candidate take. The drummer reads the PC4 performance, keeps the groove decision in ADG/AIG, lowers the part to MIDI, routes it through mioXM to the Kurzweil PC4, and returns the session through the AG03/AG06 path.",
         bullets: &[
-            "Starts from played material, profile law, and live controls.",
-            "Tracks groove state across chunks so the drummer can lock, adapt, and shape fills.",
-            "Uses the Jeans Instability reference preset as a player-controlled starting point.",
-            "Keeps generated MIDI, ADG events, and listening references tied to the take.",
+            "Uses the Jeans release-candidate take: 6:50.805 of 96 kHz stereo 24-bit PCM audio.",
+            "Starts from PC4 live MIDI intake through mioXM, including 4416 captured events for the release candidate pass.",
+            "Connects the 143 BPM Groove-led Reference live preset to the Jeans 11/8 PC4 rig.",
+            "Keeps the generated MIDI, AIG/ADG decision layer, PC4 playback, AG03 capture, and SoundCloud listening reference tied to one take.",
         ],
     },
     BlogPost {
         slug: "adg-aig-drum-language",
         series: "Drum Engine",
         title: "ADG And AIG Drum Language",
-        intro: "ADG/AIG holds the drum decision before MIDI: groove intent, gesture, surface, density, timing feel, and relation.",
-        body: "ADG keeps drum decisions readable as musical intent. MIDI is the transport that makes those decisions playable on the current rig.",
+        intro: "ADG/AIG holds the drum decision before MIDI: groove intent, gesture role, surface, density, timing feel, and phrase relation.",
+        body: "AIG is the wider gesture frame. ADG is the drum dialect used by the current reactive drummer. MIDI is the transport step that makes the decision playable on the Kurzweil PC4 through mioXM and audible through the AG03/AG06 path.",
         bullets: &[
-            "AIG is the broader articulated instrument gesture frame.",
-            "ADG is the drum dialect for voice, gesture, contact, energy, role, timing, and relationship.",
-            "Generated MIDI is a lowering step from ADG drum decisions into the PC4-compatible performance path.",
-            "The practical test is whether ADG edits survive into audible groove changes.",
+            "AIG carries articulated instrument gestures and traceable musical decisions.",
+            "ADG is the drum dialect for role, kind, surface, density, contact, timing, phrase role, variation identity, relationships, and protection flags.",
+            "Generated MIDI carries note, channel, tick, gate, and velocity for the PC4.",
+            "The release candidate keeps the player's timing and the drummer response tied to the same rig pass.",
         ],
     },
     BlogPost {
         slug: "pc4-drum-rig-flow",
         series: "Drum Engine",
         title: "PC4 Drum Rig Flow",
-        intro: "The current rig flow connects the Drum Engine to hardware: ADG/AIG decisions become MIDI, mioXM routes them, the Kurzweil PC4 plays, and Yamaha AG03 monitoring returns the sound.",
-        body: "This note describes the local performance chain used by the Drum Engine case. Drum decisions are judged through the same studio path used for the public takes.",
+        intro: "PC4 Drum Rig Flow follows the live path: ADG/AIG becomes generated MIDI, mioXM carries it to the Kurzweil PC4, and AG03/AG06 monitoring returns the take.",
+        body: "This note stays on the bench chain used for the Drum Engine takes. The same PC4, mioXM, and AG03/AG06 route is used for listening and for judging corrections.",
         bullets: &[
-            "Player controls shape the live profile and generated drum decision.",
-            "AIG/ADG events lower into MIDI note, velocity, timing, and fill behavior.",
-            "mioXM carries the MIDI path into the Kurzweil PC4.",
-            "Yamaha AG03 monitoring and recording make the result audible as a performance.",
+            "Live controls set the drummer posture before the generated part is lowered to MIDI.",
+            "mioXM carries both the PC4 intake and the generated drum output.",
+            "The PC4 plays the generated drums; AG03/AG06 brings the audio back into the session.",
+            "SoundCloud references point to takes from that chain.",
         ],
     },
     BlogPost {
         slug: "drum-engine-feedback-taste-memory",
         series: "Drum Engine",
         title: "Feedback And Taste Memory",
-        intro: "The Drum Engine keeps authorship visible through manual corpus selection, live groove state, comparison notes, and training adjustments.",
-        body: "This note describes how feedback becomes session memory. The drummer companion remembers correction and preference while the player decides what counts as a better take.",
+        intro: "Feedback And Taste Memory follows what happens after listening: selected material, accepted takes, rejected takes, and correction notes feed the next drummer pass.",
+        body: "This note keeps the feedback story close to the session. The player chooses the material, hears the PC4 take, and records what should stay or change.",
         bullets: &[
-            "Manual corpus selection gives chosen material more weight than arbitrary variation.",
+            "Manual corpus selection weights chosen material for the next pass.",
             "LiveGrooveState carries locked density, energy, accent cells, coupling, and phase across chunks.",
-            "Training feedback and comparison records preserve why a take was accepted, rejected, or revised.",
-            "Generated MIDI and source notes keep the loop readable after listening.",
+            "Comparison records mark which take won and why.",
+            "Training adjustments change priorities, density, fill pressure, surface brightness, and bass coupling.",
         ],
     },
     BlogPost {
@@ -799,159 +789,833 @@ pub fn blog_post_sections(slug: &str) -> &'static [BlogPostSection] {
     }
 }
 
+pub const NO_CODE_EXAMPLES: &[CodeExample] = &[];
+
+pub const DRUM_ENGINE_RELEASE_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "Take metadata excerpt",
+    source_path: "session-store/workbench-session/take-metadata/drum-live-1780432493944.json",
+    language: "json",
+    code: r#"{
+  "take_id": "drum-live-1780432493944",
+  "kind": "LivePass",
+  "wav_file": "drum-live-1780432493944.wav",
+  "rig_target": "Kurzweil PC4",
+  "midi_output": "hw:CARD=mioXM,DEV=0",
+  "audio_input": "hw:CARD=AG06AG03,DEV=0",
+  "section_id": "intro",
+  "section_name": "Intro",
+  "summary": "Drum Engine live performance for Aksak Cocek / Intro"
+}"#,
+}];
+
+pub const DRUM_ENGINE_INTAKE_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "Live MIDI intake excerpt",
+    source_path: "session-store/workbench-session/midi-performance-takes/drum-live-1780432493944.json",
+    language: "json",
+    code: r#"{
+  "take_id": "drum-live-1780432493944",
+  "midi_input": "hw:CARD=mioXM,DEV=0",
+  "rig_target": "Kurzweil PC4",
+  "event_count": 4416,
+  "events": [
+    { "offset_millis": 1, "bytes": [145, 48, 94] },
+    { "offset_millis": 1, "bytes": [129, 36, 47] },
+    { "offset_millis": 1, "bytes": [145, 36, 63] }
+  ]
+}"#,
+}];
+
+pub const JEANS_PROFILE_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "Profile definition excerpt; defaults are profile fallback values",
+    source_path: "support/drum-engine/profiles/jeans_11_8.toml",
+    language: "toml",
+    code: r#"profile_id = "jeans_11_8"
+name = "Jeans Instability 11/8 Groove-Led Drummer"
+ppqn = 480
+output_channel = 9
+
+[meter]
+numerator = 11
+denominator = 8
+grouping = [2, 2, 3, 2, 2]
+
+[defaults]
+energy = 0.58
+density = 0.46
+risk = 0.62
+fill_pressure = 0.42
+surface_brightness = 0.54
+
+[[midi_map]]
+role = "kick"
+kind = "anchor"
+instrument = "BassDrum1"
+note = 36
+min_velocity = 72
+max_velocity = 116
+duration_ticks = 120
+priority = 100"#,
+}];
+
+pub const AIG_ADG_CHAIN_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "AIG frame to ADG drum answer",
+    source_path: "curated ADG/AIG sketch before MIDI lowering",
+    language: "rust",
+    code: r#"let intake_phrase = AigGestureFrame {
+    source: "PC4 live intake",
+    beat: 6.5,
+    strength: 0.84,
+    density: 0.82,
+    relation: "answers the long 3 group",
+};
+
+let drum_answer = AdgGesture {
+    id: "ride_pressure_06".to_string(),
+    tick: beat_to_tick(intake_phrase.beat, profile.ppqn),
+    role: AdgRole::Ride,
+    kind: AdgKind::Pressure,
+    strength: intake_phrase.strength,
+    duration_ticks: 120,
+    body: 0.42,
+    transient: 0.66,
+    openness: 0.38,
+    density: intake_phrase.density,
+    micro_offset_ticks: -6,
+    velocity_delta: 4,
+    protect_timing: true,
+    protect_anchor: true,
+    phrase_role: Some("long-group answer".to_string()),
+    variation_seed: 1780432493944,
+    variation_group: Some("jeans_11_8_surface".to_string()),
+    surface_touch: Some(SurfaceTouch {
+        attack_hint: SurfaceAttackHint::Accent,
+        connection: SurfaceConnection::Connected,
+        release_velocity: 34,
+    }),
+    reason: "answers PC4 intake density".to_string(),
+};"#,
+}];
+
+pub const ADG_EVENT_EXAMPLES: &[CodeExample] = &[
+    CodeExample {
+        label: "ADG event before MIDI lowering",
+        source_path: "derived example from the Jeans 11/8 reactive drummer",
+        language: "adg",
+        code: r#"ADGEvent {
+  beat: 6.5,
+  role: "ride",
+  kind: "pressure",
+  strength: 0.84,
+  surface: "right-hand",
+  phrase_role: "long-group answer",
+  protects: ["anchor", "timing"],
+  relation: "answers PC4 intake density"
+}"#,
+    },
+    CodeExample {
+        label: "ADG gesture object",
+        source_path: "curated Rust sketch from crates/drum-engine/src/lib.rs",
+        language: "rust",
+        code: r#"AdgGesture {
+    id: "snare_ghost_09".to_string(),
+    tick: 1440,
+    role: AdgRole::Snare,
+    kind: AdgKind::Ghost,
+    strength: 0.36,
+    duration_ticks: 90,
+    body: 0.20,
+    transient: 0.54,
+    openness: 0.08,
+    density: 0.58,
+    micro_offset_ticks: 11,
+    velocity_delta: -8,
+    protect_timing: false,
+    protect_anchor: false,
+    phrase_role: Some("inside-motion".to_string()),
+    variation_seed: 41,
+    variation_group: Some("jeans_ghost_motion".to_string()),
+    surface_touch: None,
+    reason: "keeps motion under the PC4 phrase".to_string(),
+}"#,
+    },
+];
+
+pub const ADG_RELATION_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "Intake pressure to ADG relation",
+    source_path: "curated Rust sketch from the reactive drummer",
+    language: "rust",
+    code: r#"let kind = if intake.density > groove.locked_density + 0.12 {
+    AdgKind::Pressure
+} else {
+    AdgKind::Breath
+};
+
+let role = match intake.dominant_register {
+    RegisterBand::Low => AdgRole::Tom,
+    RegisterBand::High => AdgRole::Ride,
+    _ => AdgRole::Hat,
+};
+
+let response = AdgGesture {
+    role,
+    kind,
+    strength: intake.velocity_energy.clamp(0.34, 0.92),
+    density: intake.density,
+    protect_anchor: groove.phase == LiveGroovePhase::Locked,
+    phrase_role: Some("answers intake pressure".to_string()),
+    reason: "player pushed density in the PC4 intake".to_string(),
+    ..adg_defaults("intake_answer")
+};"#,
+}];
+
+pub const ADG_CORRECTION_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "Player correction before MIDI",
+    source_path: "curated Rust sketch from feedback controls",
+    language: "rust",
+    code: r#"match correction {
+    PlayerCorrection::LessFillPressure => {
+        for event in adg_events.iter_mut() {
+            if matches!(event.role, AdgRole::Tom | AdgRole::Crash) {
+                event.strength *= 0.72;
+                event.density *= 0.68;
+                event.reason.push_str("; fill pressure reduced after listening");
+            }
+        }
+    }
+    PlayerCorrection::TighterAnchor => {
+        for event in adg_events.iter_mut() {
+            if matches!(
+                (event.role, event.kind),
+                (AdgRole::Kick, AdgKind::Anchor)
+                    | (AdgRole::Snare, AdgKind::Backbeat)
+            ) {
+                event.protect_anchor = true;
+                event.protect_timing = true;
+                event.micro_offset_ticks = 0;
+            }
+        }
+    }
+}"#,
+}];
+
+pub const ADG_MIDI_MAP_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "PC4 lowering map excerpt",
+    source_path: "support/drum-engine/profiles/jeans_11_8.toml",
+    language: "toml",
+    code: r#"[[midi_map]]
+role = "snare"
+kind = "ghost"
+instrument = "AcousticSnare"
+note = 38
+min_velocity = 34
+max_velocity = 78
+duration_ticks = 90
+priority = 82
+
+[[midi_map]]
+role = "hat"
+kind = "open"
+instrument = "OpenHiHat"
+note = 46
+min_velocity = 42
+max_velocity = 92
+duration_ticks = 180
+right_hand_surface = true
+priority = 64
+
+[[midi_map]]
+role = "ride"
+kind = "breath"
+instrument = "RideCymbal1"
+note = 51
+min_velocity = 38
+max_velocity = 88
+duration_ticks = 120
+right_hand_surface = true
+priority = 66"#,
+}];
+
+pub const LOWERED_MIDI_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "Lowered MIDI event shape",
+    source_path: "generated-live MIDI shape for PC4 channel 9",
+    language: "yaml",
+    code: r#"channel: 9
+events:
+  - tick: 960
+    note: 51
+    gate_ticks: 120
+    velocity: 92
+    source: "ride/pressure ADG response"
+  - tick: 1080
+    note: 38
+    gate_ticks: 90
+    velocity: 54
+    source: "snare/ghost ADG response""#,
+}];
+
+pub const ADG_TO_MIDI_RUST_EXAMPLES: &[CodeExample] = &[
+    CodeExample {
+        label: "ADG gesture to MIDI",
+        source_path: "curated Rust sketch from crates/drum-engine/src/lib.rs",
+        language: "rust",
+        code: r#"for gesture in adg_events {
+    let Some(map) = find_midi_map(profile, gesture.role, gesture.kind) else {
+        continue;
+    };
+
+    let velocity = apply_velocity_delta(
+        lerp_u8(map.min_velocity, map.max_velocity, gesture.strength),
+        gesture.velocity_delta,
+    );
+    let tick = resolved_gesture_tick(gesture);
+
+    midi_events.push(GeneratedMidiEvent {
+        tick,
+        channel: profile.output_channel,
+        kind: MidiMessageKind::NoteOn,
+        data_1: map.note,
+        data_2: velocity,
+    });
+
+    midi_events.push(GeneratedMidiEvent {
+        tick: tick.saturating_add(map.duration_ticks),
+        channel: profile.output_channel,
+        kind: MidiMessageKind::NoteOff,
+        data_1: map.note,
+        data_2: 0,
+    });
+}
+
+midi_events.sort_by(compare_midi_events);"#,
+    },
+    CodeExample {
+        label: "Generated MIDI event shape",
+        source_path: "curated Rust sketch for PC4 channel 9",
+        language: "rust",
+        code: r#"let adg = AdgGesture {
+    tick: 960,
+    role: AdgRole::Ride,
+    kind: AdgKind::Pressure,
+    strength: 0.84,
+    duration_ticks: 120,
+    micro_offset_ticks: -6,
+    velocity_delta: 4,
+    phrase_role: Some("long-group answer".to_string()),
+    reason: "answers PC4 intake density".to_string(),
+    ..adg_defaults("ride_pressure_06")
+};
+
+let pc4_midi = [
+    GeneratedMidiEvent {
+        tick: 954,
+        channel: 9,
+        kind: MidiMessageKind::NoteOn,
+        data_1: 53,
+        data_2: 92,
+    },
+    GeneratedMidiEvent {
+        tick: 1074,
+        channel: 9,
+        kind: MidiMessageKind::NoteOff,
+        data_1: 53,
+        data_2: 0,
+    },
+];"#,
+    },
+    CodeExample {
+        label: "Generated drum MIDI file excerpt",
+        source_path: "session-store/workbench-session/generated-drum-midi-takes/drum-live-1780432493944.generated-live.mid",
+        language: "midi",
+        code: r#"file: Standard MIDI data (format 0), 1 track, 480 PPQN
+track_name: "jeans_11_8 live generated drums"
+
+header_hex:
+  4d 54 68 64 00 00 00 06 00 00 00 01 01 e0  # MThd, format 0, 1 track, 480 PPQN
+  4d 54 72 6b 00 00 87 29                    # MTrk, generated drum track
+
+meta_events:
+  ff 51 03 06 66 fc        # tempo meta event
+  ff 58 04 0b 03 18 08     # 11/8 meter marker
+
+first_note_on_bytes:
+  99 24 6a  # note 36, velocity 106
+  99 26 35  # note 38, velocity 53
+  99 3b 51  # note 59, velocity 81"#,
+    },
+];
+
+pub const RIG_CHAIN_RUST_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "mioXM output loop",
+    source_path: "curated Rust sketch from binaries/pc4ms-workbench/src/runtime.rs",
+    language: "rust",
+    code: r#"let midi_input = "hw:CARD=mioXM,DEV=0";
+let midi_output = "hw:CARD=mioXM,DEV=0";
+let audio_input = "hw:CARD=AG06AG03,DEV=0";
+
+let input = Rawmidi::new(midi_input, Direction::Capture, true)?;
+let output = Rawmidi::new(midi_output, Direction::Playback, false)?;
+let mut input_io = input.io();
+let mut output_io = output.io();
+
+let recording = audio_capture.start_take(take_id, audio_input)?;
+let mut captured_events = Vec::new();
+let mut pending_events = Vec::new();
+
+if let Some(event) = drum_engine_live_keyboard_event(live_tick, &input_bytes) {
+    captured_events.push(event);
+}
+
+pending_events.extend(generated_chunk.run.midi_events);
+
+while pending_index < pending_events.len()
+    && pending_events[pending_index].tick <= live_tick
+{
+    let event = &pending_events[pending_index];
+    let status = match event.kind {
+        MidiMessageKind::NoteOn => 0x90 | event.channel.min(15),
+        MidiMessageKind::NoteOff => 0x80 | event.channel.min(15),
+    };
+    let bytes = [status, event.data_1.min(127), event.data_2.min(127)];
+    output_io.write_all(&bytes)?;
+    pending_index += 1;
+}
+
+let recorded_take = audio_capture.stop_take(recording)?;"#,
+}];
+
+pub const JEANS_PROFILE_METHOD_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "Profile method map",
+    source_path: "derived profile method for jeans_11_8",
+    language: "yaml",
+    code: r#"concept_law:
+  support_scale: "space, note length, articulation, and breath"
+  density_mass: "event weight, low-end occupation, and accumulation pressure"
+  threshold: "support still exists, but phrase pressure begins to exceed it"
+  collapse: "motion contracts toward fewer anchors"
+  fragmentation: "one field splits into related competing centers"
+
+meter_law:
+  meter: "11/8"
+  grouping: [2, 2, 3, 2, 2]
+  unstable_cell: "central 3"
+  identity_rule: "keep the aksak body readable before adding pressure"
+
+form_phases:
+  - diffuse_medium
+  - pressure_support
+  - threshold
+  - support_failure
+  - collapse_onset
+  - fragmentation_core
+  - compact_residue
+
+drum_roles:
+  low_anchor_roles: ["kick", "low_floor_tom", "low_tom"]
+  right_hand_surface: "ride and closed hat behave as one moving surface"
+  tom_constellation: "six tom voices become collapse vectors"
+  rejection_rule: "reject density that feels decorative instead of structural""#,
+}];
+
+pub const ADG_PROFILE_LAW_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "Profile law carried by ADG",
+    source_path: "ADG law packet before MIDI lowering",
+    language: "adg",
+    code: r#"ADGProfileLaw {
+  meter: "11/8",
+  grouping: [2, 2, 3, 2, 2],
+  phase: "threshold",
+  pressure: {
+    support: 0.48,
+    density_mass: 0.72,
+    inward_pull: 0.68
+  },
+  role_policy: {
+    anchors: ["kick", "low_tom"],
+    surface: ["ride", "closed_hat"],
+    flashes: ["hi_mid_tom", "high_tom"]
+  },
+  transformation: "support field begins to contract",
+  lowering_target: "PC4 MIDI channel 9"
+}"#,
+}];
+
+pub const REACTIVE_LOOP_RUST_EXAMPLES: &[CodeExample] = &[
+    CodeExample {
+        label: "Groove state decision",
+        source_path: "curated Rust sketch from crates/drum-engine/src/lib.rs",
+        language: "rust",
+        code: r#"let observation = observe_live_groove(
+    chunk_input,
+    profile,
+    bar_ticks,
+    source_bar_count,
+    state.locked_density,
+    state.locked_velocity_energy,
+)?;
+
+let previous_bars = state.bars_observed;
+state.bars_observed = state.bars_observed.saturating_add(source_bar_count);
+
+if state.bars_observed < LIVE_GROOVE_LEARNING_BARS {
+    state.phase = LiveGroovePhase::Learning;
+    state.locked_density = blend_live_groove_value(
+        state.locked_density,
+        observation.density,
+    );
+    state.locked_accent_cells = merge_live_groove_accent_cells(
+        &state.locked_accent_cells,
+        &observation.accent_cells,
+    );
+    return Ok(state);
+}
+
+if previous_bars < LIVE_GROOVE_LEARNING_BARS {
+    state.phase = LiveGroovePhase::Locked;
+    state.locked_density = observation.density;
+    state.locked_velocity_energy = observation.velocity_energy;
+    state.locked_accent_cells = observation.accent_cells;
+    return Ok(state);
+}
+
+for shift in observation.bar_shifts.iter().copied() {
+    match (state.dynamic_shift_candidate, shift) {
+        (Some(current), Some(next)) if current == next => {
+            state.dynamic_shift_bars = state.dynamic_shift_bars.saturating_add(1);
+        }
+        (_, Some(next)) => {
+            state.dynamic_shift_candidate = Some(next);
+            state.dynamic_shift_bars = 1;
+        }
+        (_, None) => {
+            state.dynamic_shift_candidate = None;
+            state.dynamic_shift_bars = 0;
+        }
+    }
+
+    if state.dynamic_shift_bars >= LIVE_GROOVE_DYNAMIC_CONFIRM_BARS {
+        if let Some(shift) = state.dynamic_shift_candidate {
+            apply_live_groove_dynamic_shift(&mut state, shift, &observation);
+            state.last_dynamic_shift = Some(shift);
+        }
+    }
+}
+
+if observation.bravura_triggered && state.bravura_cooldown_bars == 0 {
+    state.phase = LiveGroovePhase::Bravura;
+}"#,
+    },
+    CodeExample {
+        label: "Response event gate",
+        source_path: "curated Rust sketch from crates/drum-engine/src/lib.rs",
+        language: "rust",
+        code: r#"if state.phase == LiveGroovePhase::Bravura
+    || !live_groove_is_intake_mirror(event)
+{
+    return true;
+}
+
+if matches!(
+    (event.role, event.kind),
+    (AdgRole::Kick, AdgKind::Anchor)
+        | (AdgRole::Snare, AdgKind::Backbeat)
+) {
+    return true;
+}
+
+let cell = (resolved_gesture_tick(event) % bar_ticks.max(1)) / grid_ticks.max(1);
+if state.locked_accent_cells.contains(&cell)
+    && !matches!(event.role, AdgRole::Tom)
+    && !matches!(event.kind, AdgKind::Flash)
+{
+    return true;
+}
+
+let threshold = (state.coupling * 100.0).round() as u32;
+live_groove_event_hash(&event.id) % 100 < threshold"#,
+    },
+];
+
 pub const DRUM_ENGINE_COMPANION_SECTIONS: &[BlogPostSection] = &[
     BlogPostSection {
-        title: "Player surface",
-        body: "The current surface is a responsive drummer companion for the PC4MS rig. It listens to material and live controls, then shapes drummer behavior that can be accepted, corrected, or revised.",
+        title: "Release candidate take",
+        body: "drum-live-1780432493944 is the Jeans release-candidate take. The WAV is a 6:50.805 live pass in stereo 96 kHz 24-bit PCM. The session names the rig target as Kurzweil PC4 and the section as Aksak Cocek / Intro.",
         bullets: &[
-            "The musician remains the author of the track and the take.",
-            "The engine contributes groove behavior, performance posture, and repeatable output.",
-            "The case lives beside EPM because the rig, MIDI, and hardware playback are part of the same studio practice.",
+            "The take metadata points to the PC4 live rig.",
+            "The same take id has a generated-live MIDI file and a human MIDI intake JSON file.",
+            "The SoundCloud reference stays tied to one session, one rig, and one generated drum pass.",
         ],
+        examples: DRUM_ENGINE_RELEASE_EXAMPLES,
     },
     BlogPostSection {
-        title: "Source center",
-        body: "`crates/drum-engine` already has the center of gravity for this story: profile-led, groove-led, and intake-led modes; live chunk requests; generated MIDI events; ADG gestures; source notes; and training records.",
+        title: "Live MIDI intake",
+        body: "The companion starts with the live intake. For this release candidate, the matching performance JSON records 4416 MIDI events from hw:CARD=mioXM,DEV=0. The drummer reads that PC4-side performance as timing, emphasis, density, and phrase pressure.",
         bullets: &[
-            "Profile-led behavior gives the drummer a stable identity.",
-            "Intake-led behavior lets captured or played material influence the next drum decision.",
-            "Groove-led behavior blends profile and intake while preserving a performance center.",
+            "The first captured events include note-on, note-off, and control traffic.",
+            "Example note-on bytes such as status 145 with notes 48 and 36 carry live player timing and velocity.",
+            "The player gives the shape; the drummer answers it.",
         ],
+        examples: DRUM_ENGINE_INTAKE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Jeans 11/8 profile",
+        body: "The release candidate keeps the Jeans 11/8 identity. The drum-engine profile is jeans_11_8, uses an 11/8 meter grouped as 2+2+3+2+2, runs at PPQN 480, and targets MIDI channel 9 for generated drums.",
+        bullets: &[
+            "The meter identity is Jeans-style 11/8.",
+            "The MIDI map keeps the PC4 target concrete: kick anchor 36, snare 38, hats 42/44/46, ride 51/59/53, crash 49, and toms 45/48/41.",
+            "The TOML defaults below are profile fallback posture.",
+            "The featured live take uses the Reference live preset values listed below.",
+        ],
+        examples: JEANS_PROFILE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Profile method",
+        body: "The Jeans profile starts with a threshold system. Support holds, density gathers, support fails, collapse contracts the bar, and fragmentation splits the same field into related centers.",
+        bullets: &[
+            "The first law is the 11/8 aksak body: 2+2+3+2+2 stays readable before pressure or variation enters.",
+            "The form moves through diffuse medium, pressure support, threshold, support failure, collapse onset, fragmentation core, and compact residue.",
+            "Kick and low toms carry gravity. Ride and closed hat carry the right-hand surface. The tom constellation carries collapse.",
+            "The PC4 map comes last: PPQN, channel, MIDI notes, velocity ranges, durations, and fallback defaults.",
+        ],
+        examples: JEANS_PROFILE_METHOD_EXAMPLES,
     },
     BlogPostSection {
         title: "Reference live preset",
-        body: "The Jeans Instability reference preset gives the page a concrete session state: 143 BPM, four-bar chunks, high energy, dense surface, deliberate humanization, anti-repeat, and controlled looseness.",
+        body: "The featured take uses the saved startup profile from the PC4, mioXM, and Yamaha AG03 drummer session: 143 BPM, four-bar chunks, Groove-led mode, energy 0.88, density 0.82, risk 0.95, fill 0.60, surface 0.80, humanize 0.42, timing 0.19, velocity 0.92, anti-repeat 0.90, and loose 0.20.",
         bullets: &[
-            "The preset is a saved player state for this exact live set.",
-            "The same values connect the case page, the public take, and the PC4MS workbench flow.",
-            "The listening context stays repeatable: same rig, same controls, same performance target.",
+            "Tempo and chunk size set the live window: 143 BPM over four-bar chunks.",
+            "Groove-led mode is the active posture for the featured take; the engine reacts while preserving the groove center.",
+            "Energy, density, risk, velocity, and anti-repeat are set high for an assertive pass.",
         ],
+        examples: NO_CODE_EXAMPLES,
     },
     BlogPostSection {
-        title: "Working flow",
-        body: "The strongest version is one working flow: groove intent, profile taste, generated MIDI, hardware playback, listening references, and feedback memory.",
+        title: "Reactive loop",
+        body: "Groove-led mode keeps the drummer centered on the live-set groove. The captured PC4 performance supplies timing, emphasis, density, and phrase pressure for the next response. The Rust sketch shows the decision point: learn the groove, lock it, accept a shift, or open a bravura response.",
         bullets: &[
-            "A short public take is more useful here than a broad catalogue of possible features.",
-            "The page should make the reader understand how the drummer decision reaches the rig.",
-            "Follow-up work can deepen this flow with stronger source notes, exports, and A/B listening passes.",
+            "The engine reads phrase pressure from the intake: where the player leans, repeats, leaves space, or pushes density.",
+            "The Reference live preset constrains how far the drummer can answer with fill, surface, risk, timing, velocity, anti-repeat, and looseness.",
+            "The next chunk is a musical response first, then a MIDI file.",
         ],
+        examples: REACTIVE_LOOP_RUST_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Generated drum MIDI",
+        body: "The matching generated-live MIDI file is the transport file. Its header identifies a jeans_11_8 live generated drums track, uses PPQN 480, carries an 11/8 meter marker, and produces note events that the PC4 can play. The Rust sketch shows the lowering step: ADG role and kind select the PC4 note, strength becomes velocity, and duration becomes note-off time.",
+        bullets: &[
+            "MIDI is where the engine becomes playable on the hardware rig.",
+            "The PC4 receives notes, ticks, gates, and velocities.",
+            "ADG/AIG stays beside the generated MIDI as the editable drum decision.",
+        ],
+        examples: ADG_TO_MIDI_RUST_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "PC4, mioXM, and AG03 chain",
+        body: "The canonical bench profile is PC4 Live: MIDI input and output are hw:CARD=mioXM,DEV=0, the rig target is Kurzweil PC4, and the capture path is AG03/AG06. In practical terms, the player performs into the PC4/mioXM path, the generated drums route back to the PC4, and the audio returns through the AG03/AG06 monitoring and recording chain. The Rust sketch shows the live route: capture PC4 MIDI, queue generated drum events, encode bytes, and write them to mioXM for the PC4.",
+        bullets: &[
+            "mioXM is the MIDI bridge between the live performance path and the generated drum output path.",
+            "The PC4 plays the drum part through the hardware rig.",
+            "AG03/AG06 capture brings the take back as session audio.",
+        ],
+        examples: RIG_CHAIN_RUST_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "SoundCloud reference",
+        body: "The SoundCloud release candidate is the public listening point for this working direction. It carries the same take id, live intake, generated MIDI, PC4 playback, and AG03/AG06 capture path.",
+        bullets: &[
+            "One focused take is easier to judge than a catalogue of possible features.",
+            "The public take is a release candidate for this rig direction.",
+            "Follow-up passes can compare accepted and rejected takes against the same intake and generated MIDI.",
+        ],
+        examples: NO_CODE_EXAMPLES,
     },
 ];
 
 pub const ADG_AIG_DRUM_LANGUAGE_SECTIONS: &[BlogPostSection] = &[
     BlogPostSection {
-        title: "Drum language",
-        body: "AIG is the general articulated gesture frame. ADG is the drum dialect used to describe drum behavior before it is lowered into transport events.",
+        title: "AIG, ADG, and MIDI",
+        body: "AIG carries the wider gesture frame. ADG is the drum dialect inside it. MIDI sends the playable part to the PC4.",
         bullets: &[
-            "The data can carry voice, gesture, energy, timing feel, surface, and phrase role.",
-            "The format gives player correction a readable object to revise.",
-            "The drummer workflow can preserve intent while changing local output details.",
+            "AIG carries timing, strength, relationships, constraints, and trace.",
+            "ADG specializes that object for drums: kick anchors, snare ghosts, hat breath, ride pressure, crash flash, tom movement, and phrase roles.",
+            "MIDI keeps what the PC4 needs to play: channel, note number, tick, duration, and velocity.",
         ],
+        examples: AIG_ADG_CHAIN_EXAMPLES,
     },
     BlogPostSection {
-        title: "Drum gesture fields",
-        body: "ADG gives drum decisions names that match musical work: anchors, ghosts, fills, surfaces, timing feel, density, contact, and relationships between kit elements.",
+        title: "ADG event shape",
+        body: "An ADG drum event names the drummer's job before it becomes a note. Role and kind come first, then strength, surface, timing feel, phrase role, and variation identity.",
         bullets: &[
-            "Kick and snare can carry anchor behavior while hats carry surface and motion.",
-            "Fill pressure and density can change without flattening the entire pattern into louder hits.",
-            "Timing feel can be represented as phrase behavior before it becomes MIDI ticks.",
+            "Role says what part of the kit or drummer job is active: kick, snare, hat, ride, crash, or tom.",
+            "Kind says what musical job that role is doing: anchor, backbeat, ghost, breath, open, pressure, flash, and similar dialect terms.",
+            "The extra fields keep the take editable after listening.",
         ],
+        examples: ADG_EVENT_EXAMPLES,
     },
     BlogPostSection {
-        title: "Lowering to MIDI",
-        body: "The current rig still needs MIDI because the Kurzweil PC4 is the playback target. The important design choice is that MIDI is produced from ADG/AIG drum decisions.",
+        title: "Profile laws in ADG",
+        body: "ADG keeps the Jeans profile laws available before MIDI export. The engine can name phase, pressure, surface, anchor, and transformation, then send the playable part to the PC4.",
         bullets: &[
-            "ADG keeps the authored decision readable.",
-            "Generated MIDI makes the decision playable on the current hardware.",
-            "Source notes connect the high-level decision to the low-level event output.",
+            "Support, threshold, collapse, and fragmentation steer the drummer response.",
+            "Right-hand surface and tom constellation choices stay visible before they become note numbers.",
+            "A later pass can tighten anchors, reduce surface pressure, or change fragmentation without hand-editing the whole MIDI file.",
         ],
+        examples: ADG_PROFILE_LAW_EXAMPLES,
     },
     BlogPostSection {
-        title: "Player correction",
-        body: "ADG/AIG stays visible so the player can ask for a tighter lock, more open surface, lower fill pressure, or a different phrase relation while preserving the take identity.",
+        title: "From intake to response",
+        body: "For drum-live-1780432493944, the live MIDI intake has 4416 events from the PC4/mioXM path. The reactive drummer answers that performance, then lowers the answer to generated MIDI.",
         bullets: &[
-            "The edit target is musical language rather than only individual note edits.",
-            "The same representation can drive comparison, training, and future export views.",
-            "The current site presents this as a working language layer that can keep evolving.",
+            "The player gives timing, pressure, repetition, and velocity shape through the PC4.",
+            "The reactive engine reads that shape against the Jeans 11/8 phrase law and the 143 BPM Groove-led Reference live preset.",
+            "The ADG decision then describes the drummer answer before the answer is reduced to PC4 MIDI.",
         ],
+        examples: ADG_RELATION_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "11/8 phrase law",
+        body: "The Jeans 11/8 profile uses an 11/8 grouping of 2+2+3+2+2. The drummer follows phrase shape, not just equal grid cells.",
+        bullets: &[
+            "A kick anchor can hold the body of the phrase without making every strong point equally heavy.",
+            "Hat and ride surfaces can explain the meter while leaving room for the player's own timing.",
+            "Fills and flashes can answer the long group without erasing the 2+2+3+2+2 feel.",
+        ],
+        examples: NO_CODE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Kick, snare, and hat examples",
+        body: "The PC4 lowering map makes the dialect concrete. A kick anchor lowers to note 36 with a strong velocity range. A snare backbeat or ghost lowers to note 38, but the ghost version uses a softer range. Hat breath lowers to note 42, hat pressure to note 44, and open hat to note 46.",
+        bullets: &[
+            "The same MIDI note can carry different ADG meaning before it is lowered; snare backbeat and snare ghost are both note 38 on the PC4 path.",
+            "A hat breath is a surface decision, while a hat pressure or choke is a relation/contact decision.",
+            "ADG lets the player ask for more breath, less pressure, or tighter ghosting without editing every event by hand.",
+        ],
+        examples: ADG_MIDI_MAP_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Ride, crash, and tom examples",
+        body: "The Jeans 11/8 map also gives the right-hand surface and fill system more vocabulary. Ride breath lowers to note 51, ride open to 59, ride pressure to 53, crash flash to 49, low tom pressure to 45, high-mid tom flash to 48, and low floor tom to 41.",
+        bullets: &[
+            "Ride choices can keep the 11/8 motion visible when hats are too narrow for the phrase.",
+            "Crash flash is a phrase marker, not just a loud cymbal hit.",
+            "Tom movement can carry pressure and answer behavior while staying connected to the same reactive phrase state.",
+        ],
+        examples: NO_CODE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "What MIDI carries",
+        body: "The generated MIDI preserves the parts needed for PC4 playback: role-to-note mapping, kind-to-note variant when the map has one, beat-to-tick timing, micro-offset-to-tick timing, velocity from strength, gate duration, and channel output.",
+        bullets: &[
+            "The PC4 gets the note, channel, tick, gate, and velocity.",
+            "The listener hears whether the response works in the take.",
+            "The ADG note keeps the drummer choice readable after playback.",
+        ],
+        examples: LOWERED_MIDI_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "What ADG keeps",
+        body: "ADG keeps the musical context around the generated MIDI: body, transient, recovery, presence, openness, density, wash, choke, timing protection, anchor protection, phrase role, variation identity, relationships, and kit model.",
+        bullets: &[
+            "Those fields stay readable before and after the PC4 output step.",
+            "A future correction can target the drummer choice instead of treating the take as only note numbers.",
+            "The generated MIDI remains the hardware path; ADG remains the working language.",
+        ],
+        examples: NO_CODE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Listening correction",
+        body: "After hearing the SoundCloud release candidate, the player can ask for a tighter anchor, a more open right-hand surface, lower fill pressure, stronger ride phrase, or less anti-repeat while keeping drum-live-1780432493944 as the session reference.",
+        bullets: &[
+            "The edit target is musical language before individual MIDI events.",
+            "The same take can keep its intake, generated MIDI, PC4 playback, and listening reference while the drummer choice changes.",
+            "That is the practical difference between this reactive drummer and a simple MIDI humanizer.",
+        ],
+        examples: ADG_CORRECTION_EXAMPLES,
     },
 ];
 
 pub const PC4_DRUM_RIG_FLOW_SECTIONS: &[BlogPostSection] = &[
     BlogPostSection {
         title: "Player path",
-        body: "The player path begins with live controls and a drummer profile. It resolves a drum decision, exports MIDI events, and sends the result through the local hardware chain.",
+        body: "The player path starts at the PC4 and live controls. The drummer profile shapes the answer, ADG/AIG keeps the decision readable, and generated MIDI carries it back to the rig.",
         bullets: &[
             "Live controls shape energy, density, risk, fill pressure, surface, humanization, and looseness.",
-            "The profile and manual corpus provide taste boundaries.",
-            "The exported MIDI carries note, velocity, timing, and fill behavior into the rig.",
+            "ADG/AIG carries role, kind, surface, and phrase relation before MIDI.",
+            "Generated MIDI sends note, velocity, tick, and gate to the PC4.",
         ],
+        examples: NO_CODE_EXAMPLES,
     },
     BlogPostSection {
         title: "Hardware chain",
-        body: "The current chain is ADG/AIG decision to MIDI, mioXM routing, Kurzweil PC4 playback, and Yamaha AG03 monitoring and recording.",
+        body: "The current chain is ADG/AIG decision to MIDI, mioXM routing, Kurzweil PC4 playback, and Yamaha AG03/AG06 monitoring and recording.",
         bullets: &[
             "mioXM routes generated MIDI into the hardware rig.",
             "The PC4 plays the audible drum performance for this workflow.",
-            "The AG03 gives the session a consistent monitoring and capture path.",
+            "AG03/AG06 gives the session a consistent monitoring and capture path.",
         ],
+        examples: NO_CODE_EXAMPLES,
     },
     BlogPostSection {
         title: "Listening references",
-        body: "The SoundCloud takes are the quickest way to hear this rig direction. They put the drum flow next to real listening while the code and source notes preserve the build path.",
+        body: "The SoundCloud takes are the listening references for this chain. They make the PC4, mioXM, and AG03/AG06 route audible before the page gets into source notes.",
         bullets: &[
-            "The release candidate is the featured take for the case page.",
-            "Related takes show nearby experiments and revisions.",
-            "The public page should keep one embed and a concise track list so the reader stays focused.",
+            "The release candidate stays the main take.",
+            "Related takes show nearby choices and revisions.",
+            "The page keeps one embed and a short track list.",
         ],
+        examples: NO_CODE_EXAMPLES,
     },
     BlogPostSection {
         title: "What the flow connects",
-        body: "The flow connects the Drum Engine to the studio setup: ADG/AIG drum decisions become a PC4 performance and are heard through the same local chain used for the published tracks.",
+        body: "The flow ties each drummer choice to the studio chain: ADG/AIG, generated MIDI, PC4 playback, AG03/AG06 capture, and listening reference.",
         bullets: &[
-            "The build story is tied to hardware.",
-            "The output path is specific enough for local replay.",
-            "The site presents the rig as part of the creative system rather than a footnote.",
+            "The drummer choice reaches hardware.",
+            "The output path stays specific: generated MIDI to mioXM to PC4.",
+            "The listening reference comes back through AG03/AG06.",
         ],
+        examples: NO_CODE_EXAMPLES,
     },
 ];
 
 pub const DRUM_ENGINE_FEEDBACK_MEMORY_SECTIONS: &[BlogPostSection] = &[
     BlogPostSection {
         title: "Manual corpus",
-        body: "Manual corpus selection gives chosen material and decisions weight. That lets the drummer companion treat chosen references as better starting points than random variation.",
+        body: "Manual corpus selection is the drummer's saved taste input. Chosen material can steer repeat reduction, surface choice, tom answers, and ghost notes in the next pass.",
         bullets: &[
-            "The corpus can steer repeat reduction, event selection, and local law.",
-            "The corpus layer connects listening judgment to the next pass.",
-            "The site should describe this as taste memory under player control.",
+            "Selected material can make a surface thinner or a tom answer more likely.",
+            "A kept take can become the reference for the next pass.",
+            "The player keeps control of what enters that memory.",
         ],
+        examples: NO_CODE_EXAMPLES,
     },
     BlogPostSection {
         title: "Live groove state",
-        body: "LiveGrooveState carries groove memory between chunks: locked density, velocity energy, accent cells, coupling, confidence, and the current response phase.",
+        body: "LiveGrooveState is the chunk memory: locked density, velocity energy, accent cells, coupling, confidence, and the current response phase.",
         bullets: &[
-            "Learning chunks can observe the material.",
-            "Locked chunks can preserve the groove identity.",
-            "Higher-energy variation can happen while the locked groove remains the reference.",
+            "Learning chunks listen for density, velocity, and accent cells.",
+            "Locked chunks keep the groove center stable.",
+            "Bravura chunks can open the response while the locked groove remains the reference.",
         ],
+        examples: NO_CODE_EXAMPLES,
     },
     BlogPostSection {
         title: "Training records",
-        body: "Training feedback records and comparison records preserve what the player preferred and why. That makes future revisions more grounded than a one-off random take.",
+        body: "Training records store listening decisions after a pass: what won, what lost, and what should change next.",
         bullets: &[
-            "Feedback can target a whole take, ADG event, bass event, or comparison side.",
-            "Comparison records preserve winner, confidence, take refs, and diff summary.",
-            "Training adjustments stay scoped to the relevant drummer identity.",
+            "Feedback can target a whole take, one ADG event, a bass event, or a comparison side.",
+            "Comparison records keep the winner, confidence, take refs, and diff summary.",
+            "Training adjustments stay tied to the current drummer profile.",
         ],
+        examples: NO_CODE_EXAMPLES,
     },
     BlogPostSection {
         title: "Session loop",
-        body: "The loop is strongest when every audible result connects back to profile, live controls, ADG events, generated MIDI, and feedback records.",
+        body: "A useful pass stays tied to one chain: profile, live controls, ADG events, generated MIDI, PC4 playback, AG03/AG06 capture, and the next correction.",
         bullets: &[
-            "Source notes support debugging and musical review.",
-            "Generated MIDI and source notes make audition and comparison repeatable.",
-            "The player stays able to correct the drummer without losing the history of the take.",
+            "The listener hears the PC4 take first.",
+            "The correction targets ADG, MIDI, or the selected material.",
+            "The next pass keeps the take history close to the session.",
         ],
+        examples: NO_CODE_EXAMPLES,
     },
 ];
 

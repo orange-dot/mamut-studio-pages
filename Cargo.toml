@@ -8,4 +8,4 @@ base64 = "=0.22.1"
 dioxus = { version = "=0.7.6", features = ["router", "web"] }
 dioxus-logger = "=0.7.6"
 wasm-bindgen = "=0.2.118"
-web-sys = { version = "=0.3.95", features = ["HtmlAudioElement"] }
+web-sys = { version = "=0.3.95", features = ["Document", "Element", "HtmlAudioElement", "Storage", "Window"] }

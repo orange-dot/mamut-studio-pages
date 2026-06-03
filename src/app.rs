@@ -2,7 +2,7 @@ use crate::content::{
     BLOG_INTRO, BLOG_POSTS, DOC_CATEGORIES, DRUM_ENGINE_EVIDENCE, DRUM_ENGINE_FEATURED_TRACK_ID,
     DRUM_ENGINE_NOTE_SLUGS, DRUM_ENGINE_PRESET_CONTROLS, DRUM_ENGINE_TRACKS, EPM2_PUBLIC_REPO_URL,
     HERO, HOME_WORK_AREAS, LAB_INTRO, LAB_NEXT_STEPS, LAB_RESULTS, LAB_STAGES, PC4_BRIDGE,
-    PRODUCT_LINES, PRODUCTS_INTRO, RepoKind, STATS, blog_post_by_slug, blog_post_sections,
+    PRODUCT_LINES, PRODUCTS_INTRO, RepoKind, blog_post_by_slug, blog_post_sections,
     pc4_microkit_studio_url, repo_root_url, source_url,
 };
 use crate::play::PlayPage;
@@ -11,25 +11,75 @@ use dioxus::prelude::*;
 const SITE_NAME: &str = "Mamut EPM";
 const SITE_DESCRIPTION: &str = "Public home for Mamut Studio: play EPM1, hear the Drum Engine, follow PC4 Microkit Studio, and read the EPM2 hardware path.";
 const DEFAULT_SITE_BASE_URL: &str = "https://mamut-studio.com";
-const PREVIEW_IMAGE_PATH: &str = "/background-clean-final.png";
-const HERO_PREVIEW_STEPS: [(&str, bool); 16] = [
-    ("C2", true),
-    ("G2", false),
-    ("C3", true),
-    ("G2", false),
-    ("G3", true),
-    ("D3", true),
-    ("C3", false),
-    ("C4", true),
-    ("C3", true),
-    ("G2", false),
-    ("G3", true),
-    ("C4", false),
-    ("D4", true),
-    ("G3", false),
-    ("G4", true),
-    ("C4", true),
+const PREVIEW_IMAGE_PATH: &str = "/og-default.png";
+const PREVIEW_IMAGE_WIDTH: &str = "3000";
+const PREVIEW_IMAGE_HEIGHT: &str = "3000";
+const PREVIEW_IMAGE_ALT: &str = "Mamut Studio circular signal artwork";
+#[cfg(target_arch = "wasm32")]
+const THEME_STORAGE_KEY: &str = "mamut-theme";
+const HERO_DRUM_FLOW_STEPS: [HeroDrumFlowStep; 12] = [
+    HeroDrumFlowStep::active("PC4 MIDI", "Live intake"),
+    HeroDrumFlowStep::active("Played part", "Your timing"),
+    HeroDrumFlowStep::active("Groove-led", "Lock + adapt"),
+    HeroDrumFlowStep::inactive("AIG frame", "Gesture intent"),
+    HeroDrumFlowStep::active("ADG dialect", "Drum decision"),
+    HeroDrumFlowStep::inactive("Surface", "Density + fills"),
+    HeroDrumFlowStep::inactive("Timing feel", "Humanize"),
+    HeroDrumFlowStep::active("Reactive state", "Next chunk"),
+    HeroDrumFlowStep::active("MIDI lower", "Notes + velocity"),
+    HeroDrumFlowStep::active("mioXM", "Route to PC4"),
+    HeroDrumFlowStep::active("PC4", "Drum playback"),
+    HeroDrumFlowStep::active("AG03", "Monitor + record"),
 ];
+const HERO_DRUM_CHAIN_CARDS: [HeroDrumChainCard; 4] = [
+    HeroDrumChainCard {
+        label: "Input",
+        value: "PC4 MIDI live intake",
+    },
+    HeroDrumChainCard {
+        label: "Engine",
+        value: "Groove-led reactive drummer",
+    },
+    HeroDrumChainCard {
+        label: "Language",
+        value: "AIG frame + ADG drum dialect",
+    },
+    HeroDrumChainCard {
+        label: "Output",
+        value: "mioXM -> PC4 -> AG03",
+    },
+];
+
+#[derive(Clone, Copy)]
+struct HeroDrumFlowStep {
+    label: &'static str,
+    value: &'static str,
+    active: bool,
+}
+
+impl HeroDrumFlowStep {
+    const fn active(label: &'static str, value: &'static str) -> Self {
+        Self {
+            label,
+            value,
+            active: true,
+        }
+    }
+
+    const fn inactive(label: &'static str, value: &'static str) -> Self {
+        Self {
+            label,
+            value,
+            active: false,
+        }
+    }
+}
+
+#[derive(Clone, Copy)]
+struct HeroDrumChainCard {
+    label: &'static str,
+    value: &'static str,
+}
 
 #[derive(Clone, Debug, PartialEq, Routable)]
 pub enum Route {
@@ -55,8 +105,70 @@ pub enum Route {
     DrumEngine {},
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum ThemeMode {
+    Dark,
+    Light,
+}
+
+impl ThemeMode {
+    #[cfg(target_arch = "wasm32")]
+    fn from_storage_value(value: &str) -> Option<Self> {
+        match value {
+            "dark" => Some(Self::Dark),
+            "light" => Some(Self::Light),
+            _ => None,
+        }
+    }
+
+    const fn label(self) -> &'static str {
+        match self {
+            Self::Dark => "Dark",
+            Self::Light => "Light",
+        }
+    }
+
+    const fn shell_class(self) -> &'static str {
+        match self {
+            Self::Dark => "theme-dark",
+            Self::Light => "theme-light",
+        }
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    const fn storage_value(self) -> &'static str {
+        match self {
+            Self::Dark => "dark",
+            Self::Light => "light",
+        }
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    const fn theme_color(self) -> &'static str {
+        match self {
+            Self::Dark => "#090b10",
+            Self::Light => "#f4f5f1",
+        }
+    }
+
+    const fn toggled(self) -> Self {
+        match self {
+            Self::Dark => Self::Light,
+            Self::Light => Self::Dark,
+        }
+    }
+}
+
+#[derive(Clone, Copy)]
+struct ThemeController {
+    mode: Signal<ThemeMode>,
+}
+
 #[component]
 pub fn App() -> Element {
+    let theme = use_signal(initial_theme_mode);
+    use_context_provider(|| ThemeController { mode: theme });
+
     rsx! { Router::<Route> {} }
 }
 
@@ -147,6 +259,38 @@ fn NotePost(slug: String) -> Element {
                                     ul {
                                         for bullet in section.bullets {
                                             li { "{bullet}" }
+                                        }
+                                    }
+                                    if post.slug == "drum-engine-companion" && section.title == "Reference live preset" {
+                                        figure { class: "note-image-panel",
+                                            img {
+                                                class: "note-image",
+                                                src: "/pc4ms-screen1.png",
+                                                alt: "PC4MS Drum Engine live controls showing the Jeans 11/8 reference preset values",
+                                                width: "1419",
+                                                height: "960",
+                                                loading: "lazy",
+                                                decoding: "async",
+                                            }
+                                            figcaption {
+                                                "Reference live-set controls for the Jeans 11/8 Drum Engine pass: Groove-led mode, 143 BPM, four-bar chunks, and the saved macro/feel values used by the featured take."
+                                            }
+                                        }
+                                    }
+                                    if !section.examples.is_empty() {
+                                        div { class: "code-example-stack",
+                                            for example in section.examples {
+                                                figure { class: "code-example",
+                                                    figcaption { class: "code-example-head",
+                                                        span { class: "code-example-label", "{example.label}" }
+                                                        span { class: "code-example-language", "{example.language}" }
+                                                    }
+                                                    code { class: "code-example-path", "{example.source_path}" }
+                                                    pre { class: "code-example-body",
+                                                        code { "{example.code}" }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -475,6 +619,12 @@ fn DrumEngineNotesSection() -> Element {
 
 #[component]
 fn PageFrame(title: String, description: String, current: Route, children: Element) -> Element {
+    let theme = use_context::<ThemeController>();
+    let theme_mode = *theme.mode.read();
+    use_effect(move || {
+        update_theme_color_meta(*theme.mode.read());
+    });
+
     let full_title = if title == SITE_NAME {
         SITE_NAME.to_string()
     } else {
@@ -487,35 +637,31 @@ fn PageFrame(title: String, description: String, current: Route, children: Eleme
     let twitter_description = description;
     let canonical_url = route_url(&current);
     let preview_image = format!("{}{}", site_base_url(), PREVIEW_IMAGE_PATH);
-    let stylesheet_path = public_path("site.css");
-    let brand_mark_path = public_path("brand-mark.svg");
+    let page_shell_class = format!("page-shell {}", theme_mode.shell_class());
 
     rsx! {
         document::Title { "{full_title}" }
         document::Meta { name: "description", content: "{description_meta}" }
-        document::Meta { name: "theme-color", content: "#090b10" }
         document::Meta { property: "og:site_name", content: "{SITE_NAME}" }
         document::Meta { property: "og:type", content: "website" }
         document::Meta { property: "og:url", content: "{canonical_url}" }
         document::Meta { property: "og:title", content: "{og_title}" }
         document::Meta { property: "og:description", content: "{og_description}" }
         document::Meta { property: "og:image", content: "{preview_image}" }
-        document::Meta { property: "twitter:card", content: "summary_large_image" }
+        document::Meta { property: "og:image:secure_url", content: "{preview_image}" }
+        document::Meta { property: "og:image:type", content: "image/png" }
+        document::Meta { property: "og:image:width", content: "{PREVIEW_IMAGE_WIDTH}" }
+        document::Meta { property: "og:image:height", content: "{PREVIEW_IMAGE_HEIGHT}" }
+        document::Meta { property: "og:image:alt", content: "{PREVIEW_IMAGE_ALT}" }
+        document::Meta { name: "twitter:card", content: "summary_large_image" }
         document::Meta { name: "twitter:image", content: "{preview_image}" }
-        document::Meta { property: "twitter:title", content: "{twitter_title}" }
-        document::Meta { property: "twitter:description", content: "{twitter_description}" }
+        document::Meta { name: "twitter:image:alt", content: "{PREVIEW_IMAGE_ALT}" }
+        document::Meta { name: "twitter:title", content: "{twitter_title}" }
+        document::Meta { name: "twitter:description", content: "{twitter_description}" }
 
-        link { rel: "preconnect", href: "https://fonts.googleapis.com" }
-        link { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "anonymous" }
         link { rel: "canonical", href: "{canonical_url}" }
-        link {
-            rel: "stylesheet",
-            href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap",
-        }
-        link { rel: "stylesheet", href: "{stylesheet_path}" }
-        link { rel: "icon", href: "{brand_mark_path}", r#type: "image/svg+xml" }
 
-        div { class: "page-shell",
+        div { class: "{page_shell_class}",
             a { class: "skip-link", href: "#content", "Skip to content" }
             div { class: "page-grid" }
             SiteHeader { current: current.clone() }
@@ -528,6 +674,12 @@ fn PageFrame(title: String, description: String, current: Route, children: Eleme
 #[component]
 fn SiteHeader(current: Route) -> Element {
     let brand_mark_path = public_path("brand-mark.svg");
+    let mut theme = use_context::<ThemeController>().mode;
+    let theme_mode = *theme.read();
+    let next_theme = theme_mode.toggled();
+    let theme_label = theme_mode.label();
+    let next_theme_label = next_theme.label();
+    let theme_button_label = format!("Switch to {next_theme_label} theme");
 
     rsx! {
         header { class: "site-header",
@@ -539,14 +691,34 @@ fn SiteHeader(current: Route) -> Element {
                         span { class: "brand-title", "{SITE_NAME}" }
                     }
                 }
-                div { class: "nav-links",
-                    Link { class: nav_link_class(&current, "home"), to: Route::Home {}, "Home" }
-                    Link { class: nav_link_class(&current, "play"), to: Route::Play {}, "Play" }
-                    Link { class: nav_link_class(&current, "drums"), to: Route::DrumEngine {}, "Drums" }
-                    Link { class: nav_link_class(&current, "notes"), to: Route::Notes {}, "Notes" }
-                    Link { class: nav_link_class(&current, "lines"), to: Route::Lines {}, "Lines" }
-                    Link { class: nav_link_class(&current, "lab"), to: Route::Lab {}, "Lab" }
-                    Link { class: nav_link_class(&current, "docs"), to: Route::Docs {}, "Docs" }
+                div { class: "nav-cluster",
+                    div { class: "nav-links",
+                        Link { class: nav_link_class(&current, "home"), to: Route::Home {}, "Home" }
+                        Link { class: nav_link_class(&current, "play"), to: Route::Play {}, "Play" }
+                        Link { class: nav_link_class(&current, "drums"), to: Route::DrumEngine {}, "Drums" }
+                        Link { class: nav_link_class(&current, "notes"), to: Route::Notes {}, "Notes" }
+                        Link { class: nav_link_class(&current, "lines"), to: Route::Lines {}, "Lines" }
+                        Link { class: nav_link_class(&current, "lab"), to: Route::Lab {}, "Lab" }
+                        Link { class: nav_link_class(&current, "docs"), to: Route::Docs {}, "Docs" }
+                    }
+                    button {
+                        class: "theme-toggle",
+                        r#type: "button",
+                        title: "{theme_button_label}",
+                        aria_label: "{theme_button_label}",
+                        onclick: move |_| {
+                            let next = {
+                                let current = *theme.read();
+                                current.toggled()
+                            };
+                            theme.set(next);
+                            apply_theme_side_effects(next);
+                        },
+                        span { class: "theme-toggle-track", aria_hidden: "true",
+                            span { class: "theme-toggle-dot" }
+                        }
+                        span { class: "theme-toggle-label", "{theme_label}" }
+                    }
                 }
             }
         }
@@ -630,28 +802,28 @@ fn HeroSection() -> Element {
             div { class: "hero-panel hero-panel-demo",
                 div { class: "hero-surface" }
                 div { class: "hero-demo-header",
-                    div { class: "card-topline", "Audible demo" }
-                    h3 { "Browser instrument" }
-                    p { "Sixteen steps, one macro lane, eight live-set patches, and a browser render path for the current software line." }
+                    div { class: "card-topline", "Reactive Drum Engine" }
+                    h3 { "AIG/ADG to PC4 rig" }
+                    p { "PC4 MIDI live intake - what you play - gives the groove context. The engine reacts groove-led, keeps the drum decision readable as ADG inside the wider AIG frame, lowers it to MIDI, routes it through mioXM to the PC4, and returns audio through AG03." }
                 }
                 div { class: "hero-preview-ruler",
-                    for step in 0..HERO_PREVIEW_STEPS.len() {
+                    for step in 0..HERO_DRUM_FLOW_STEPS.len() {
                         span {
                             class: if step % 4 == 0 { "ruler-step is-anchor" } else { "ruler-step" },
-                            {format!("{:02}", step + 1)}
+                            {hero_drum_flow_segment(step)}
                         }
                     }
                 }
                 div { class: "hero-preview-grid",
-                    for (index, (note, enabled)) in HERO_PREVIEW_STEPS.iter().enumerate() {
-                        article { class: hero_preview_step_class(index, *enabled),
-                            span { class: "hero-preview-index", {format!("Step {:02}", index + 1)} }
-                            strong { "{note}" }
+                    for (index, step) in HERO_DRUM_FLOW_STEPS.iter().enumerate() {
+                        article { class: hero_preview_step_class(index, step.active),
+                            span { class: "hero-preview-index", "{step.label}" }
+                            strong { "{step.value}" }
                         }
                     }
                 }
                 div { class: "stat-grid",
-                    for stat in STATS {
+                    for stat in HERO_DRUM_CHAIN_CARDS {
                         article { class: "stat-card",
                             span { class: "stat-label", "{stat.label}" }
                             strong { "{stat.value}" }
@@ -1009,6 +1181,62 @@ fn public_path(path: &str) -> String {
     } else {
         format!("{}/{path}", base_path.trim_end_matches('/'))
     }
+}
+
+fn hero_drum_flow_segment(index: usize) -> &'static str {
+    match index {
+        0 | 1 => "In",
+        2 | 3 => "Sense",
+        4..=7 => "ADG",
+        8 | 9 => "Route",
+        _ => "Audio",
+    }
+}
+
+fn initial_theme_mode() -> ThemeMode {
+    stored_theme_mode().unwrap_or(ThemeMode::Dark)
+}
+
+#[cfg(target_arch = "wasm32")]
+fn stored_theme_mode() -> Option<ThemeMode> {
+    let storage = web_sys::window()?.local_storage().ok()??;
+    let value = storage.get_item(THEME_STORAGE_KEY).ok()??;
+
+    ThemeMode::from_storage_value(&value)
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+fn stored_theme_mode() -> Option<ThemeMode> {
+    None
+}
+
+#[cfg(target_arch = "wasm32")]
+fn persist_theme_mode(mode: ThemeMode) {
+    if let Some(storage) =
+        web_sys::window().and_then(|window| window.local_storage().ok().flatten())
+    {
+        let _ = storage.set_item(THEME_STORAGE_KEY, mode.storage_value());
+    }
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+fn persist_theme_mode(_mode: ThemeMode) {}
+
+#[cfg(target_arch = "wasm32")]
+fn update_theme_color_meta(mode: ThemeMode) {
+    if let Some(document) = web_sys::window().and_then(|window| window.document()) {
+        if let Ok(Some(meta)) = document.query_selector("meta[name='theme-color']") {
+            let _ = meta.set_attribute("content", mode.theme_color());
+        }
+    }
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+fn update_theme_color_meta(_mode: ThemeMode) {}
+
+fn apply_theme_side_effects(mode: ThemeMode) {
+    persist_theme_mode(mode);
+    update_theme_color_meta(mode);
 }
 
 fn hero_preview_step_class(index: usize, enabled: bool) -> &'static str {

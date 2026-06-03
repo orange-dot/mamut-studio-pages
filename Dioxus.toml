@@ -7,6 +7,14 @@ asset_dir = "public"
 [web.app]
 title = "Mamut EPM"
 
+[web.resource]
+style = [
+    "/site.css",
+    "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap",
+]
+
+[web.resource.dev]
+
 [web.watcher]
 reload_html = true
 watch_path = ["src", "public", "docs", "README.md"]

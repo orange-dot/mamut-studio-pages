@@ -1290,6 +1290,7 @@ fn peak_to_db(peak: f32) -> f32 {
     20.0 * peak.max(0.000_1).log10()
 }
 
+#[cfg(any(target_arch = "wasm32", test))]
 fn wav_bytes(render: &RenderResult) -> Vec<u8> {
     let data_bytes = render.frame_count * 4;
     let riff_size = 36 + data_bytes as u32;
