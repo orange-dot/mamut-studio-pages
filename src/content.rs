@@ -30,10 +30,13 @@ pub struct PageIntro {
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
-pub struct DetailSection {
+pub struct HomeWorkArea {
+    pub kicker: &'static str,
     pub title: &'static str,
     pub body: &'static str,
     pub bullets: &'static [&'static str],
+    pub primary_cta: &'static str,
+    pub secondary_cta: Option<&'static str>,
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -106,51 +109,81 @@ pub struct DrumEngineTrack {
 }
 
 pub const HERO: HeroContent = HeroContent {
-    eyebrow: "Mamut EPM",
-    title: "Current software instrument.",
-    body: "EPM1 plays now: browser demo, desktop runtime, patch bank, macro controls, and PC4 MIDI work. EPM2 follows the hardware path through analog studies, KiCad capture, simulation, and bench preparation.",
-    status: "Play the browser demo first, then use Notes and Docs for the current build notes.",
-    primary_cta: "Open play",
-    secondary_cta: "Open notes",
+    eyebrow: "Mamut Studio",
+    title: "Software, drums, and PC4 rig work.",
+    body: "EPM1 plays in the browser and desktop runtime. The Drum Engine turns ADG/AIG groove intent into MIDI for the Kurzweil PC4. PC4 Microkit Studio keeps the mioXM and Yamaha AG03 rig flow close to the sessions.",
+    status: "Start with EPM1 or the Drum Engine take, then use Notes for the rig and source notes.",
+    primary_cta: "Play EPM1",
+    secondary_cta: "Hear drums",
 };
 
 pub const STATS: &[Stat] = &[
     Stat {
-        label: "Current demo",
-        value: "Browser demo + software runtime",
+        label: "EPM1",
+        value: "Browser + desktop runtime",
     },
     Stat {
-        label: "Runtime focus",
-        value: "Patch bank + MIDI control",
+        label: "Drums",
+        value: "ADG/AIG to MIDI to PC4",
     },
     Stat {
-        label: "Hardware line",
-        value: "EPM2 in study and capture",
+        label: "PC4MS",
+        value: "mioXM + AG03 rig flow",
     },
     Stat {
-        label: "Patch language",
-        value: "Horizont, Pec, Baklja, Gravitacija",
+        label: "EPM2",
+        value: "Hardware study and bench",
     },
 ];
 
-pub const HOME_FEATURES: &[DetailSection] = &[
-    DetailSection {
-        title: "EPM1",
-        body: "EPM1 is the software instrument that runs now: Rust runtime, factory patches, browser rendering, and PC4-oriented MIDI work.",
+pub const HOME_WORK_AREAS: &[HomeWorkArea] = &[
+    HomeWorkArea {
+        kicker: "EPM1",
+        title: "Play the software instrument.",
+        body: "EPM1 is the runnable instrument: browser demo, desktop runtime, patch bank, macro controls, and PC4-oriented MIDI work.",
         bullets: &[
-            "Standalone runtime for audio, MIDI, and live play.",
-            "Browser demo and desktop runtime use the same patch names and macro targets.",
-            "Transport is locally frozen pending shared platform extraction.",
+            "Eight live-set patches and one browser render path.",
+            "Patch names and macro targets match the desktop runtime.",
+            "PC4 MIDI work keeps the software line close to the rig.",
         ],
+        primary_cta: "Open play",
+        secondary_cta: Some("Open lines"),
     },
-    DetailSection {
-        title: "EPM2",
-        body: "EPM2 is the hardware track for a desktop analog poly synth: simulation, circuit capture, test points, and bench workflow.",
+    HomeWorkArea {
+        kicker: "Drums",
+        title: "Hear the Drum Engine take.",
+        body: "ADG/AIG groove intent becomes MIDI, mioXM routes it, the Kurzweil PC4 plays it, and Yamaha AG03 monitoring brings the take back into the session.",
         bullets: &[
-            "P1 VCO study, KiCad capture, and bench-prep remain the active path.",
-            "External MIDI control keeps V1 focused on the sound engine.",
-            "EPM1 keeps the patch and control model testable while hardware work continues.",
+            "Start with the Jeans Instability release-candidate take.",
+            "143 BPM, four-bar chunks, groove-led mode, and saved player controls.",
+            "Feedback and taste shape the next listening pass.",
         ],
+        primary_cta: "Open Drum Engine",
+        secondary_cta: Some("Open SoundCloud"),
+    },
+    HomeWorkArea {
+        kicker: "PC4MS",
+        title: "Follow the PC4 rig flow.",
+        body: "PC4 Microkit Studio keeps playback control, session files, local rig flow, and hardware bench notes outside the instrument repos.",
+        bullets: &[
+            "PC4, mioXM, and Yamaha AG03 stay close to the working sessions.",
+            "Session files and playback control live in their own source home.",
+            "The rig notes connect EPM, drums, and hardware work.",
+        ],
+        primary_cta: "Read PC4MS note",
+        secondary_cta: Some("Open repo"),
+    },
+    HomeWorkArea {
+        kicker: "EPM2",
+        title: "Read the hardware lab.",
+        body: "EPM2 follows the hardware path for the later physical instrument: P1 VCO simulation, KiCad capture, bench expectations, and public source notes.",
+        bullets: &[
+            "P1 VCO study and KiCad capture are the active path.",
+            "Bench notes keep ramp window, reset level, sync, and range visible.",
+            "The public repo keeps docs, sim, KiCad, bench notes, and tools together.",
+        ],
+        primary_cta: "Open lab",
+        secondary_cta: Some("Browse docs"),
     },
 ];
 

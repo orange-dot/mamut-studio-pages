@@ -1,7 +1,7 @@
 use crate::content::{
     BLOG_INTRO, BLOG_POSTS, DOC_CATEGORIES, DRUM_ENGINE_EVIDENCE, DRUM_ENGINE_FEATURED_TRACK_ID,
     DRUM_ENGINE_NOTE_SLUGS, DRUM_ENGINE_PRESET_CONTROLS, DRUM_ENGINE_TRACKS, EPM2_PUBLIC_REPO_URL,
-    HERO, HOME_FEATURES, LAB_INTRO, LAB_NEXT_STEPS, LAB_RESULTS, LAB_STAGES, PC4_BRIDGE,
+    HERO, HOME_WORK_AREAS, LAB_INTRO, LAB_NEXT_STEPS, LAB_RESULTS, LAB_STAGES, PC4_BRIDGE,
     PRODUCT_LINES, PRODUCTS_INTRO, RepoKind, STATS, blog_post_by_slug, blog_post_sections,
     pc4_microkit_studio_url, repo_root_url, source_url,
 };
@@ -9,7 +9,7 @@ use crate::play::PlayPage;
 use dioxus::prelude::*;
 
 const SITE_NAME: &str = "Mamut EPM";
-const SITE_DESCRIPTION: &str = "Public home for Mamut EPM: play the current software instrument, read working notes, hear the Drum Engine case, and follow the hardware path.";
+const SITE_DESCRIPTION: &str = "Public home for Mamut Studio: play EPM1, hear the Drum Engine, follow PC4 Microkit Studio, and read the EPM2 hardware path.";
 const DEFAULT_SITE_BASE_URL: &str = "https://mamut-studio.com";
 const PREVIEW_IMAGE_PATH: &str = "/background-clean-final.png";
 const HERO_PREVIEW_STEPS: [(&str, bool); 16] = [
@@ -62,6 +62,8 @@ pub fn App() -> Element {
 
 #[component]
 fn Home() -> Element {
+    let pc4_url = pc4_microkit_studio_url();
+
     rsx! {
         PageFrame {
             title: SITE_NAME.to_string(),
@@ -70,19 +72,19 @@ fn Home() -> Element {
             HeroSection {}
             section { class: "signal-section",
                 div { class: "section-copy",
-                    span { class: "section-kicker", "Current build" }
-                    h2 { "Software now, hardware on the bench." }
-                    p { "EPM1 is the runnable software instrument. EPM2 is the hardware track for simulation, capture, and bench work. The split keeps each session easy to follow." }
+                    span { class: "section-kicker", "Current work" }
+                    h2 { "EPM1, drums, PC4MS, EPM2." }
+                    p { "EPM1 plays in the browser. The Drum Engine sends ADG/AIG drums to the PC4. PC4MS keeps the rig sessions organized, and EPM2 carries the hardware path." }
                 }
                 div { class: "feature-grid",
-                    for section in HOME_FEATURES {
-                        {feature_card(section)}
+                    for area in HOME_WORK_AREAS {
+                        {home_work_card(area, pc4_url.as_deref())}
                     }
                 }
             }
-            HomeUtilitySection {}
             DrumEngineCaseSection {}
             AdjacentProjectSection {}
+            HomeUtilitySection {}
         }
     }
 }
@@ -575,7 +577,7 @@ fn DrumEngineCaseSection() -> Element {
     rsx! {
         section { class: "drum-engine-band",
             div { class: "section-copy",
-                span { class: "section-kicker", "Hero case" }
+                span { class: "section-kicker", "Drums" }
                 h2 { "Authorial Drum Engine for the PC4 rig." }
                 p { "PC4 Microkit Studio now carries a concrete drummer workflow: ADG/AIG intent, profile taste, MIDI through mioXM, PC4 playback, Yamaha AG03 monitoring, and public SoundCloud takes." }
                 div { class: "utility-links",
@@ -617,8 +619,12 @@ fn HeroSection() -> Element {
                 p { class: "hero-status", "{HERO.status}" }
                 div { class: "hero-actions",
                     Link { class: "button button-primary", to: Route::Play {}, "{HERO.primary_cta}" }
-                    Link { class: "button button-secondary", to: Route::Notes {}, "{HERO.secondary_cta}" }
-                    Link { class: "source-link hero-link", to: Route::Lines {}, "See the work split" }
+                    Link { class: "button button-secondary", to: Route::DrumEngine {}, "{HERO.secondary_cta}" }
+                    Link {
+                        class: "source-link hero-link",
+                        to: Route::NotePost { slug: "pc4-microkit-studio".to_string() },
+                        "Follow PC4MS"
+                    }
                 }
             }
             div { class: "hero-panel hero-panel-demo",
@@ -663,14 +669,18 @@ fn HomeUtilitySection() -> Element {
         section { class: "utility-band",
             div { class: "section-copy",
                 span { class: "section-kicker", "Where to start" }
-                h2 { "Play first, then read the notes." }
-                p { "Play is the fastest way to hear the current software runtime. Notes track decisions and open work. Lines keeps EPM1 and EPM2 separated. Docs links to the source material." }
+                h2 { "Choose by listening path." }
+                p { "Use Play for EPM1, Drums for the PC4 drummer take, PC4MS for the rig notes, and Lab or Docs for the EPM2 hardware path." }
             }
             div { class: "utility-links",
-                Link { class: "button button-primary", to: Route::Play {}, "Open play" }
-                Link { class: "button button-primary", to: Route::Notes {}, "Open notes" }
+                Link { class: "button button-primary", to: Route::Play {}, "Play EPM1" }
+                Link { class: "button button-primary", to: Route::DrumEngine {}, "Hear drums" }
+                Link {
+                    class: "button button-secondary",
+                    to: Route::NotePost { slug: "pc4-microkit-studio".to_string() },
+                    "PC4MS note"
+                }
                 Link { class: "button button-secondary", to: Route::Lab {}, "Open lab" }
-                Link { class: "button button-secondary", to: Route::Lines {}, "Open lines" }
                 Link { class: "button button-secondary", to: Route::Docs {}, "Browse docs" }
             }
         }
@@ -724,18 +734,88 @@ fn AdjacentProjectSection() -> Element {
     }
 }
 
-fn feature_card(section: &crate::content::DetailSection) -> Element {
+fn home_work_card(area: &crate::content::HomeWorkArea, pc4_url: Option<&str>) -> Element {
     rsx! {
         article { class: "feature-card",
-            div { class: "card-topline", "Current focus" }
-            h3 { "{section.title}" }
-            p { "{section.body}" }
+            div { class: "card-topline", "{area.kicker}" }
+            h3 { "{area.title}" }
+            p { "{area.body}" }
             ul {
-                for bullet in section.bullets {
+                for bullet in area.bullets {
                     li { "{bullet}" }
                 }
             }
+            div { class: "hero-actions",
+                {home_primary_action(area)}
+                if area.secondary_cta.is_some() {
+                    {home_secondary_action(area, pc4_url)}
+                }
+            }
         }
+    }
+}
+
+fn home_primary_action(area: &crate::content::HomeWorkArea) -> Element {
+    match area.kicker {
+        "EPM1" => rsx! {
+            Link { class: "button button-primary", to: Route::Play {}, "{area.primary_cta}" }
+        },
+        "Drums" => rsx! {
+            Link { class: "button button-primary", to: Route::DrumEngine {}, "{area.primary_cta}" }
+        },
+        "PC4MS" => rsx! {
+            Link {
+                class: "button button-primary",
+                to: Route::NotePost { slug: "pc4-microkit-studio".to_string() },
+                "{area.primary_cta}"
+            }
+        },
+        "EPM2" => rsx! {
+            Link { class: "button button-primary", to: Route::Lab {}, "{area.primary_cta}" }
+        },
+        _ => rsx! {
+            Link { class: "button button-primary", to: Route::Notes {}, "{area.primary_cta}" }
+        },
+    }
+}
+
+fn home_secondary_action(area: &crate::content::HomeWorkArea, pc4_url: Option<&str>) -> Element {
+    let Some(label) = area.secondary_cta else {
+        return rsx! {};
+    };
+
+    match area.kicker {
+        "EPM1" => rsx! {
+            Link { class: "button button-secondary", to: Route::Lines {}, "{label}" }
+        },
+        "Drums" => rsx! {
+            a {
+                class: "button button-secondary",
+                href: "https://soundcloud.com/mamut_studio",
+                target: "_blank",
+                rel: "noopener noreferrer",
+                "{label}"
+            }
+        },
+        "PC4MS" => {
+            if let Some(url) = pc4_url {
+                rsx! {
+                    a {
+                        class: "button button-secondary",
+                        href: "{url}",
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        "{label}"
+                    }
+                }
+            } else {
+                rsx! {}
+            }
+        }
+        "EPM2" => rsx! {
+            Link { class: "button button-secondary", to: Route::Docs {}, "{label}" }
+        },
+        _ => rsx! {},
     }
 }
 
