@@ -9,7 +9,7 @@ use crate::play::PlayPage;
 use dioxus::prelude::*;
 
 const SITE_NAME: &str = "Mamut EPM";
-const SITE_DESCRIPTION: &str = "Public home for Mamut EPM: play the current software instrument, read working notes, follow the Drum Engine case study, and track the hardware study path.";
+const SITE_DESCRIPTION: &str = "Public home for Mamut EPM: play the current software instrument, read working notes, hear the Drum Engine case, and follow the hardware path.";
 const DEFAULT_SITE_BASE_URL: &str = "https://mamut-studio.com";
 const PREVIEW_IMAGE_PATH: &str = "/background-clean-final.png";
 const HERO_PREVIEW_STEPS: [(&str, bool); 16] = [
@@ -71,8 +71,8 @@ fn Home() -> Element {
             section { class: "signal-section",
                 div { class: "section-copy",
                     span { class: "section-kicker", "Current build" }
-                    h2 { "Software now, hardware in study." }
-                    p { "EPM1 is the runnable software instrument. EPM2 is the hardware track for simulation, capture, and bench work. They are kept separate so the current state stays clear." }
+                    h2 { "Software now, hardware on the bench." }
+                    p { "EPM1 is the runnable software instrument. EPM2 is the hardware track for simulation, capture, and bench work. The split keeps each session easy to follow." }
                 }
                 div { class: "feature-grid",
                     for section in HOME_FEATURES {
@@ -183,7 +183,7 @@ fn Lines() -> Element {
     rsx! {
         PageFrame {
             title: "Lines".to_string(),
-            description: "Current split between EPM1, the runnable software instrument, and EPM2, the hardware study track.".to_string(),
+            description: "Current split between EPM1, the runnable software instrument, and EPM2, the hardware build track.".to_string(),
             current: Route::Lines {},
             PageIntroBlock {
                 kicker: PRODUCTS_INTRO.kicker,
@@ -204,7 +204,7 @@ fn Lab() -> Element {
     rsx! {
         PageFrame {
             title: "Lab".to_string(),
-            description: "EPM2 hardware lab: P1 VCO simulation, KiCad capture, bench expectations, and public source.".to_string(),
+            description: "EPM2 hardware lab: P1 VCO simulation, KiCad capture, bench expectations, and public source notes.".to_string(),
             current: Route::Lab {},
             PageIntroBlock {
                 kicker: LAB_INTRO.kicker,
@@ -214,8 +214,8 @@ fn Lab() -> Element {
             section { class: "utility-band",
                 div { class: "section-copy",
                     span { class: "section-kicker", "Public source" }
-                    h2 { "Hardware source, separate from site infra." }
-                    p { "The EPM2 public repo is a curated hardware-study export: docs, ngspice studies, KiCad capture, bench expectations, and helper tools. Deploy config, investor notes, and local workspace state stay outside that repo." }
+                    h2 { "EPM2 hardware source." }
+                    p { "The EPM2 public repo carries docs, ngspice studies, KiCad capture, bench expectations, and helper tools. Deploy config, investor notes, and local workspace state stay outside that repo." }
                 }
                 div { class: "utility-links",
                     a {
@@ -231,8 +231,8 @@ fn Lab() -> Element {
             section { class: "doc-category",
                 div { class: "section-copy",
                     span { class: "section-kicker", "Path" }
-                    h2 { "Simulation to capture to bench." }
-                    p { "The lab page shows the hardware work as a staged study path with references tied to each step." }
+                    h2 { "Simulation, capture, bench." }
+                    p { "The lab page follows the hardware work step by step, with source notes tied to each stage." }
                 }
                 div { class: "products-grid",
                     for card in LAB_STAGES {
@@ -270,12 +270,12 @@ fn Docs() -> Element {
     rsx! {
         PageFrame {
             title: "Docs".to_string(),
-            description: "Utility library of current EPM2 hardware source documents.".to_string(),
+            description: "Current EPM2 hardware source library.".to_string(),
             current: Route::Docs {},
             PageIntroBlock {
                 kicker: "Docs",
-                title: "Source library for the current hardware corpus.",
-                summary: "Docs links to the current source material for EPM2 while keeping the landing page compact."
+                title: "Source library for the current hardware notes.",
+                summary: "Docs links to the current EPM2 source material while keeping the landing page compact."
             }
             for category in DOC_CATEGORIES {
                 section { class: "doc-category",
@@ -320,14 +320,14 @@ fn DrumEngine() -> Element {
     rsx! {
         PageFrame {
             title: "Authorial Drum Engine".to_string(),
-            description: "A portfolio case study for the PC4-playable Drum Engine: semantic ADG/AIG intent, responsive drummer behavior, MIDI output, and public listening references.".to_string(),
+            description: "A PC4-playable Drum Engine case: ADG/AIG groove intent, responsive drummer behavior, MIDI output, and public SoundCloud takes.".to_string(),
             current: Route::DrumEngine {},
             section { class: "drum-case-hero",
                 div { class: "section-copy",
                     span { class: "eyebrow", "Portfolio case" }
                     h1 { "Authorial Drum Engine" }
-                    p { class: "hero-body", "A responsive drummer engine for the PC4 rig: it keeps groove intent in an ADG/AIG layer, locks a performance posture, lowers it into MIDI, routes through mioXM, and is monitored through the Yamaha AG03 path." }
-                    p { class: "hero-status", "Drummer companion behavior: it proposes, remembers feedback, and keeps authorship with the person shaping the track." }
+                    p { class: "hero-body", "A responsive drummer workflow for the PC4 rig: ADG/AIG groove intent becomes MIDI, mioXM routes it, the Kurzweil PC4 plays it, and the Yamaha AG03 monitors the session." }
+                    p { class: "hero-status", "Player controls shape the take, correction feeds the next pass, and taste stays with the person working on the track." }
                     div { class: "hero-actions",
                         a {
                             class: "button button-primary",
@@ -342,12 +342,12 @@ fn DrumEngine() -> Element {
                 div { class: "drum-flow-panel",
                     div { class: "card-topline", "Current loop" }
                     h2 { "ADG/AIG to MIDI to PC4" }
-                    p { "The operator path starts from a drummer intent layer, resolves it through the active profile, exports MIDI events, routes them through mioXM to the Kurzweil PC4, and monitors the result through the Yamaha AG03 audio path." }
+                    p { "The player path starts from drum intent, resolves it through the active profile, exports MIDI events, routes them through mioXM to the Kurzweil PC4, and monitors the result through the Yamaha AG03 audio path." }
                     div { class: "drum-flow-steps",
                         article { class: "drum-flow-step",
                             span { "Intent" }
                             strong { "Groove shape" }
-                            p { "ADG/AIG keeps density, fill pressure, surface, timing feel, and drummer posture visible before note output." }
+                            p { "ADG/AIG keeps density, fill pressure, surface, timing feel, and drummer posture readable before note output." }
                         }
                         article { class: "drum-flow-step",
                             span { "Profile" }
@@ -357,7 +357,7 @@ fn DrumEngine() -> Element {
                         article { class: "drum-flow-step",
                             span { "mioXM" }
                             strong { "MIDI bridge" }
-                            p { "Generated note, velocity, timing, and fill decisions are lowered into MIDI and sent through the rig interface." }
+                            p { "Generated note, velocity, timing, and fill decisions become MIDI for the rig interface." }
                         }
                         article { class: "drum-flow-step",
                             span { "PC4 + AG03" }
@@ -372,7 +372,7 @@ fn DrumEngine() -> Element {
                 div { class: "section-copy",
                     span { class: "section-kicker", "Reference live set" }
                     h2 { "Reference live preset." }
-                    p { "These controls are the saved startup profile from the PC4, mioXM, and Yamaha AG03 drummer workflow used for the featured take." }
+                    p { "These controls are the saved startup profile from the PC4, mioXM, and Yamaha AG03 drummer session used for the featured take." }
                 }
                 div { class: "drum-control-grid",
                     for control in DRUM_ENGINE_PRESET_CONTROLS {
@@ -388,7 +388,7 @@ fn DrumEngine() -> Element {
                 div { class: "section-copy",
                     span { class: "section-kicker", "System shape" }
                     h2 { "What the case connects." }
-                    p { "The point is one vertical flow: semantic groove intent, hardware playback, manual taste, and feedback records all point at one drummer workflow." }
+                    p { "The case follows one working flow: ADG/AIG groove intent becomes MIDI, the PC4 plays it, and feedback shapes the next pass." }
                 }
                 div { class: "drum-case-grid",
                     for card in DRUM_ENGINE_EVIDENCE {
@@ -397,7 +397,7 @@ fn DrumEngine() -> Element {
                             h3 { "{card.title}" }
                             p { "{card.body}" }
                             div { class: "repo-meta",
-                                span { class: "repo-label", "Angle" }
+                                span { class: "repo-label", "Reference" }
                                 code { "{card.detail}" }
                             }
                         }
@@ -410,8 +410,8 @@ fn DrumEngine() -> Element {
             section { class: "listen-section",
                 div { class: "section-copy",
                     span { class: "section-kicker", "Listen" }
-                    h2 { "Public takes from the Drum Engine direction." }
-                    p { "The featured SoundCloud player opens with the release-candidate take. The other Jeans Instability tracks stay linked below for context without turning the page into a playlist." }
+                    h2 { "SoundCloud takes from the Drum Engine flow." }
+                    p { "Start with the release-candidate take. The other Jeans Instability tracks are linked below for nearby versions and live jams." }
                 }
                 div { class: "soundcloud-frame-shell",
                     iframe {
@@ -458,7 +458,7 @@ fn DrumEngineNotesSection() -> Element {
             div { class: "section-copy",
                 span { class: "section-kicker", "Lab notes" }
                 h2 { "Read the build notes." }
-                p { "These notes expand the Drum Engine case into the product frame, ADG/AIG language, hardware rig flow, and feedback loop." }
+                p { "These notes open the Drum Engine case into the player surface, ADG/AIG language, hardware rig flow, and feedback loop." }
             }
             div { class: "doc-grid",
                 for slug in DRUM_ENGINE_NOTE_SLUGS {
@@ -577,7 +577,7 @@ fn DrumEngineCaseSection() -> Element {
             div { class: "section-copy",
                 span { class: "section-kicker", "Hero case" }
                 h2 { "Authorial Drum Engine for the PC4 rig." }
-                p { "A separate PC4 Microkit Studio path now has a concrete drummer workflow: ADG/AIG intent, profile-led decisions, MIDI output through mioXM, PC4 playback, Yamaha AG03 monitoring, manual taste, and public SoundCloud takes." }
+                p { "PC4 Microkit Studio now carries a concrete drummer workflow: ADG/AIG intent, profile taste, MIDI through mioXM, PC4 playback, Yamaha AG03 monitoring, and public SoundCloud takes." }
                 div { class: "utility-links",
                     Link { class: "button button-primary", to: Route::DrumEngine {}, "Open Drum Engine" }
                     a {
@@ -592,7 +592,7 @@ fn DrumEngineCaseSection() -> Element {
             div { class: "drum-case-summary",
                 div { class: "card-topline", "Reference profile" }
                 h3 { "Jeans Instability release candidate" }
-                p { "143 BPM, four-bar chunks, groove-led mode, high energy, dense surface, and deliberate humanization. The controls are saved as an operator preset for the current PC4, mioXM, and AG03 drummer workflow." }
+                p { "143 BPM, four-bar chunks, groove-led mode, high energy, dense surface, and deliberate humanization. The controls are saved as a player preset for the current PC4, mioXM, and AG03 drummer workflow." }
                 div { class: "drum-mini-controls",
                     for control in DRUM_ENGINE_PRESET_CONTROLS.iter().take(6) {
                         span {
@@ -664,7 +664,7 @@ fn HomeUtilitySection() -> Element {
             div { class: "section-copy",
                 span { class: "section-kicker", "Where to start" }
                 h2 { "Play first, then read the notes." }
-                p { "Play is the fastest way to hear the current software runtime. Notes summarize decisions and open work. Lines keeps EPM1 and EPM2 separated. Docs links to the source material." }
+                p { "Play is the fastest way to hear the current software runtime. Notes track decisions and open work. Lines keeps EPM1 and EPM2 separated. Docs links to the source material." }
             }
             div { class: "utility-links",
                 Link { class: "button button-primary", to: Route::Play {}, "Open play" }
@@ -686,7 +686,7 @@ fn AdjacentProjectSection() -> Element {
             div { class: "section-copy",
                 span { class: "section-kicker", "{PC4_BRIDGE.kicker}" }
                 h2 { "PC4 rig work lives in a separate repo." }
-                p { "PC4 Microkit Studio covers playback control, session files, and local orchestration for the live setup while keeping that work outside the instrument repos." }
+                p { "PC4 Microkit Studio covers playback control, session files, and local rig flow for the live setup while keeping that work outside the instrument repos." }
             }
             article { class: "adjacent-card",
                 div { class: "card-topline", "{PC4_BRIDGE.kicker}" }
@@ -887,14 +887,14 @@ fn SiteFooter() -> Element {
             div { class: "footer-inner",
                 div {
                     span { class: "section-kicker", "{SITE_NAME}" }
-                    p { "Play for the browser demo. Lab for the EPM2 hardware path. Notes and Docs for current decisions and source material." }
+                    p { "Play the browser demo. Use Lab for the EPM2 hardware path, and Notes and Docs for current source material." }
                 }
                 div { class: "footer-meta",
                     span { "EPM1 active" }
                     span { "PC4MS related rig work" }
                     span { "Browser demo online" }
                     span { "EPM2 hardware lab" }
-                    span { "Notes for current decisions" }
+                    span { "Notes for current sessions" }
                 }
             }
         }

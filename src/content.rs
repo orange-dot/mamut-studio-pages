@@ -108,8 +108,8 @@ pub struct DrumEngineTrack {
 pub const HERO: HeroContent = HeroContent {
     eyebrow: "Mamut EPM",
     title: "Current software instrument.",
-    body: "EPM1 is runnable now: browser demo, desktop runtime, patch bank, macro controls, and PC4 MIDI work. EPM2 tracks the hardware path through analog studies, KiCad capture, simulation, and bench preparation.",
-    status: "Play the browser demo first, then use Notes and Docs for the current build trail.",
+    body: "EPM1 plays now: browser demo, desktop runtime, patch bank, macro controls, and PC4 MIDI work. EPM2 follows the hardware path through analog studies, KiCad capture, simulation, and bench preparation.",
+    status: "Play the browser demo first, then use Notes and Docs for the current build notes.",
     primary_cta: "Open play",
     secondary_cta: "Open notes",
 };
@@ -136,16 +136,16 @@ pub const STATS: &[Stat] = &[
 pub const HOME_FEATURES: &[DetailSection] = &[
     DetailSection {
         title: "EPM1",
-        body: "EPM1 is the software build that can be run now: Rust runtime, factory patches, browser rendering, and PC4-oriented MIDI work.",
+        body: "EPM1 is the software instrument that runs now: Rust runtime, factory patches, browser rendering, and PC4-oriented MIDI work.",
         bullets: &[
-            "Standalone runtime with audio, MIDI, and live performance paths.",
+            "Standalone runtime for audio, MIDI, and live play.",
             "Browser demo and desktop runtime use the same patch names and macro targets.",
             "Transport is locally frozen pending shared platform extraction.",
         ],
     },
     DetailSection {
         title: "EPM2",
-        body: "EPM2 is the hardware research track for a desktop analog poly synth: simulation, circuit capture, test points, and bench workflow.",
+        body: "EPM2 is the hardware track for a desktop analog poly synth: simulation, circuit capture, test points, and bench workflow.",
         bullets: &[
             "P1 VCO study, KiCad capture, and bench-prep remain the active path.",
             "External MIDI control keeps V1 focused on the sound engine.",
@@ -157,13 +157,13 @@ pub const HOME_FEATURES: &[DetailSection] = &[
 pub const PRODUCTS_INTRO: PageIntro = PageIntro {
     kicker: "Lines",
     title: "Current work split.",
-    summary: "EPM1 is the runnable software instrument. EPM2 is the hardware research and build track. The split keeps current software work and physical hardware work easy to follow.",
+    summary: "EPM1 is the runnable software instrument. EPM2 is the hardware build track. The split keeps current software sessions and physical hardware work easy to follow.",
 };
 
 pub const LAB_INTRO: PageIntro = PageIntro {
     kicker: "Lab",
     title: "EPM2 hardware lab.",
-    summary: "A compact view of the current hardware study path: P1 VCO simulation, KiCad capture, bench expectations, and the public source repo.",
+    summary: "A compact view of the current hardware path: P1 VCO simulation, KiCad capture, bench expectations, and the public source repo.",
 };
 
 pub const LAB_STAGES: &[LabCard] = &[
@@ -176,19 +176,19 @@ pub const LAB_STAGES: &[LabCard] = &[
     LabCard {
         label: "Step 02",
         title: "KiCad capture",
-        body: "Promoted blocks move into a hierarchical KiCad project only after the mechanism is understood enough to review.",
+        body: "Promoted blocks move into a hierarchical KiCad project after the mechanism is clear enough to review.",
         detail: "Current capture covers input tune, power reference, bench I/O, expo converter, threshold comparator, reset output, and current integrator.",
     },
     LabCard {
         label: "Step 03",
-        title: "Bench contract",
-        body: "Expected behavior is written before physical measurement so simulation, capture, and hardware can disagree productively.",
+        title: "Bench notes",
+        body: "Expected behavior is written before physical measurement so simulation, capture, and hardware can be compared directly.",
         detail: "Bench notes track ramp window, reset level, frequency range, sync movement, and test point intent for the P1 oscillator path.",
     },
     LabCard {
         label: "Step 04",
         title: "Public source",
-        body: "The public repo is a cleaned hardware-study export for docs, simulation, KiCad capture, bench expectations, and helper tools.",
+        body: "The public repo carries the hardware study: docs, simulation, KiCad capture, bench expectations, and helper tools.",
         detail: "It keeps docs, sim, KiCad, bench expectations, and tools together while leaving deploy, investor, and outreach material out.",
     },
 ];
@@ -197,13 +197,13 @@ pub const LAB_RESULTS: &[LabCard] = &[
     LabCard {
         label: "60",
         title: "Integrated VCO chain",
-        body: "The current `CV -> expo -> core -> saw/pulse` reference behaves as a usable study platform.",
+        body: "The current `CV -> expo -> core -> saw/pulse` reference works as the main P1 study platform.",
         detail: "The documented range is roughly 489 Hz to 4021 Hz across the modest -1 V to +2 V sweep.",
     },
     LabCard {
         label: "70",
         title: "Temperature drift",
-        body: "The simplified expo model is intentionally characterized before compensation work hides the failure mode.",
+        body: "The simplified expo model is characterized before compensation work hides the drift.",
         detail: "The +1 V / 0 V ratio bends across temperature, which gives the expo work a concrete baseline.",
     },
     LabCard {
@@ -215,7 +215,7 @@ pub const LAB_RESULTS: &[LabCard] = &[
     LabCard {
         label: "100/101",
         title: "Transistor reset pocket",
-        body: "The reset path has moved beyond a gentle behavioral shortcut into a more bench-facing transistor study.",
+        body: "The reset path has moved from a behavioral shortcut into a bench-facing transistor study.",
         detail: "The current useful region stays stable around the 2.2 k to 4.7 k base-drive area, with extreme weak drive failing.",
     },
 ];
@@ -230,12 +230,12 @@ pub const PRODUCT_LINES: &[ProductLine] = &[
     ProductLine {
         code: "EPM1",
         title: "Software runtime",
-        summary: "Rust runtime for the current software instrument: standalone execution, factory patches, live-set behavior, and PC4-oriented MIDI work.",
+        summary: "Rust runtime for the current software instrument: standalone play, factory patches, live-set behavior, and PC4-oriented MIDI work.",
         status: "Active: runnable software instrument",
         repo_path: "/home/dev/sel4/mamut-sint-sw",
         repo: RepoKind::Epm1,
         bullets: &[
-            "Core workspace is implemented: params, patch, identity, DSP, engine, and standalone.",
+            "Core workspace is in place: params, patch, identity, DSP, engine, and standalone.",
             "Sprint 3 hardening and Sprint 4 runtime work are done; Sprint 6 centers the PC4 rig.",
             "Transport is locally frozen pending shared platform extraction.",
         ],
@@ -244,7 +244,7 @@ pub const PRODUCT_LINES: &[ProductLine] = &[
     ProductLine {
         code: "EPM2",
         title: "Hardware track",
-        summary: "Hardware program for the later physical instrument: desktop analog poly direction, digital control work, and a bench-oriented path anchored in simulation and KiCad.",
+        summary: "Hardware path for the later physical instrument: desktop analog poly direction, digital control work, simulation, KiCad, and bench notes.",
         status: "Early study, capture, and bench-prep",
         repo_path: "/home/dev/sel4/mamut-sint-hw",
         repo: RepoKind::Epm2,
@@ -259,19 +259,19 @@ pub const PRODUCT_LINES: &[ProductLine] = &[
 
 pub const BLOG_INTRO: PageIntro = PageIntro {
     kicker: "Notes",
-    title: "Working notes and design records.",
-    summary: "Short notes from the current software runtime, hardware study path, and related rig work.",
+    title: "Working notes.",
+    summary: "Short notes from the current software runtime, hardware path, and related rig work.",
 };
 
 pub const PC4_BRIDGE: AdjacentProject = AdjacentProject {
     kicker: "Related repo",
     title: "PC4 Microkit Studio",
-    summary: "A separate repo for PC4 rig integration, playback control, session logs, and local-first orchestration around the performance setup.",
+    summary: "A separate repo for PC4 rig integration, playback control, session logs, and local-first flow around the performance setup.",
     repo_path: "/home/dev/sel4/pc4-microkit-studio",
     bullets: &[
         "Keeps rig orchestration and session files outside the instrument repo.",
         "Covers playback control, musical control boundaries, and hardware bench workflow around the PC4 setup.",
-        "Dedicated infrastructure for the performance setup.",
+        "Keeps the performance setup in its own source home.",
     ],
 };
 
@@ -336,25 +336,25 @@ pub const DRUM_ENGINE_EVIDENCE: &[LabCard] = &[
     LabCard {
         label: "Intent",
         title: "ADG/AIG layer",
-        body: "The engine keeps groove intent and drummer behavior above raw MIDI events, then lowers the decision into a PC4-playable performance.",
-        detail: "Semantic groove representation before MIDI output.",
+        body: "ADG/AIG keeps the drum decision musical before it becomes MIDI for the PC4.",
+        detail: "Groove intent before MIDI output.",
     },
     LabCard {
         label: "Play",
         title: "PC4 rig loop",
-        body: "The current operator path sends AIG/ADG drum decisions through mioXM to the Kurzweil PC4, then monitors the result through the Yamaha AG03 audio path.",
-        detail: "Local MIDI and audio playback tied to the real rig.",
+        body: "mioXM routes the generated MIDI to the Kurzweil PC4, and the Yamaha AG03 monitors the session.",
+        detail: "Local MIDI and audio tied to the real rig.",
     },
     LabCard {
         label: "Taste",
         title: "Manual corpus",
-        body: "Selected manual material, live controls, traces, and comparisons steer the drummer instead of treating every variation as equally useful.",
-        detail: "Profile-led and intake-led decisions stay readable.",
+        body: "Selected material and live controls steer the drummer toward takes that fit the track.",
+        detail: "Profile-led and intake-led choices stay readable.",
     },
     LabCard {
         label: "Memory",
         title: "Feedback loop",
-        body: "Training adjustments and comparison records let the drummer companion remember what worked without taking authorship away from the player.",
+        body: "Correction and comparison notes help the drummer companion remember what worked while the player keeps the taste call.",
         detail: "Learning follows correction and preference from the player.",
     },
 ];
@@ -363,7 +363,7 @@ pub const DRUM_ENGINE_TRACKS: &[DrumEngineTrack] = &[
     DrumEngineTrack {
         title: "jeans-instability-experiment-moises-ai-guitar-stem",
         url: "https://soundcloud.com/mamut_studio/jeans-instability-experiment",
-        note: "Moises AI guitar stem experiment.",
+        note: "Guitar-stem experiment made with Moises AI.",
         track_id: "2332306544",
     },
     DrumEngineTrack {
@@ -381,7 +381,7 @@ pub const DRUM_ENGINE_TRACKS: &[DrumEngineTrack] = &[
     DrumEngineTrack {
         title: "Jeans Instability v2",
         url: "https://soundcloud.com/mamut_studio/jeans-instability-v2",
-        note: "Earlier version with Moises AI bass track stem added.",
+        note: "Earlier version with a Moises AI bass track stem.",
         track_id: "2330361851",
     },
     DrumEngineTrack {
@@ -404,36 +404,36 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         slug: "drum-engine-companion",
         series: "Drum Engine",
         title: "Drummer Companion",
-        intro: "The Drum Engine is the current PC4MS rhythm partner: semantic groove state, live controls, selected corpus material, and hardware playback in one loop.",
-        body: "This note describes the product shape behind the Authorial Drum Engine case: a drummer companion that follows material, locks a performance posture, proposes drum behavior, and keeps the decision path readable.",
+        intro: "The Drum Engine is the current PC4MS rhythm partner: groove state, live controls, selected material, and hardware playback in one loop.",
+        body: "This note follows the Authorial Drum Engine case: a drummer companion listens to the material, locks a posture, shapes drum behavior, and keeps the player in control.",
         bullets: &[
             "Starts from played material, profile law, and live controls.",
             "Tracks groove state across chunks so the drummer can lock, adapt, and shape fills.",
-            "Uses the Jeans Instability reference preset as an operator-controlled starting point.",
-            "Keeps proposals tied to traces, generated MIDI, ADG events, and listening references.",
+            "Uses the Jeans Instability reference preset as a player-controlled starting point.",
+            "Keeps generated MIDI, ADG events, and listening references tied to the take.",
         ],
     },
     BlogPost {
         slug: "adg-aig-drum-language",
         series: "Drum Engine",
         title: "ADG And AIG Drum Language",
-        intro: "ADG and AIG give the drummer workflow a semantic layer before MIDI: groove intent, gesture, surface, density, timing feel, and relation.",
-        body: "The language layer is the bridge between AI-human iteration and hardware playback. ADG keeps drum decisions readable as musical intent; MIDI remains the transport that makes those decisions playable on the current rig.",
+        intro: "ADG/AIG holds the drum decision before MIDI: groove intent, gesture, surface, density, timing feel, and relation.",
+        body: "ADG keeps drum decisions readable as musical intent. MIDI is the transport that makes those decisions playable on the current rig.",
         bullets: &[
             "AIG is the broader articulated instrument gesture frame.",
             "ADG is the drum dialect for voice, gesture, contact, energy, role, timing, and relationship.",
-            "Generated MIDI is a lowering step from semantic drum decisions into the PC4-compatible performance path.",
-            "The practical test is whether semantic edits survive into audible groove changes.",
+            "Generated MIDI is a lowering step from ADG drum decisions into the PC4-compatible performance path.",
+            "The practical test is whether ADG edits survive into audible groove changes.",
         ],
     },
     BlogPost {
         slug: "pc4-drum-rig-flow",
         series: "Drum Engine",
         title: "PC4 Drum Rig Flow",
-        intro: "The current rig flow connects the Drum Engine to real hardware: ADG/AIG decisions become MIDI, route through mioXM, play the Kurzweil PC4, and return through Yamaha AG03 monitoring.",
-        body: "This note describes the local performance chain used by the Drum Engine case. The workflow is a hardware-backed loop because the drum decisions are judged through the same studio path used for the public takes.",
+        intro: "The current rig flow connects the Drum Engine to hardware: ADG/AIG decisions become MIDI, mioXM routes them, the Kurzweil PC4 plays, and Yamaha AG03 monitoring returns the sound.",
+        body: "This note describes the local performance chain used by the Drum Engine case. Drum decisions are judged through the same studio path used for the public takes.",
         bullets: &[
-            "Operator controls shape the live profile and generated drum decision.",
+            "Player controls shape the live profile and generated drum decision.",
             "AIG/ADG events lower into MIDI note, velocity, timing, and fill behavior.",
             "mioXM carries the MIDI path into the Kurzweil PC4.",
             "Yamaha AG03 monitoring and recording make the result audible as a performance.",
@@ -443,13 +443,13 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         slug: "drum-engine-feedback-taste-memory",
         series: "Drum Engine",
         title: "Feedback And Taste Memory",
-        intro: "The Drum Engine keeps authorship visible through manual corpus selection, live groove state, traces, comparison records, and training adjustments.",
-        body: "This note describes how feedback becomes system state. The important behavior is that the drummer companion can remember correction and preference while keeping the player in charge of what counts as a better take.",
+        intro: "The Drum Engine keeps authorship visible through manual corpus selection, live groove state, comparison notes, and training adjustments.",
+        body: "This note describes how feedback becomes session memory. The drummer companion remembers correction and preference while the player decides what counts as a better take.",
         bullets: &[
             "Manual corpus selection gives chosen material more weight than arbitrary variation.",
             "LiveGrooveState carries locked density, energy, accent cells, coupling, and phase across chunks.",
             "Training feedback and comparison records preserve why a take was accepted, rejected, or revised.",
-            "Traces and generated MIDI keep the loop readable after listening.",
+            "Generated MIDI and source notes keep the loop readable after listening.",
         ],
     },
     BlogPost {
@@ -459,8 +459,8 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         intro: "The project keeps software, hardware, and rig work separated enough that each part can be tested on its own.",
         body: "EPM1, EPM2, and PC4 rig work have different jobs. The software runtime should stay runnable, the hardware path should stay tied to simulation and bench work, and related orchestration should stay in its own repo.",
         bullets: &[
-            "Software behavior should be audible and testable now.",
-            "Hardware work should move through simulation, capture, and measurement.",
+            "Software behavior should be audible and playable now.",
+            "Hardware work should move through simulation, capture, and bench measurement.",
             "Rig orchestration belongs in its own repo.",
         ],
     },
@@ -481,7 +481,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         series: "Direction",
         title: "Why Two Lines Exist",
         intro: "The software runtime and the hardware build path move at different speeds, so they are tracked as separate lines.",
-        body: "EPM1 exists so patches, macros, and performance behavior can be exercised now. EPM2 exists so the physical instrument can move through circuit study, capture, and bench work.",
+        body: "EPM1 exists so patches, macros, and performance behavior can be played now. EPM2 exists so the physical instrument can move through circuit study, capture, and bench work.",
         bullets: &[
             "EPM1 is the current runnable instrument.",
             "EPM2 is the physical hardware track.",
@@ -493,7 +493,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         series: "Direction",
         title: "EPM1 Runtime Scope",
         intro: "EPM1 is the part that can be run and checked now, so the immediate work stays close to runtime behavior.",
-        body: "The software line is focused on a standalone runtime first. It exposes patch validation, dry-run behavior, device selection, live play, and PC4 rig work before plugin or editor polish.",
+        body: "The software line is focused on a standalone runtime first. It exposes patch checks, dry-run behavior, device selection, live play, and PC4 rig work before plugin or editor polish.",
         bullets: &[
             "Standalone runtime before plugin/editor work.",
             "Factory bank and locked live set are part of the current runtime shape.",
@@ -514,7 +514,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         ],
     },
     BlogPost {
-        slug: "boundaries-and-non-goals",
+        slug: "boundaries-and-roles",
         series: "Direction",
         title: "Boundaries And Roles",
         intro: "The split is useful only if each line keeps a clear job.",
@@ -533,19 +533,19 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         body: "The software line is decomposed into crates for parameters, patches, identity terms, DSP, engine behavior, and standalone execution. That makes runtime behavior easier to follow and test.",
         bullets: &[
             "Stable parameter and macro registry.",
-            "Canonical TOML patch model and validation.",
+            "Canonical TOML patch model and patch checks.",
             "Shared DSP, engine logic, and standalone runtime.",
         ],
     },
     BlogPost {
-        slug: "pc4-controller-map-validated",
+        slug: "pc4-controller-map-session",
         series: "System",
-        title: "PC4 Controller Map Validated",
+        title: "PC4 Controller Map Session",
         intro: "A real Kurzweil PC4 session now exercises EPM1 as a one-way MIDI-controlled software instrument.",
-        body: "On April 29, 2026, the EPM1 standalone runtime was run through the live rig: Kurzweil PC4 into mioXM DIN 1, then into the Rust standalone synth, with audio out through the Yamaha AG03 on hw:1,0. The session validated the full PC4 controller surface that matters for one-way play into Mamut while keeping the detailed session notes in the EPM1 repo.",
+        body: "On April 29, 2026, the EPM1 standalone runtime ran through the live rig: Kurzweil PC4 into mioXM DIN 1, then into the Rust standalone synth, with audio out through the Yamaha AG03 on hw:1,0. The session covered the PC4 controller surface that matters for one-way play into Mamut while keeping the detailed session notes in the EPM1 repo.",
         bullets: &[
-            "Clean idle held after PC4 Global MIDI cleanup; startup trace stayed quiet across note, CC, and program-change channels.",
-            "Sustain, K1-K9, S1-S9, SW1-SW9, mod wheel, pitch bend, and channel aftertouch were observed through the standalone MIDI trace.",
+            "Clean idle held after PC4 Global MIDI cleanup; the startup MIDI log stayed quiet across note, CC, and program-change channels.",
+            "Sustain, K1-K9, S1-S9, SW1-SW9, mod wheel, pitch bend, and channel aftertouch were observed in the standalone MIDI log.",
             "Reserved controls were detected as incoming MIDI and left outside synth action mapping.",
             "Patch-switch actions survived on the exclusive AG03 hw:1,0 path with stable ALSA device ownership.",
             "Program Change stayed out of scope for this run because PC4 Global Program Change stayed Off for stable idle behavior.",
@@ -580,7 +580,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         series: "Build Path",
         title: "Simulation First",
         intro: "The hardware path uses simulation before boards so circuit behavior can be checked cheaply and repeatedly.",
-        body: "The current study loop treats NGSpice as the primary daily tool for learning behavior before expensive hardware commitments are made.",
+        body: "The current study loop uses NGSpice as the daily tool for learning behavior before expensive hardware commitments are made.",
         bullets: &[
             "Simulation playbooks are already documented.",
             "P1-specific notes and walkthroughs exist for the integrated chain.",
@@ -592,7 +592,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         series: "Build Path",
         title: "Capture And Hardware",
         intro: "The hardware path becomes useful when KiCad capture represents real electrical choices.",
-        body: "The repo now carries electrically meaningful capture for P1 blocks, while intentionally leaving some areas provisional until they need more fidelity.",
+        body: "The repo now carries electrically meaningful capture for P1 blocks, while leaving some areas provisional until they need more fidelity.",
         bullets: &[
             "Input tune, power reference, current integrator, threshold comparator, and reset output are already named as meaningful capture targets.",
             "Hardware organization follows bench relevance and concrete review questions.",
@@ -616,11 +616,11 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         series: "Adjacent Work",
         title: "PC4 Microkit Studio",
         intro: "PC4 Microkit Studio is related rig infrastructure, so it stays outside the EPM1 and EPM2 repos.",
-        body: "PC4 Microkit Studio is a host-first, spec-first standalone repo for a studio rig. It centers typed contracts, musical control boundaries, session files, playback control, and hardware bench work around a PC4 setup.",
+        body: "PC4 Microkit Studio is a host-first standalone repo for a studio rig. It centers typed contracts, musical control boundaries, session files, playback control, and hardware bench work around a PC4 setup.",
         bullets: &[
-            "Separate canonical repository and separate problem frame.",
+            "Separate canonical repository and separate rig frame.",
             "Related to the performance setup and kept outside the EPM1/EPM2 repo split.",
-            "Surfaced here with a concise summary and outbound repo context.",
+            "Linked here with a concise summary and outbound repo context.",
         ],
     },
 ];
@@ -631,7 +631,7 @@ pub const DOC_CATEGORIES: &[DocCategory] = &[
         body: "Hardware-backed runtime notes for the current playable EPM1 instrument.",
         docs: &[DocCard {
             title: "PC4 Full Controller Map",
-            summary: "Real Kurzweil PC4 hardware validation of one-way sustain, knobs, sliders, switches, wheels, and aftertouch into EPM1.",
+            summary: "Real Kurzweil PC4 session for one-way sustain, knobs, sliders, switches, wheels, and aftertouch into EPM1.",
             source_path: "docs/live-sessions/2026-04-29-pc4-ag03-full-controller-map.md",
             repo: RepoKind::Epm1,
         }],
@@ -654,7 +654,7 @@ pub const DOC_CATEGORIES: &[DocCategory] = &[
             },
             DocCard {
                 title: "Direction Notes",
-                summary: "The chosen direction for the desktop analog poly and the current V1 non-goals.",
+                summary: "The chosen direction for the desktop analog poly and the current V1 boundaries.",
                 source_path: "docs/product-direction.md",
                 repo: RepoKind::Epm2,
             },
@@ -684,7 +684,7 @@ pub const DOC_CATEGORIES: &[DocCategory] = &[
             },
             DocCard {
                 title: "Tonal Architecture",
-                summary: "How the identity terms map into system and implementation roles.",
+                summary: "How the identity terms map into system and sound roles.",
                 source_path: "docs/tonal-architecture.md",
                 repo: RepoKind::Epm2,
             },
@@ -768,8 +768,8 @@ pub fn blog_post_sections(slug: &str) -> &'static [BlogPostSection] {
 
 pub const DRUM_ENGINE_COMPANION_SECTIONS: &[BlogPostSection] = &[
     BlogPostSection {
-        title: "Product surface",
-        body: "The current product surface is a responsive drummer companion for the PC4MS rig. It listens to material and live controls, then proposes drummer behavior that can be accepted, corrected, or revised.",
+        title: "Player surface",
+        body: "The current surface is a responsive drummer companion for the PC4MS rig. It listens to material and live controls, then shapes drummer behavior that can be accepted, corrected, or revised.",
         bullets: &[
             "The musician remains the author of the track and the take.",
             "The engine contributes groove behavior, performance posture, and repeatable output.",
@@ -777,8 +777,8 @@ pub const DRUM_ENGINE_COMPANION_SECTIONS: &[BlogPostSection] = &[
         ],
     },
     BlogPostSection {
-        title: "Implementation nucleus",
-        body: "`crates/drum-engine` already has the center of gravity for this story: profile-led, groove-led, and intake-led modes; live chunk requests; generated MIDI events; ADG gestures; traces; and training records.",
+        title: "Source center",
+        body: "`crates/drum-engine` already has the center of gravity for this story: profile-led, groove-led, and intake-led modes; live chunk requests; generated MIDI events; ADG gestures; source notes; and training records.",
         bullets: &[
             "Profile-led behavior gives the drummer a stable identity.",
             "Intake-led behavior lets captured or played material influence the next drum decision.",
@@ -787,31 +787,31 @@ pub const DRUM_ENGINE_COMPANION_SECTIONS: &[BlogPostSection] = &[
     },
     BlogPostSection {
         title: "Reference live preset",
-        body: "The Jeans Instability reference preset gives the page a concrete operator state: 143 BPM, four-bar chunks, high energy, dense surface, deliberate humanization, anti-repeat, and controlled looseness.",
+        body: "The Jeans Instability reference preset gives the page a concrete session state: 143 BPM, four-bar chunks, high energy, dense surface, deliberate humanization, anti-repeat, and controlled looseness.",
         bullets: &[
-            "The preset is a saved operator state for this exact live set.",
+            "The preset is a saved player state for this exact live set.",
             "The same values connect the case page, the public take, and the PC4MS workbench flow.",
-            "The point is repeatable listening context: same rig, same controls, same performance target.",
+            "The listening context stays repeatable: same rig, same controls, same performance target.",
         ],
     },
     BlogPostSection {
-        title: "Vertical path",
-        body: "The strongest version is one vertical path rather than a wide feature list: semantic intent, profile taste, generated MIDI, hardware playback, listening references, and feedback memory.",
+        title: "Working flow",
+        body: "The strongest version is one working flow: groove intent, profile taste, generated MIDI, hardware playback, listening references, and feedback memory.",
         bullets: &[
             "A short public take is more useful here than a broad catalogue of possible features.",
             "The page should make the reader understand how the drummer decision reaches the rig.",
-            "Follow-up work can deepen this vertical with stronger traces, exports, and A/B listening passes.",
+            "Follow-up work can deepen this flow with stronger source notes, exports, and A/B listening passes.",
         ],
     },
 ];
 
 pub const ADG_AIG_DRUM_LANGUAGE_SECTIONS: &[BlogPostSection] = &[
     BlogPostSection {
-        title: "Semantic layer",
+        title: "Drum language",
         body: "AIG is the general articulated gesture frame. ADG is the drum dialect used to describe drum behavior before it is lowered into transport events.",
         bullets: &[
             "The data can carry voice, gesture, energy, timing feel, surface, and phrase role.",
-            "The format gives AI-human iteration a readable object to revise.",
+            "The format gives player correction a readable object to revise.",
             "The drummer workflow can preserve intent while changing local output details.",
         ],
     },
@@ -826,16 +826,16 @@ pub const ADG_AIG_DRUM_LANGUAGE_SECTIONS: &[BlogPostSection] = &[
     },
     BlogPostSection {
         title: "Lowering to MIDI",
-        body: "The current rig still needs MIDI because the Kurzweil PC4 is the playback target. The important design choice is that MIDI is produced from semantic drum decisions.",
+        body: "The current rig still needs MIDI because the Kurzweil PC4 is the playback target. The important design choice is that MIDI is produced from ADG/AIG drum decisions.",
         bullets: &[
             "ADG keeps the authored decision readable.",
             "Generated MIDI makes the decision playable on the current hardware.",
-            "Trace files connect the high-level decision to the low-level event output.",
+            "Source notes connect the high-level decision to the low-level event output.",
         ],
     },
     BlogPostSection {
-        title: "AI-human iteration",
-        body: "The reason to keep ADG/AIG visible is iteration. A player or agent can ask for a tighter lock, more open surface, lower fill pressure, or a different phrase relation while preserving the take identity.",
+        title: "Player correction",
+        body: "ADG/AIG stays visible so the player can ask for a tighter lock, more open surface, lower fill pressure, or a different phrase relation while preserving the take identity.",
         bullets: &[
             "The edit target is musical language rather than only individual note edits.",
             "The same representation can drive comparison, training, and future export views.",
@@ -846,8 +846,8 @@ pub const ADG_AIG_DRUM_LANGUAGE_SECTIONS: &[BlogPostSection] = &[
 
 pub const PC4_DRUM_RIG_FLOW_SECTIONS: &[BlogPostSection] = &[
     BlogPostSection {
-        title: "Operator path",
-        body: "The operator path begins with live controls and a drummer profile. It resolves a drum decision, exports MIDI events, and sends the result through the local hardware chain.",
+        title: "Player path",
+        body: "The player path begins with live controls and a drummer profile. It resolves a drum decision, exports MIDI events, and sends the result through the local hardware chain.",
         bullets: &[
             "Live controls shape energy, density, risk, fill pressure, surface, humanization, and looseness.",
             "The profile and manual corpus provide taste boundaries.",
@@ -856,16 +856,16 @@ pub const PC4_DRUM_RIG_FLOW_SECTIONS: &[BlogPostSection] = &[
     },
     BlogPostSection {
         title: "Hardware chain",
-        body: "The current chain is ADG/AIG decision to MIDI, mioXM for MIDI routing, Kurzweil PC4 for playback, and Yamaha AG03 for monitoring and recording.",
+        body: "The current chain is ADG/AIG decision to MIDI, mioXM routing, Kurzweil PC4 playback, and Yamaha AG03 monitoring and recording.",
         bullets: &[
-            "mioXM is part of the rig because it turns the generated MIDI into a hardware route.",
-            "The PC4 is the audible instrument for this drummer workflow.",
-            "The AG03 gives the workflow a consistent monitoring and capture path.",
+            "mioXM routes generated MIDI into the hardware rig.",
+            "The PC4 plays the audible drum performance for this workflow.",
+            "The AG03 gives the session a consistent monitoring and capture path.",
         ],
     },
     BlogPostSection {
         title: "Listening references",
-        body: "The SoundCloud takes are the quickest way to hear this rig direction. They put the drum flow next to real listening while the code and traces preserve the implementation path.",
+        body: "The SoundCloud takes are the quickest way to hear this rig direction. They put the drum flow next to real listening while the code and source notes preserve the build path.",
         bullets: &[
             "The release candidate is the featured take for the case page.",
             "Related takes show nearby experiments and revisions.",
@@ -874,11 +874,11 @@ pub const PC4_DRUM_RIG_FLOW_SECTIONS: &[BlogPostSection] = &[
     },
     BlogPostSection {
         title: "What the flow connects",
-        body: "The flow connects the Drum Engine to the studio setup: semantic drum decisions become a PC4 performance and are heard through the same local chain used for the published tracks.",
+        body: "The flow connects the Drum Engine to the studio setup: ADG/AIG drum decisions become a PC4 performance and are heard through the same local chain used for the published tracks.",
         bullets: &[
-            "The implementation story is hardware-backed.",
-            "The output path is specific enough to reproduce locally.",
-            "The site can present the rig as part of the creative system rather than a footnote.",
+            "The build story is tied to hardware.",
+            "The output path is specific enough for local replay.",
+            "The site presents the rig as part of the creative system rather than a footnote.",
         ],
     },
 ];
@@ -889,7 +889,7 @@ pub const DRUM_ENGINE_FEEDBACK_MEMORY_SECTIONS: &[BlogPostSection] = &[
         body: "Manual corpus selection gives chosen material and decisions weight. That lets the drummer companion treat chosen references as better starting points than random variation.",
         bullets: &[
             "The corpus can steer repeat reduction, event selection, and local law.",
-            "The corpus layer connects listening judgment to future generation.",
+            "The corpus layer connects listening judgment to the next pass.",
             "The site should describe this as taste memory under player control.",
         ],
     },
@@ -912,11 +912,11 @@ pub const DRUM_ENGINE_FEEDBACK_MEMORY_SECTIONS: &[BlogPostSection] = &[
         ],
     },
     BlogPostSection {
-        title: "Inspectable loop",
-        body: "The loop is strongest when every audible result can be traced back through profile, live controls, ADG events, generated MIDI, and feedback records.",
+        title: "Session loop",
+        body: "The loop is strongest when every audible result connects back to profile, live controls, ADG events, generated MIDI, and feedback records.",
         bullets: &[
-            "Traces support debugging and musical review.",
-            "Generated MIDI and trace files make audition and comparison repeatable.",
+            "Source notes support debugging and musical review.",
+            "Generated MIDI and source notes make audition and comparison repeatable.",
             "The player stays able to correct the drummer without losing the history of the take.",
         ],
     },

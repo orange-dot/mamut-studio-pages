@@ -284,7 +284,7 @@ pub fn PlayPage() -> Element {
     let mut steps = use_signal(default_steps);
     let mut automation = use_signal(default_automation);
     let mut status = use_signal(|| {
-        "Choose a patch, shape the phrase, and render the current EPM1 language straight in the browser."
+        "Choose a patch, shape the phrase, and play the current EPM1 sound in the browser."
             .to_string()
     });
     let mut last_render = use_signal(|| Option::<RenderSummary>::None);
@@ -317,12 +317,12 @@ pub fn PlayPage() -> Element {
             section { class: "play-hero",
                 div { class: "play-copy",
                     span { class: "section-kicker", "Play / Browser demo" }
-                    h1 { "Sequence the current software instrument." }
+                    h1 { "Play the current software instrument." }
                     p {
-                        "Choose a live-set patch, shape a 16-step phrase, drive one macro lane, and render the result straight in the browser."
+                        "Choose a live-set patch, shape a 16-step phrase, drive one macro lane, and play the result straight in the browser."
                     }
                     p {
-                        "The browser engine is smaller than the desktop runtime, but it uses the same patch names, macro targets, and MIDI-oriented control model."
+                        "The browser engine uses the same patch names, macro targets, and MIDI-oriented control model as the desktop runtime."
                     }
                     p { class: "play-hint", "{active_preset.code} / {current_macro_target.label()}: {current_macro_target.blurb()}" }
                     div { class: "hero-actions",
@@ -409,7 +409,7 @@ pub fn PlayPage() -> Element {
                                     span { class: "section-kicker", "Patch bank" }
                                     h2 { "Eight live-set patches" }
                                 }
-                                p { "These names mirror the current EPM1 live set. The browser engine keeps the patch and macro model visible in a compact demo surface." }
+                                p { "These names mirror the current EPM1 live set. The browser engine keeps the patch and macro model close to the controls." }
                             }
                             div { class: "play-patch-grid",
                                 for patch in LivePatchId::ALL {
@@ -435,7 +435,7 @@ pub fn PlayPage() -> Element {
                             div { class: "lane-header",
                                 div {
                                     span { class: "section-kicker", "Transport" }
-                                    h2 { "Render the phrase, keep the surface tight" }
+                                    h2 { "Render the phrase and listen" }
                                 }
                                 p { "{status_text}" }
                             }
@@ -504,7 +504,7 @@ pub fn PlayPage() -> Element {
                                         span { class: "section-kicker", "Note lane" }
                                         h2 { "Toggle steps and cycle pitch" }
                                     }
-                                    p { "Each active step emits a NoteOn and matching NoteOff. Click the pad to arm or mute it, then use the lower switch to move the pitch through the fixed stage set." }
+                                    p { "Each active step plays a NoteOn and matching NoteOff. Click the pad to arm or mute it, then use the lower switch to move the pitch through the fixed stage set." }
                                 }
                                 LaneRuler {}
                                 div { class: "step-grid",
@@ -550,7 +550,7 @@ pub fn PlayPage() -> Element {
                                         span { class: "section-kicker", "Automation lane" }
                                         h2 { "Drive one macro across the phrase" }
                                     }
-                                    p { "The lane targets one macro at a time. Each click advances the step from base value to a higher setting, then wraps back to base." }
+                                    p { "The lane targets one macro at a time. Each click moves the step from base value to a higher setting, then wraps back to base." }
                                 }
                                 LaneRuler {}
                                 div { class: "macro-grid",
@@ -650,11 +650,11 @@ pub fn PlayPage() -> Element {
                     section { class: "play-panel play-panel-secondary" ,
                         div { class: "card-topline", "Runtime shape" }
                         h2 { "Constrained browser renderer" }
-                        p { "This surface is intentionally small: one phrase, one macro lane, one render path, and enough output detail to hear the result." }
+                        p { "One phrase, one macro lane, one browser render path. Enough to hear the current EPM1 runtime." }
                         ul { class: "play-detail-list",
                             li { "Offline block renderer with browser playback handoff." }
                             li { {format!("{}-frame processing blocks and {}-voice cap.", BLOCK_SIZE, MAX_VOICES)} }
-                            li { "Macro lane emits controller events against the selected target." }
+                            li { "Macro lane sends controller events to the selected target." }
                             li { "Patch bank mirrors the current EPM1 live-set names." }
                         }
                     }
