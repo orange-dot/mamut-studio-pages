@@ -748,6 +748,16 @@ p {
   align-items: start;
 }
 
+.drum-case-hero {
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  gap: 1.35rem;
+  isolation: isolate;
+}
+
+.drum-case-hero > * {
+  min-width: 0;
+}
+
 .listen-section {
   grid-template-columns: minmax(0, 0.62fr) minmax(320px, 0.92fr) minmax(280px, 0.7fr);
   align-items: start;
@@ -888,12 +898,23 @@ p {
 }
 
 .drum-case-hero h1 {
-  max-width: 12ch;
+  max-width: 12.6ch;
+  font-size: clamp(2.85rem, 4.55vw, 4.45rem);
+  line-height: 1.02;
+  overflow-wrap: normal;
 }
 
 .drum-case-summary,
 .drum-flow-panel {
   min-height: 100%;
+}
+
+.drum-case-hero .drum-flow-panel {
+  align-self: stretch;
+}
+
+.drum-case-hero .drum-flow-steps {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .drum-mini-controls span,
