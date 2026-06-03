@@ -810,9 +810,7 @@ pub const DRUM_ENGINE_RELEASE_EXAMPLES: &[CodeExample] = &[CodeExample {
   "rig_target": "Kurzweil PC4",
   "midi_output": "hw:CARD=mioXM,DEV=0",
   "audio_input": "hw:CARD=AG06AG03,DEV=0",
-  "section_id": "intro",
-  "section_name": "Intro",
-  "summary": "Reactive programmable drum-machine live performance for Aksak Cocek / Intro"
+  "summary": "Reactive programmable drum-machine live performance"
 }"#,
 }];
 
@@ -1346,7 +1344,7 @@ live_groove_event_hash(&event.id) % 100 < threshold"#,
 pub const REACTIVE_PROGRAMMABLE_DRUM_MACHINE_SECTIONS: &[BlogPostSection] = &[
     BlogPostSection {
         title: "Release candidate take",
-        body: "drum-live-1780432493944 is the Jeans release-candidate take. The WAV is a 6:50.805 live pass in stereo 96 kHz 24-bit PCM. The session names the rig target as Kurzweil PC4 and the section as Aksak Cocek / Intro.",
+        body: "drum-live-1780432493944 is the Jeans release-candidate take. The WAV is a 6:50.805 live pass in stereo 96 kHz 24-bit PCM. The session names the rig target as Kurzweil PC4.",
         bullets: &[
             "The take metadata points to the PC4 live rig.",
             "The same take id has a generated-live MIDI file and a human MIDI intake JSON file.",
