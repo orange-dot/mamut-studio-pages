@@ -9,7 +9,7 @@ use crate::play::PlayPage;
 use dioxus::prelude::*;
 
 const SITE_NAME: &str = "Mamut EPM";
-const SITE_DESCRIPTION: &str = "Public home for Mamut Studio: play EPM1, hear the Drum Engine, follow PC4 Microkit Studio, and read the EPM2 hardware path.";
+const SITE_DESCRIPTION: &str = "Public home for Mamut Studio: play EPM1, hear the Reactive Programmable Drum Machine, follow PC4 Microkit Studio, and read the EPM2 hardware path.";
 const DEFAULT_SITE_BASE_URL: &str = "https://mamut-studio.com";
 const PREVIEW_IMAGE_PATH: &str = "/og-default.png";
 const PREVIEW_IMAGE_WIDTH: &str = "3000";
@@ -38,7 +38,7 @@ const HERO_DRUM_CHAIN_CARDS: [HeroDrumChainCard; 4] = [
     },
     HeroDrumChainCard {
         label: "Engine",
-        value: "Groove-led reactive drummer",
+        value: "Groove-led machine",
     },
     HeroDrumChainCard {
         label: "Language",
@@ -101,7 +101,8 @@ pub enum Route {
     Docs {},
     #[route("/play")]
     Play {},
-    #[route("/drum-engine")]
+    #[redirect("/drum-engine", || Route::DrumEngine {})]
+    #[route("/programmable-drum-machine")]
     DrumEngine {},
 }
 
@@ -186,7 +187,7 @@ fn Home() -> Element {
                 div { class: "section-copy",
                     span { class: "section-kicker", "Current work" }
                     h2 { "EPM1, drums, PC4MS, EPM2." }
-                    p { "EPM1 plays in the browser. The Drum Engine sends ADG/AIG drums to the PC4. PC4MS keeps the rig sessions organized, and EPM2 carries the hardware path." }
+                    p { "EPM1 plays in the browser. The Reactive Programmable Drum Machine sends ADG/AIG drums to the PC4. PC4MS keeps the rig sessions organized, and EPM2 carries the hardware path." }
                 }
                 div { class: "feature-grid",
                     for area in HOME_WORK_AREAS {
@@ -225,6 +226,9 @@ fn Notes() -> Element {
 #[component]
 fn NotePost(slug: String) -> Element {
     let post = blog_post_by_slug(&slug);
+    let canonical_slug = post
+        .map(|post| post.slug.to_string())
+        .unwrap_or_else(|| slug.clone());
     let title = post
         .map(|post| post.title.to_string())
         .unwrap_or_else(|| "Note".to_string());
@@ -239,7 +243,9 @@ fn NotePost(slug: String) -> Element {
         PageFrame {
             title: title,
             description: description,
-            current: Route::NotePost { slug: slug.clone() },
+            current: Route::NotePost {
+                slug: canonical_slug,
+            },
             if let Some(post) = post {
                 section { class: "post-shell",
                     Link { class: "source-link post-back", to: Route::Notes {}, "Back to notes" }
@@ -261,19 +267,19 @@ fn NotePost(slug: String) -> Element {
                                             li { "{bullet}" }
                                         }
                                     }
-                                    if post.slug == "drum-engine-companion" && section.title == "Reference live preset" {
+                                    if post.slug == "reactive-programmable-drum-machine" && section.title == "Reference live preset" {
                                         figure { class: "note-image-panel",
                                             img {
                                                 class: "note-image",
                                                 src: "/pc4ms-screen1.png",
-                                                alt: "PC4MS Drum Engine live controls showing the Jeans 11/8 reference preset values",
+                                                alt: "PC4MS live controls showing the Jeans 11/8 programmable drum-machine reference preset values",
                                                 width: "1419",
                                                 height: "960",
                                                 loading: "lazy",
                                                 decoding: "async",
                                             }
                                             figcaption {
-                                                "Reference live-set controls for the Jeans 11/8 Drum Engine pass: Groove-led mode, 143 BPM, four-bar chunks, and the saved macro/feel values used by the featured take."
+                                                "Reference live-set controls for the Jeans 11/8 programmable drum-machine pass: Groove-led mode, 143 BPM, four-bar chunks, and the saved macro/feel values used by the featured take."
                                             }
                                         }
                                     }
@@ -302,9 +308,9 @@ fn NotePost(slug: String) -> Element {
                                 li { "{bullet}" }
                             }
                         }
-                        if post.series == "Drum Engine" {
+                        if post.series == "Programmable Drums" {
                             div { class: "post-actions",
-                                Link { class: "button button-primary", to: Route::DrumEngine {}, "Open Drum Engine case" }
+                                Link { class: "button button-primary", to: Route::DrumEngine {}, "Open drum-machine case" }
                                 Link { class: "button button-secondary", to: Route::Notes {}, "All notes" }
                             }
                         }
@@ -465,14 +471,14 @@ fn DrumEngine() -> Element {
 
     rsx! {
         PageFrame {
-            title: "Authorial Drum Engine".to_string(),
-            description: "A PC4-playable Drum Engine case: ADG/AIG groove intent, responsive drummer behavior, MIDI output, and public SoundCloud takes.".to_string(),
+            title: "Reactive Programmable Drum Machine".to_string(),
+            description: "A PC4-playable programmable drum-machine case: ADG/AIG groove intent, reactive MIDI output, and public SoundCloud takes.".to_string(),
             current: Route::DrumEngine {},
             section { class: "drum-case-hero",
                 div { class: "section-copy",
                     span { class: "eyebrow", "Portfolio case" }
-                    h1 { "Authorial Drum Engine" }
-                    p { class: "hero-body", "A responsive drummer workflow for the PC4 rig: ADG/AIG groove intent becomes MIDI, mioXM routes it, the Kurzweil PC4 plays it, and the Yamaha AG03 monitors the session." }
+                    h1 { "Reactive Programmable Drum Machine" }
+                    p { class: "hero-body", "A PC4 rig drum system: ADG/AIG groove intent becomes MIDI, mioXM routes it, the Kurzweil PC4 plays it, and the Yamaha AG03 monitors the session." }
                     p { class: "hero-status", "Player controls shape the take, correction feeds the next pass, and taste stays with the person working on the track." }
                     div { class: "hero-actions",
                         a {
@@ -493,12 +499,12 @@ fn DrumEngine() -> Element {
                         article { class: "drum-flow-step",
                             span { "Intent" }
                             strong { "Groove shape" }
-                            p { "ADG/AIG keeps density, fill pressure, surface, timing feel, and drummer posture readable before note output." }
+                            p { "ADG/AIG keeps density, fill pressure, surface, timing feel, and response posture readable before note output." }
                         }
                         article { class: "drum-flow-step",
                             span { "Profile" }
                             strong { "Taste layer" }
-                            p { "The live preset and manual corpus steer how tightly the drummer locks in, adapts, and shapes fills." }
+                            p { "The live preset and manual corpus steer how tightly the machine locks in, adapts, and shapes fills." }
                         }
                         article { class: "drum-flow-step",
                             span { "mioXM" }
@@ -518,7 +524,7 @@ fn DrumEngine() -> Element {
                 div { class: "section-copy",
                     span { class: "section-kicker", "Reference live set" }
                     h2 { "Reference live preset." }
-                    p { "These controls are the saved startup profile from the PC4, mioXM, and Yamaha AG03 drummer session used for the featured take." }
+                    p { "These controls are the saved startup profile from the PC4, mioXM, and Yamaha AG03 drum-machine session used for the featured take." }
                 }
                 div { class: "drum-control-grid",
                     for control in DRUM_ENGINE_PRESET_CONTROLS {
@@ -556,7 +562,7 @@ fn DrumEngine() -> Element {
             section { class: "listen-section",
                 div { class: "section-copy",
                     span { class: "section-kicker", "Listen" }
-                    h2 { "SoundCloud takes from the Drum Engine flow." }
+                    h2 { "SoundCloud takes from the programmable drum-machine flow." }
                     p { "Start with the release-candidate take. The other Jeans Instability tracks are linked below for nearby versions and live jams." }
                 }
                 div { class: "soundcloud-frame-shell",
@@ -604,7 +610,7 @@ fn DrumEngineNotesSection() -> Element {
             div { class: "section-copy",
                 span { class: "section-kicker", "Lab notes" }
                 h2 { "Read the build notes." }
-                p { "These notes open the Drum Engine case into the player surface, ADG/AIG language, hardware rig flow, and feedback loop." }
+                p { "These notes open the programmable drum-machine case into the player surface, ADG/AIG language, hardware rig flow, and feedback loop." }
             }
             div { class: "doc-grid",
                 for slug in DRUM_ENGINE_NOTE_SLUGS {
@@ -750,10 +756,10 @@ fn DrumEngineCaseSection() -> Element {
         section { class: "drum-engine-band",
             div { class: "section-copy",
                 span { class: "section-kicker", "Drums" }
-                h2 { "Authorial Drum Engine for the PC4 rig." }
-                p { "PC4 Microkit Studio now carries a concrete drummer workflow: ADG/AIG intent, profile taste, MIDI through mioXM, PC4 playback, Yamaha AG03 monitoring, and public SoundCloud takes." }
+                h2 { "Reactive Programmable Drum Machine for the PC4 rig." }
+                p { "PC4 Microkit Studio now carries a concrete drum-machine flow: ADG/AIG intent, profile taste, MIDI through mioXM, PC4 playback, Yamaha AG03 monitoring, and public SoundCloud takes." }
                 div { class: "utility-links",
-                    Link { class: "button button-primary", to: Route::DrumEngine {}, "Open Drum Engine" }
+                    Link { class: "button button-primary", to: Route::DrumEngine {}, "Open drum machine" }
                     a {
                         class: "button button-secondary",
                         href: "https://soundcloud.com/mamut_studio",
@@ -766,7 +772,7 @@ fn DrumEngineCaseSection() -> Element {
             div { class: "drum-case-summary",
                 div { class: "card-topline", "Reference profile" }
                 h3 { "Jeans Instability release candidate" }
-                p { "143 BPM, four-bar chunks, groove-led mode, high energy, dense surface, and deliberate humanization. The controls are saved as a player preset for the current PC4, mioXM, and AG03 drummer workflow." }
+                p { "143 BPM, four-bar chunks, groove-led mode, high energy, dense surface, and deliberate humanization. The controls are saved as a player preset for the current PC4, mioXM, and AG03 drum-machine workflow." }
                 div { class: "drum-mini-controls",
                     for control in DRUM_ENGINE_PRESET_CONTROLS.iter().take(6) {
                         span {
@@ -802,9 +808,9 @@ fn HeroSection() -> Element {
             div { class: "hero-panel hero-panel-demo",
                 div { class: "hero-surface" }
                 div { class: "hero-demo-header",
-                    div { class: "card-topline", "Reactive Drum Engine" }
+                    div { class: "card-topline", "Reactive programmable drum machine" }
                     h3 { "AIG/ADG to PC4 rig" }
-                    p { "PC4 MIDI live intake - what you play - gives the groove context. The engine reacts groove-led, keeps the drum decision readable as ADG inside the wider AIG frame, lowers it to MIDI, routes it through mioXM to the PC4, and returns audio through AG03." }
+                    p { "PC4 MIDI live intake - what you play - gives the groove context. The machine reacts groove-led, keeps the drum decision readable as ADG inside the wider AIG frame, lowers it to MIDI, routes it through mioXM to the PC4, and returns audio through AG03." }
                 }
                 div { class: "hero-preview-ruler",
                     for step in 0..HERO_DRUM_FLOW_STEPS.len() {
@@ -842,7 +848,7 @@ fn HomeUtilitySection() -> Element {
             div { class: "section-copy",
                 span { class: "section-kicker", "Where to start" }
                 h2 { "Choose by listening path." }
-                p { "Use Play for EPM1, Drums for the PC4 drummer take, PC4MS for the rig notes, and Lab or Docs for the EPM2 hardware path." }
+                p { "Use Play for EPM1, Drums for the PC4 drum-machine take, PC4MS for the rig notes, and Lab or Docs for the EPM2 hardware path." }
             }
             div { class: "utility-links",
                 Link { class: "button button-primary", to: Route::Play {}, "Play EPM1" }
@@ -1162,7 +1168,7 @@ fn route_path(route: &Route) -> String {
         Route::Lab {} => "/lab".to_string(),
         Route::Docs {} => "/docs".to_string(),
         Route::Play {} => "/play".to_string(),
-        Route::DrumEngine {} => "/drum-engine".to_string(),
+        Route::DrumEngine {} => "/programmable-drum-machine".to_string(),
     }
 }
 
