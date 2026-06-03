@@ -402,7 +402,7 @@ p {
 .drum-case-summary,
 .drum-flow-panel,
 .drum-control-cell,
-.drum-evidence-card,
+.drum-case-card,
 .soundcloud-frame-shell,
 .track-card,
 .play-stat-card,
@@ -441,7 +441,7 @@ p {
   pointer-events: none;
 }
 
-.hero-proof-header,
+.hero-demo-header,
 .hero-preview-ruler,
 .hero-preview-grid,
 .stat-grid {
@@ -449,7 +449,7 @@ p {
   z-index: 1;
 }
 
-.hero-proof-header {
+.hero-demo-header {
   display: grid;
   gap: 0.42rem;
   padding: 0.85rem;
@@ -457,7 +457,7 @@ p {
   background: rgba(7, 8, 10, 0.72);
 }
 
-.hero-proof-header h3 {
+.hero-demo-header h3 {
   font-size: 1.35rem;
 }
 
@@ -596,7 +596,7 @@ p {
 .drum-mini-controls,
 .drum-flow-steps,
 .drum-control-grid,
-.drum-evidence-grid,
+.drum-case-grid,
 .track-list,
 .post-shell,
 .play-shell,
@@ -632,7 +632,7 @@ p {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-.drum-evidence-grid {
+.drum-case-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   margin-top: 0.25rem;
 }
@@ -658,7 +658,7 @@ p {
 .drum-case-summary,
 .drum-flow-panel,
 .drum-control-cell,
-.drum-evidence-card,
+.drum-case-card,
 .soundcloud-frame-shell,
 .track-card {
   padding: 1rem;
@@ -671,7 +671,7 @@ p {
 .detail-panel ul,
 .adjacent-card ul,
 .product-card ul,
-.play-proof-list {
+.play-detail-list {
   color: var(--text-soft);
 }
 
@@ -697,7 +697,7 @@ p {
 .adjacent-card::before,
 .drum-case-summary::before,
 .drum-flow-panel::before,
-.drum-evidence-card::before,
+.drum-case-card::before,
 .track-card::before,
 .patch-card::before {
   content: "";
@@ -1127,7 +1127,7 @@ p {
   .blog-grid,
   .play-patch-grid,
   .drum-control-grid,
-  .drum-evidence-grid {
+  .drum-case-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1193,7 +1193,7 @@ p {
   .play-toolbar,
   .drum-mini-controls,
   .drum-control-grid,
-  .drum-evidence-grid,
+  .drum-case-grid,
   .drum-flow-steps,
   .lane-ruler,
   .step-grid,

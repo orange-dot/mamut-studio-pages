@@ -650,8 +650,8 @@ pub fn PlayPage() -> Element {
                     section { class: "play-panel play-panel-secondary" ,
                         div { class: "card-topline", "Runtime shape" }
                         h2 { "Constrained browser renderer" }
-                        p { "This surface is intentionally small: one phrase, one macro lane, one render path, and enough output detail to inspect the result." }
-                        ul { class: "play-proof-list",
+                        p { "This surface is intentionally small: one phrase, one macro lane, one render path, and enough output detail to hear the result." }
+                        ul { class: "play-detail-list",
                             li { "Offline block renderer with browser playback handoff." }
                             li { {format!("{}-frame processing blocks and {}-voice cap.", BLOCK_SIZE, MAX_VOICES)} }
                             li { "Macro lane emits controller events against the selected target." }

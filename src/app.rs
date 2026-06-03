@@ -214,8 +214,8 @@ fn Lab() -> Element {
             section { class: "utility-band",
                 div { class: "section-copy",
                     span { class: "section-kicker", "Public source" }
-                    h2 { "Hardware evidence, kept separate from site infra." }
-                    p { "The EPM2 public repo is a curated hardware-study export: docs, ngspice studies, KiCad capture, bench expectations, and helper tools. Deploy config, investor notes, and local workspace state stay outside that source trail." }
+                    h2 { "Hardware source, separate from site infra." }
+                    p { "The EPM2 public repo is a curated hardware-study export: docs, ngspice studies, KiCad capture, bench expectations, and helper tools. Deploy config, investor notes, and local workspace state stay outside that repo." }
                 }
                 div { class: "utility-links",
                     a {
@@ -232,7 +232,7 @@ fn Lab() -> Element {
                 div { class: "section-copy",
                     span { class: "section-kicker", "Path" }
                     h2 { "Simulation to capture to bench." }
-                    p { "The lab page shows the hardware work as a staged study path with evidence tied to each step." }
+                    p { "The lab page shows the hardware work as a staged study path with references tied to each step." }
                 }
                 div { class: "products-grid",
                     for card in LAB_STAGES {
@@ -320,7 +320,7 @@ fn DrumEngine() -> Element {
     rsx! {
         PageFrame {
             title: "Authorial Drum Engine".to_string(),
-            description: "A portfolio case study for the PC4-playable Drum Engine: semantic ADG/AIG intent, responsive drummer behavior, MIDI output, and public listening evidence.".to_string(),
+            description: "A portfolio case study for the PC4-playable Drum Engine: semantic ADG/AIG intent, responsive drummer behavior, MIDI output, and public listening references.".to_string(),
             current: Route::DrumEngine {},
             section { class: "drum-case-hero",
                 div { class: "section-copy",
@@ -351,7 +351,7 @@ fn DrumEngine() -> Element {
                         }
                         article { class: "drum-flow-step",
                             span { "Profile" }
-                            strong { "Authority layer" }
+                            strong { "Taste layer" }
                             p { "The live preset and manual corpus steer how tightly the drummer locks in, adapts, and shapes fills." }
                         }
                         article { class: "drum-flow-step",
@@ -372,7 +372,7 @@ fn DrumEngine() -> Element {
                 div { class: "section-copy",
                     span { class: "section-kicker", "Reference live set" }
                     h2 { "Reference live preset." }
-                    p { "These controls are the saved startup profile from the release-candidate flow, shown as implementation evidence for the PC4, mioXM, and Yamaha AG03 drummer workflow." }
+                    p { "These controls are the saved startup profile from the PC4, mioXM, and Yamaha AG03 drummer workflow used for the featured take." }
                 }
                 div { class: "drum-control-grid",
                     for control in DRUM_ENGINE_PRESET_CONTROLS {
@@ -387,17 +387,17 @@ fn DrumEngine() -> Element {
             section { class: "doc-category",
                 div { class: "section-copy",
                     span { class: "section-kicker", "System shape" }
-                    h2 { "What the case demonstrates." }
-                    p { "The useful proof is vertical: semantic groove intent, hardware playback, manual authority, and feedback records all point at one drummer workflow." }
+                    h2 { "What the case connects." }
+                    p { "The point is one vertical flow: semantic groove intent, hardware playback, manual taste, and feedback records all point at one drummer workflow." }
                 }
-                div { class: "drum-evidence-grid",
+                div { class: "drum-case-grid",
                     for card in DRUM_ENGINE_EVIDENCE {
-                        article { class: "drum-evidence-card",
+                        article { class: "drum-case-card",
                             div { class: "card-topline", "{card.label}" }
                             h3 { "{card.title}" }
                             p { "{card.body}" }
                             div { class: "repo-meta",
-                                span { class: "repo-label", "Proof angle" }
+                                span { class: "repo-label", "Angle" }
                                 code { "{card.detail}" }
                             }
                         }
@@ -411,7 +411,7 @@ fn DrumEngine() -> Element {
                 div { class: "section-copy",
                     span { class: "section-kicker", "Listen" }
                     h2 { "Public takes from the Drum Engine direction." }
-                    p { "The release candidate is embedded as the primary listening artifact. The rest of the series stays available as linked takes so the page remains fast and focused." }
+                    p { "The featured SoundCloud player opens with the release-candidate take. The other Jeans Instability tracks stay linked below for context without turning the page into a playlist." }
                 }
                 div { class: "soundcloud-frame-shell",
                     iframe {
@@ -457,8 +457,8 @@ fn DrumEngineNotesSection() -> Element {
         section { class: "doc-category",
             div { class: "section-copy",
                 span { class: "section-kicker", "Lab notes" }
-                h2 { "Read the implementation trail." }
-                p { "These notes expand the Drum Engine case into the product frame, ADG/AIG language, hardware rig flow, and feedback authority loop." }
+                h2 { "Read the build notes." }
+                p { "These notes expand the Drum Engine case into the product frame, ADG/AIG language, hardware rig flow, and feedback loop." }
             }
             div { class: "doc-grid",
                 for slug in DRUM_ENGINE_NOTE_SLUGS {
@@ -577,7 +577,7 @@ fn DrumEngineCaseSection() -> Element {
             div { class: "section-copy",
                 span { class: "section-kicker", "Hero case" }
                 h2 { "Authorial Drum Engine for the PC4 rig." }
-                p { "A separate PC4 Microkit Studio path now has a concrete drummer workflow: ADG/AIG intent, profile-led decisions, MIDI output through mioXM, PC4 playback, Yamaha AG03 monitoring, manual authority, and public listening artifacts." }
+                p { "A separate PC4 Microkit Studio path now has a concrete drummer workflow: ADG/AIG intent, profile-led decisions, MIDI output through mioXM, PC4 playback, Yamaha AG03 monitoring, manual taste, and public SoundCloud takes." }
                 div { class: "utility-links",
                     Link { class: "button button-primary", to: Route::DrumEngine {}, "Open Drum Engine" }
                     a {
@@ -621,9 +621,9 @@ fn HeroSection() -> Element {
                     Link { class: "source-link hero-link", to: Route::Lines {}, "See the work split" }
                 }
             }
-            div { class: "hero-panel hero-panel-proof",
+            div { class: "hero-panel hero-panel-demo",
                 div { class: "hero-surface" }
-                div { class: "hero-proof-header",
+                div { class: "hero-demo-header",
                     div { class: "card-topline", "Audible demo" }
                     h3 { "Browser instrument" }
                     p { "Sixteen steps, one macro lane, eight live-set patches, and a browser render path for the current software line." }
@@ -686,7 +686,7 @@ fn AdjacentProjectSection() -> Element {
             div { class: "section-copy",
                 span { class: "section-kicker", "{PC4_BRIDGE.kicker}" }
                 h2 { "PC4 rig work lives in a separate repo." }
-                p { "PC4 Microkit Studio covers playback control, session artifacts, and local orchestration for the live setup while keeping that work outside the instrument repos." }
+                p { "PC4 Microkit Studio covers playback control, session files, and local orchestration for the live setup while keeping that work outside the instrument repos." }
             }
             article { class: "adjacent-card",
                 div { class: "card-topline", "{PC4_BRIDGE.kicker}" }

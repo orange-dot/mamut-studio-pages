@@ -109,7 +109,7 @@ pub const HERO: HeroContent = HeroContent {
     eyebrow: "Mamut EPM",
     title: "Current software instrument.",
     body: "EPM1 is runnable now: browser demo, desktop runtime, patch bank, macro controls, and PC4 MIDI work. EPM2 tracks the hardware path through analog studies, KiCad capture, simulation, and bench preparation.",
-    status: "Play the browser demo first, then use Notes and Docs for the implementation trail.",
+    status: "Play the browser demo first, then use Notes and Docs for the current build trail.",
     primary_cta: "Open play",
     secondary_cta: "Open notes",
 };
@@ -157,7 +157,7 @@ pub const HOME_FEATURES: &[DetailSection] = &[
 pub const PRODUCTS_INTRO: PageIntro = PageIntro {
     kicker: "Lines",
     title: "Current work split.",
-    summary: "EPM1 is the runnable software instrument. EPM2 is the hardware research and build track. The split keeps current software work and physical hardware work easy to inspect.",
+    summary: "EPM1 is the runnable software instrument. EPM2 is the hardware research and build track. The split keeps current software work and physical hardware work easy to follow.",
 };
 
 pub const LAB_INTRO: PageIntro = PageIntro {
@@ -204,7 +204,7 @@ pub const LAB_RESULTS: &[LabCard] = &[
         label: "70",
         title: "Temperature drift",
         body: "The simplified expo model is intentionally characterized before compensation work hides the failure mode.",
-        detail: "The +1 V / 0 V ratio bends across temperature, which is useful baseline evidence before deeper expo work.",
+        detail: "The +1 V / 0 V ratio bends across temperature, which gives the expo work a concrete baseline.",
     },
     LabCard {
         label: "80",
@@ -223,7 +223,7 @@ pub const LAB_RESULTS: &[LabCard] = &[
 pub const LAB_NEXT_STEPS: &[&str] = &[
     "Keep P1 focused on the first oscillator block before turning the work into a full voice board.",
     "Deepen the expo/integrator path only where simulation and KiCad capture already point to a concrete question.",
-    "Use the public repo as the source trail for hardware evidence.",
+    "Use the public repo as the source home for the hardware work.",
 ];
 
 pub const PRODUCT_LINES: &[ProductLine] = &[
@@ -266,11 +266,11 @@ pub const BLOG_INTRO: PageIntro = PageIntro {
 pub const PC4_BRIDGE: AdjacentProject = AdjacentProject {
     kicker: "Related repo",
     title: "PC4 Microkit Studio",
-    summary: "A separate repo for PC4 rig integration, playback control, session evidence, and local-first orchestration around the performance setup.",
+    summary: "A separate repo for PC4 rig integration, playback control, session logs, and local-first orchestration around the performance setup.",
     repo_path: "/home/dev/sel4/pc4-microkit-studio",
     bullets: &[
-        "Keeps rig orchestration and session artifacts outside the instrument repo.",
-        "Covers playback control, authority boundaries, and hardware bench workflow around the PC4 setup.",
+        "Keeps rig orchestration and session files outside the instrument repo.",
+        "Covers playback control, musical control boundaries, and hardware bench workflow around the PC4 setup.",
         "Dedicated infrastructure for the performance setup.",
     ],
 };
@@ -346,16 +346,16 @@ pub const DRUM_ENGINE_EVIDENCE: &[LabCard] = &[
         detail: "Local MIDI and audio playback tied to the real rig.",
     },
     LabCard {
-        label: "Authority",
+        label: "Taste",
         title: "Manual corpus",
-        body: "The system treats selected manual material, live controls, traces, and comparisons as authority instead of presenting every variation as equally good.",
-        detail: "Profile-led and intake-led decisions remain inspectable.",
+        body: "Selected manual material, live controls, traces, and comparisons steer the drummer instead of treating every variation as equally useful.",
+        detail: "Profile-led and intake-led decisions stay readable.",
     },
     LabCard {
         label: "Memory",
         title: "Feedback loop",
         body: "Training adjustments and comparison records let the drummer companion remember what worked without taking authorship away from the player.",
-        detail: "Learning is framed as correction and preference under player authority.",
+        detail: "Learning follows correction and preference from the player.",
     },
 ];
 
@@ -363,19 +363,19 @@ pub const DRUM_ENGINE_TRACKS: &[DrumEngineTrack] = &[
     DrumEngineTrack {
         title: "jeans-instability-experiment-moises-ai-guitar-stem",
         url: "https://soundcloud.com/mamut_studio/jeans-instability-experiment",
-        note: "Moises AI guitar stem experiment take.",
+        note: "Moises AI guitar stem experiment.",
         track_id: "2332306544",
     },
     DrumEngineTrack {
         title: "jeans instability release candidate 1",
         url: "https://soundcloud.com/mamut_studio/jeans-instability-release",
-        note: "Featured release candidate from the reference Drum Engine live set.",
+        note: "Featured take from the saved Drum Engine live set.",
         track_id: DRUM_ENGINE_FEATURED_TRACK_ID,
     },
     DrumEngineTrack {
         title: "jeans instability jam 3",
         url: "https://soundcloud.com/mamut_studio/jeans-instability-jam-3",
-        note: "Later live jam take from the same public series.",
+        note: "Later live jam from the same SoundCloud set.",
         track_id: "2332264673",
     },
     DrumEngineTrack {
@@ -396,7 +396,7 @@ pub const DRUM_ENGINE_NOTE_SLUGS: &[&str] = &[
     "drum-engine-companion",
     "adg-aig-drum-language",
     "pc4-drum-rig-flow",
-    "drum-engine-feedback-authority",
+    "drum-engine-feedback-taste-memory",
 ];
 
 pub const BLOG_POSTS: &[BlogPost] = &[
@@ -404,13 +404,13 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         slug: "drum-engine-companion",
         series: "Drum Engine",
         title: "Drummer Companion",
-        intro: "The Drum Engine is the current PC4MS rhythm partner: semantic groove state, live controls, corpus authority, and hardware audition in one loop.",
-        body: "This note documents the product shape behind the Authorial Drum Engine case. The useful unit is a drummer companion that follows material, locks a performance posture, proposes drum behavior, and leaves the decision path inspectable.",
+        intro: "The Drum Engine is the current PC4MS rhythm partner: semantic groove state, live controls, selected corpus material, and hardware playback in one loop.",
+        body: "This note describes the product shape behind the Authorial Drum Engine case: a drummer companion that follows material, locks a performance posture, proposes drum behavior, and keeps the decision path readable.",
         bullets: &[
             "Starts from played material, profile law, and live controls.",
             "Tracks groove state across chunks so the drummer can lock, adapt, and shape fills.",
             "Uses the Jeans Instability reference preset as an operator-controlled starting point.",
-            "Keeps proposals tied to traces, generated MIDI, ADG events, and listening artifacts.",
+            "Keeps proposals tied to traces, generated MIDI, ADG events, and listening references.",
         ],
     },
     BlogPost {
@@ -423,7 +423,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
             "AIG is the broader articulated instrument gesture frame.",
             "ADG is the drum dialect for voice, gesture, contact, energy, role, timing, and relationship.",
             "Generated MIDI is a lowering step from semantic drum decisions into the PC4-compatible performance path.",
-            "The useful proof is whether semantic edits survive into audible groove changes.",
+            "The practical test is whether semantic edits survive into audible groove changes.",
         ],
     },
     BlogPost {
@@ -431,25 +431,25 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         series: "Drum Engine",
         title: "PC4 Drum Rig Flow",
         intro: "The current rig flow connects the Drum Engine to real hardware: ADG/AIG decisions become MIDI, route through mioXM, play the Kurzweil PC4, and return through Yamaha AG03 monitoring.",
-        body: "This note documents the local performance chain used by the Drum Engine case. The site presents the workflow as a hardware-backed loop because the drum decisions are judged through the same studio path used for the public takes.",
+        body: "This note describes the local performance chain used by the Drum Engine case. The workflow is a hardware-backed loop because the drum decisions are judged through the same studio path used for the public takes.",
         bullets: &[
             "Operator controls shape the live profile and generated drum decision.",
             "AIG/ADG events lower into MIDI note, velocity, timing, and fill behavior.",
             "mioXM carries the MIDI path into the Kurzweil PC4.",
-            "Yamaha AG03 monitoring and recording make the result audible as a performance artifact.",
+            "Yamaha AG03 monitoring and recording make the result audible as a performance.",
         ],
     },
     BlogPost {
-        slug: "drum-engine-feedback-authority",
+        slug: "drum-engine-feedback-taste-memory",
         series: "Drum Engine",
-        title: "Feedback And Authority",
-        intro: "The Drum Engine keeps authorship visible through manual corpus authority, live groove state, traces, comparison records, and training adjustments.",
-        body: "This note documents how feedback becomes system state. The important behavior is that the drummer companion can remember correction and preference while keeping the player in charge of what counts as a better take.",
+        title: "Feedback And Taste Memory",
+        intro: "The Drum Engine keeps authorship visible through manual corpus selection, live groove state, traces, comparison records, and training adjustments.",
+        body: "This note describes how feedback becomes system state. The important behavior is that the drummer companion can remember correction and preference while keeping the player in charge of what counts as a better take.",
         bullets: &[
-            "Manual corpus authority gives selected material more weight than arbitrary variation.",
+            "Manual corpus selection gives chosen material more weight than arbitrary variation.",
             "LiveGrooveState carries locked density, energy, accent cells, coupling, and phase across chunks.",
             "Training feedback and comparison records preserve why a take was accepted, rejected, or revised.",
-            "Traces and generated artifacts keep the loop inspectable after listening.",
+            "Traces and generated MIDI keep the loop readable after listening.",
         ],
     },
     BlogPost {
@@ -457,7 +457,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         series: "Direction",
         title: "Project Boundaries",
         intro: "The project keeps software, hardware, and rig work separated enough that each part can be tested on its own.",
-        body: "EPM1, EPM2, and PC4 rig work have different jobs. The software runtime should stay runnable, the hardware path should stay tied to simulation and bench evidence, and related orchestration should stay in its own repo.",
+        body: "EPM1, EPM2, and PC4 rig work have different jobs. The software runtime should stay runnable, the hardware path should stay tied to simulation and bench work, and related orchestration should stay in its own repo.",
         bullets: &[
             "Software behavior should be audible and testable now.",
             "Hardware work should move through simulation, capture, and measurement.",
@@ -481,7 +481,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         series: "Direction",
         title: "Why Two Lines Exist",
         intro: "The software runtime and the hardware build path move at different speeds, so they are tracked as separate lines.",
-        body: "EPM1 exists so patches, macros, and performance behavior can be exercised now. EPM2 exists so the physical instrument can move through circuit study, capture, and bench evidence.",
+        body: "EPM1 exists so patches, macros, and performance behavior can be exercised now. EPM2 exists so the physical instrument can move through circuit study, capture, and bench work.",
         bullets: &[
             "EPM1 is the current runnable instrument.",
             "EPM2 is the physical hardware track.",
@@ -518,7 +518,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         series: "Direction",
         title: "Boundaries And Roles",
         intro: "The split is useful only if each line keeps a clear job.",
-        body: "EPM1 stays focused on runnable software instrument behavior. EPM2 stays focused on desktop hardware study and bench evidence. PC4 rig orchestration stays separate from both.",
+        body: "EPM1 stays focused on runnable software instrument behavior. EPM2 stays focused on desktop hardware study and bench work. PC4 rig orchestration stays separate from both.",
         bullets: &[
             "EPM1 is the runnable software instrument.",
             "EPM2 is the desktop hardware track.",
@@ -530,7 +530,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         series: "System",
         title: "EPM1 Runtime Stack",
         intro: "The software side is split into explicit runtime pieces with clear responsibilities.",
-        body: "The software line is decomposed into crates for parameters, patches, identity terms, DSP, engine behavior, and standalone execution. That makes runtime behavior easier to inspect and test.",
+        body: "The software line is decomposed into crates for parameters, patches, identity terms, DSP, engine behavior, and standalone execution. That makes runtime behavior easier to follow and test.",
         bullets: &[
             "Stable parameter and macro registry.",
             "Canonical TOML patch model and validation.",
@@ -542,7 +542,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         series: "System",
         title: "PC4 Controller Map Validated",
         intro: "A real Kurzweil PC4 session now exercises EPM1 as a one-way MIDI-controlled software instrument.",
-        body: "On April 29, 2026, the EPM1 standalone runtime was run through the live rig: Kurzweil PC4 into mioXM DIN 1, then into the Rust standalone synth, with audio out through the Yamaha AG03 on hw:1,0. The session validated the full PC4 controller surface that matters for one-way play into Mamut while keeping the detailed evidence in the EPM1 repo.",
+        body: "On April 29, 2026, the EPM1 standalone runtime was run through the live rig: Kurzweil PC4 into mioXM DIN 1, then into the Rust standalone synth, with audio out through the Yamaha AG03 on hw:1,0. The session validated the full PC4 controller surface that matters for one-way play into Mamut while keeping the detailed session notes in the EPM1 repo.",
         bullets: &[
             "Clean idle held after PC4 Global MIDI cleanup; startup trace stayed quiet across note, CC, and program-change channels.",
             "Sustain, K1-K9, S1-S9, SW1-SW9, mod wheel, pitch bend, and channel aftertouch were observed through the standalone MIDI trace.",
@@ -600,13 +600,13 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         ],
     },
     BlogPost {
-        slug: "bench-evidence",
+        slug: "bench-loop",
         series: "Build Path",
-        title: "Bench Evidence",
+        title: "Bench Loop",
         intro: "Simulation and capture need measurement feedback once prototypes exist.",
         body: "Bench, notes, and expected-behavior folders are in place so measurements can tighten the loop between simulation and physical reality once the next prototypes land.",
         bullets: &[
-            "Bench artifacts have a dedicated home.",
+            "Bench files have a dedicated home.",
             "Expected behavior lives beside measurement notes.",
             "Study logs and promoted docs can stay in sync.",
         ],
@@ -616,7 +616,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         series: "Adjacent Work",
         title: "PC4 Microkit Studio",
         intro: "PC4 Microkit Studio is related rig infrastructure, so it stays outside the EPM1 and EPM2 repos.",
-        body: "PC4 Microkit Studio is a host-first, spec-first standalone repo for a studio rig. It centers typed contracts, authority boundaries, session artifacts, playback control, and hardware bench work around a PC4 setup.",
+        body: "PC4 Microkit Studio is a host-first, spec-first standalone repo for a studio rig. It centers typed contracts, musical control boundaries, session files, playback control, and hardware bench work around a PC4 setup.",
         bullets: &[
             "Separate canonical repository and separate problem frame.",
             "Related to the performance setup and kept outside the EPM1/EPM2 repo split.",
@@ -627,8 +627,8 @@ pub const BLOG_POSTS: &[BlogPost] = &[
 
 pub const DOC_CATEGORIES: &[DocCategory] = &[
     DocCategory {
-        title: "EPM1 Runtime Evidence",
-        body: "Hardware-backed software-runtime evidence for the current playable EPM1 instrument.",
+        title: "EPM1 Runtime Session",
+        body: "Hardware-backed runtime notes for the current playable EPM1 instrument.",
         docs: &[DocCard {
             title: "PC4 Full Controller Map",
             summary: "Real Kurzweil PC4 hardware validation of one-way sustain, knobs, sliders, switches, wheels, and aftertouch into EPM1.",
@@ -660,7 +660,7 @@ pub const DOC_CATEGORIES: &[DocCategory] = &[
             },
             DocCard {
                 title: "Open Questions",
-                summary: "Open design questions that still need decisions or evidence.",
+                summary: "Open design questions that still need decisions or measurements.",
                 source_path: "docs/open-questions.md",
                 repo: RepoKind::Epm2,
             },
@@ -761,7 +761,7 @@ pub fn blog_post_sections(slug: &str) -> &'static [BlogPostSection] {
         "drum-engine-companion" => DRUM_ENGINE_COMPANION_SECTIONS,
         "adg-aig-drum-language" => ADG_AIG_DRUM_LANGUAGE_SECTIONS,
         "pc4-drum-rig-flow" => PC4_DRUM_RIG_FLOW_SECTIONS,
-        "drum-engine-feedback-authority" => DRUM_ENGINE_FEEDBACK_AUTHORITY_SECTIONS,
+        "drum-engine-feedback-taste-memory" => DRUM_ENGINE_FEEDBACK_MEMORY_SECTIONS,
         _ => &[],
     }
 }
@@ -772,7 +772,7 @@ pub const DRUM_ENGINE_COMPANION_SECTIONS: &[BlogPostSection] = &[
         body: "The current product surface is a responsive drummer companion for the PC4MS rig. It listens to material and live controls, then proposes drummer behavior that can be accepted, corrected, or revised.",
         bullets: &[
             "The musician remains the author of the track and the take.",
-            "The engine contributes groove behavior, performance posture, and repeatable artifacts.",
+            "The engine contributes groove behavior, performance posture, and repeatable output.",
             "The case lives beside EPM because the rig, MIDI, and hardware playback are part of the same studio practice.",
         ],
     },
@@ -789,18 +789,18 @@ pub const DRUM_ENGINE_COMPANION_SECTIONS: &[BlogPostSection] = &[
         title: "Reference live preset",
         body: "The Jeans Instability reference preset gives the page a concrete operator state: 143 BPM, four-bar chunks, high energy, dense surface, deliberate humanization, anti-repeat, and controlled looseness.",
         bullets: &[
-            "The preset is shown as operator evidence, not a generic product setting.",
+            "The preset is a saved operator state for this exact live set.",
             "The same values connect the case page, the public take, and the PC4MS workbench flow.",
             "The point is repeatable listening context: same rig, same controls, same performance target.",
         ],
     },
     BlogPostSection {
-        title: "Vertical proof",
-        body: "The useful proof is one vertical path rather than a wide feature list: semantic intent, profile authority, generated MIDI, hardware playback, listening evidence, and feedback memory.",
+        title: "Vertical path",
+        body: "The strongest version is one vertical path rather than a wide feature list: semantic intent, profile taste, generated MIDI, hardware playback, listening references, and feedback memory.",
         bullets: &[
             "A short public take is more useful here than a broad catalogue of possible features.",
             "The page should make the reader understand how the drummer decision reaches the rig.",
-            "Follow-up work can deepen this vertical with stronger traces, exports, and A/B listening evidence.",
+            "Follow-up work can deepen this vertical with stronger traces, exports, and A/B listening passes.",
         ],
     },
 ];
@@ -830,7 +830,7 @@ pub const ADG_AIG_DRUM_LANGUAGE_SECTIONS: &[BlogPostSection] = &[
         bullets: &[
             "ADG keeps the authored decision readable.",
             "Generated MIDI makes the decision playable on the current hardware.",
-            "Trace artifacts connect the high-level decision to the low-level event output.",
+            "Trace files connect the high-level decision to the low-level event output.",
         ],
     },
     BlogPostSection {
@@ -839,7 +839,7 @@ pub const ADG_AIG_DRUM_LANGUAGE_SECTIONS: &[BlogPostSection] = &[
         bullets: &[
             "The edit target is musical language rather than only individual note edits.",
             "The same representation can drive comparison, training, and future export views.",
-            "The current site should present this as a working language layer, not a completed standard.",
+            "The current site presents this as a working language layer that can keep evolving.",
         ],
     },
 ];
@@ -864,8 +864,8 @@ pub const PC4_DRUM_RIG_FLOW_SECTIONS: &[BlogPostSection] = &[
         ],
     },
     BlogPostSection {
-        title: "Listening evidence",
-        body: "The SoundCloud takes are listening artifacts for this rig direction. They make the case inspectable by ear while the code and traces preserve the implementation path.",
+        title: "Listening references",
+        body: "The SoundCloud takes are the quickest way to hear this rig direction. They put the drum flow next to real listening while the code and traces preserve the implementation path.",
         bullets: &[
             "The release candidate is the featured take for the case page.",
             "Related takes show nearby experiments and revisions.",
@@ -873,8 +873,8 @@ pub const PC4_DRUM_RIG_FLOW_SECTIONS: &[BlogPostSection] = &[
         ],
     },
     BlogPostSection {
-        title: "What the flow proves",
-        body: "The flow proves that the Drum Engine is connected to the studio setup: semantic drum decisions can become a PC4 performance and can be heard through the same local chain used for the published artifacts.",
+        title: "What the flow connects",
+        body: "The flow connects the Drum Engine to the studio setup: semantic drum decisions become a PC4 performance and are heard through the same local chain used for the published tracks.",
         bullets: &[
             "The implementation story is hardware-backed.",
             "The output path is specific enough to reproduce locally.",
@@ -883,13 +883,13 @@ pub const PC4_DRUM_RIG_FLOW_SECTIONS: &[BlogPostSection] = &[
     },
 ];
 
-pub const DRUM_ENGINE_FEEDBACK_AUTHORITY_SECTIONS: &[BlogPostSection] = &[
+pub const DRUM_ENGINE_FEEDBACK_MEMORY_SECTIONS: &[BlogPostSection] = &[
     BlogPostSection {
-        title: "Manual corpus authority",
-        body: "Manual corpus authority gives selected material and decisions weight. That lets the drummer companion treat chosen references as stronger evidence than random variation.",
+        title: "Manual corpus",
+        body: "Manual corpus selection gives chosen material and decisions weight. That lets the drummer companion treat chosen references as better starting points than random variation.",
         bullets: &[
             "The corpus can steer repeat reduction, event selection, and local law.",
-            "The authority layer connects listening judgment to future generation.",
+            "The corpus layer connects listening judgment to future generation.",
             "The site should describe this as taste memory under player control.",
         ],
     },
@@ -907,8 +907,8 @@ pub const DRUM_ENGINE_FEEDBACK_AUTHORITY_SECTIONS: &[BlogPostSection] = &[
         body: "Training feedback records and comparison records preserve what the player preferred and why. That makes future revisions more grounded than a one-off random take.",
         bullets: &[
             "Feedback can target a whole take, ADG event, bass event, or comparison side.",
-            "Comparison records preserve winner, confidence, artifact refs, and diff summary.",
-            "Training adjustments remain profile-scoped so taste changes do not leak across unrelated drummer identities.",
+            "Comparison records preserve winner, confidence, take refs, and diff summary.",
+            "Training adjustments stay scoped to the relevant drummer identity.",
         ],
     },
     BlogPostSection {
@@ -916,7 +916,7 @@ pub const DRUM_ENGINE_FEEDBACK_AUTHORITY_SECTIONS: &[BlogPostSection] = &[
         body: "The loop is strongest when every audible result can be traced back through profile, live controls, ADG events, generated MIDI, and feedback records.",
         bullets: &[
             "Traces support debugging and musical review.",
-            "Generated artifacts make audition and comparison repeatable.",
+            "Generated MIDI and trace files make audition and comparison repeatable.",
             "The player stays able to correct the drummer without losing the history of the take.",
         ],
     },
