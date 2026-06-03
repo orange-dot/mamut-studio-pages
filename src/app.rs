@@ -283,6 +283,22 @@ fn NotePost(slug: String) -> Element {
                                             }
                                         }
                                     }
+                                    if post.slug == "pc4ms-touch-surface-live-rig" && section.title == "Tablet control surface" {
+                                        figure { class: "note-image-panel",
+                                            img {
+                                                class: "note-image",
+                                                src: "/pc4ms-touch-surface-live-rig-app-2026-06-03.jpg",
+                                                alt: "Android tablet running the PC4MS touch-control surface on the PC4 and mioXM live rig",
+                                                width: "1600",
+                                                height: "720",
+                                                loading: "lazy",
+                                                decoding: "async",
+                                            }
+                                            figcaption {
+                                                "Android touch-control surface running on the tablet while the PC4 and mioXM rig is active. The sliders send macro MIDI into Workbench without taking over the performer MIDI path."
+                                            }
+                                        }
+                                    }
                                     if !section.examples.is_empty() {
                                         div { class: "code-example-stack",
                                             for example in section.examples {

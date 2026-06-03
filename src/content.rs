@@ -416,6 +416,7 @@ pub const DRUM_ENGINE_TRACKS: &[DrumEngineTrack] = &[
 ];
 
 pub const DRUM_ENGINE_NOTE_SLUGS: &[&str] = &[
+    "pc4ms-touch-surface-live-rig",
     "reactive-programmable-drum-machine",
     "adg-aig-drum-language",
     "pc4-drum-rig-flow",
@@ -423,6 +424,19 @@ pub const DRUM_ENGINE_NOTE_SLUGS: &[&str] = &[
 ];
 
 pub const BLOG_POSTS: &[BlogPost] = &[
+    BlogPost {
+        slug: "pc4ms-touch-surface-live-rig",
+        series: "PC4MS",
+        title: "PC4MS Touch Surface Live Rig",
+        intro: "An Android tablet now sends live macro controls over USB MIDI into the mioXM while the PC4 performer path stays on its own route.",
+        body: "This note captures the June 3, 2026 live rig pass: tablet sliders moved the reactive drum engine through the Workbench touch-control input, and the change was audible in the next generated drum chunk.",
+        bullets: &[
+            "Android tablet macro controls reached the laptop through mioXM HST 1.",
+            "PC4 performer MIDI and tablet touch MIDI stayed on separate mioXM paths.",
+            "Workbench applied the touch values to the next generated drum chunk.",
+            "WebSocket telemetry still needs an Android cleartext/network-security pass.",
+        ],
+    },
     BlogPost {
         slug: "reactive-programmable-drum-machine",
         series: "Programmable Drums",
@@ -789,6 +803,7 @@ pub fn blog_post_by_slug(slug: &str) -> Option<BlogPost> {
 
 pub fn blog_post_sections(slug: &str) -> &'static [BlogPostSection] {
     match canonical_blog_slug(slug) {
+        "pc4ms-touch-surface-live-rig" => PC4MS_TOUCH_SURFACE_LIVE_RIG_SECTIONS,
         "reactive-programmable-drum-machine" => REACTIVE_PROGRAMMABLE_DRUM_MACHINE_SECTIONS,
         "adg-aig-drum-language" => ADG_AIG_DRUM_LANGUAGE_SECTIONS,
         "pc4-drum-rig-flow" => PC4_DRUM_RIG_FLOW_SECTIONS,
@@ -798,6 +813,70 @@ pub fn blog_post_sections(slug: &str) -> &'static [BlogPostSection] {
 }
 
 pub const NO_CODE_EXAMPLES: &[CodeExample] = &[];
+
+pub const PC4MS_TOUCH_MIDI_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "Tablet Energy slider",
+    source_path: "pc4ms-workbench live MIDI probe",
+    language: "text",
+    code: r#"PC4MS_TOUCH_MIDI_INPUT=hw:3,0,4
+
+BF 14 50
+BF 14 4F
+BF 14 4E"#,
+}];
+
+pub const PC4MS_TOUCH_WORKBENCH_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "Workbench touch input launch",
+    source_path: "pc4-microkit-studio-remote-up-21-4",
+    language: "bash",
+    code: r#"PC4MS_TOUCH_BIND=0.0.0.0:8788 \
+PC4MS_TOUCH_TOKEN=test \
+PC4MS_TOUCH_MIDI_INPUT=hw:3,0,4 \
+target/release/pc4ms-workbench"#,
+}];
+
+pub const PC4MS_TOUCH_SURFACE_LIVE_RIG_SECTIONS: &[BlogPostSection] = &[
+    BlogPostSection {
+        title: "Tablet control surface",
+        body: "The Android app runs as a touch-first macro surface for the PC4MS Workbench. The tablet is connected as USB MIDI to the mioXM, and the Workbench reads it as the touch-control input.",
+        bullets: &[
+            "The tablet controls energy, density, risk, fill, surface, humanize, timing, and velocity.",
+            "The mioXM LEDs move with slider changes, so the route is visible before the software reacts.",
+            "The screenshot below is the running Android surface on the live rig.",
+        ],
+        examples: NO_CODE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Separated MIDI paths",
+        body: "The PC4 performer MIDI and tablet macro MIDI run beside each other. The performer path stays available for playing, while the tablet path changes drum-engine macro state.",
+        bullets: &[
+            "PC4 performer MIDI remains on its own mioXM route.",
+            "Tablet touch-control MIDI arrives through mioXM HST 1 on this setup.",
+            "The captured Energy slider uses channel 16 control change, CC20, and the slider value byte.",
+        ],
+        examples: PC4MS_TOUCH_MIDI_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Workbench live path",
+        body: "Workbench consumes the touch input separately from performer MIDI. Macro changes affect the next generated drum chunk, which keeps already queued MIDI stable while the live response moves.",
+        bullets: &[
+            "The reactive drummer remains playable during live slider movement.",
+            "Changes are heard in the drum response during the take.",
+            "The launch keeps the WebSocket status bind and token configured for the later telemetry pass.",
+        ],
+        examples: PC4MS_TOUCH_WORKBENCH_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Next pass",
+        body: "The musical path is ready for a longer take. WebSocket telemetry still needs a separate Android network-security fix because the tablet currently blocks cleartext traffic to the laptop address.",
+        bullets: &[
+            "Record one long pass with PC4 performer MIDI and tablet macro control active.",
+            "Keep the generated MIDI and audio capture tied to the session notes.",
+            "Return to WebSocket telemetry after the live MIDI route is captured.",
+        ],
+        examples: NO_CODE_EXAMPLES,
+    },
+];
 
 pub const DRUM_ENGINE_RELEASE_EXAMPLES: &[CodeExample] = &[CodeExample {
     label: "Take metadata excerpt",
