@@ -284,7 +284,7 @@ pub fn PlayPage() -> Element {
     let mut steps = use_signal(default_steps);
     let mut automation = use_signal(default_automation);
     let mut status = use_signal(|| {
-        "Choose a patch, shape the phrase, and play the current EPM1 sound in the browser."
+        "Choose a patch, shape the phrase, and hear the current EPM1 sound in the browser."
             .to_string()
     });
     let mut last_render = use_signal(|| Option::<RenderSummary>::None);
@@ -319,10 +319,10 @@ pub fn PlayPage() -> Element {
                     span { class: "section-kicker", "Play / Browser demo" }
                     h1 { "Play the current software instrument." }
                     p {
-                        "Choose a live-set patch, shape a 16-step phrase, drive one macro lane, and play the result straight in the browser."
+                        "Choose a live-set patch, shape a 16-step phrase, drive one macro lane, and hear the result in the browser."
                     }
                     p {
-                        "The browser engine uses the same patch names, macro targets, and MIDI-oriented control model as the desktop runtime."
+                        "The patch names, macro targets, and MIDI-oriented controls follow the desktop runtime."
                     }
                     p { class: "play-hint", "{active_preset.code} / {current_macro_target.label()}: {current_macro_target.blurb()}" }
                     div { class: "hero-actions",
@@ -409,7 +409,7 @@ pub fn PlayPage() -> Element {
                                     span { class: "section-kicker", "Patch bank" }
                                     h2 { "Eight live-set patches" }
                                 }
-                                p { "These names mirror the current EPM1 live set. The browser engine keeps the patch and macro model close to the controls." }
+                                p { "These names mirror the current EPM1 live set. The browser renderer keeps the patch and macro controls close to the instrument." }
                             }
                             div { class: "play-patch-grid",
                                 for patch in LivePatchId::ALL {

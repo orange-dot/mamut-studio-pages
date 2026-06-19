@@ -1,15 +1,16 @@
 use crate::content::{
     BLOG_INTRO, BLOG_POSTS, DOC_CATEGORIES, DRUM_ENGINE_EVIDENCE, DRUM_ENGINE_FEATURED_TRACK_ID,
-    DRUM_ENGINE_NOTE_SLUGS, DRUM_ENGINE_PRESET_CONTROLS, DRUM_ENGINE_TRACKS, EPM2_PUBLIC_REPO_URL,
-    HERO, HOME_WORK_AREAS, LAB_INTRO, LAB_NEXT_STEPS, LAB_RESULTS, LAB_STAGES, PC4_BRIDGE,
-    PRODUCT_LINES, PRODUCTS_INTRO, RepoKind, blog_post_by_slug, blog_post_sections,
-    pc4_microkit_studio_url, repo_root_url, source_url,
+    DRUM_ENGINE_NOTE_SLUGS, DRUM_ENGINE_PRESET_CONTROLS, DRUM_ENGINE_TRACKS,
+    DRUM_STUDIO_ARTIFACT_CARDS, DRUM_STUDIO_AUTHORITY_CARDS, DRUM_STUDIO_INTRO,
+    DRUM_STUDIO_NOTE_SLUGS, EPM2_PUBLIC_REPO_URL, HERO, HOME_WORK_AREAS, LAB_INTRO, LAB_NEXT_STEPS,
+    LAB_RESULTS, LAB_STAGES, PRODUCT_LINES, PRODUCTS_INTRO, RepoKind, blog_post_by_slug,
+    blog_post_sections, repo_root_url, source_url,
 };
 use crate::play::PlayPage;
 use dioxus::prelude::*;
 
 const SITE_NAME: &str = "Mamut EPM";
-const SITE_DESCRIPTION: &str = "Public home for Mamut Studio: play EPM1, hear the Reactive Programmable Drum Machine, follow PC4 Microkit Studio, and read the EPM2 hardware path.";
+const SITE_DESCRIPTION: &str = "Public home for Mamut Studio: play EPM1, hear programmable drums, follow Drum Studio, and read the EPM2 hardware path.";
 const DEFAULT_SITE_BASE_URL: &str = "https://mamut-studio.com";
 const PREVIEW_IMAGE_PATH: &str = "/og-default.png";
 const PREVIEW_IMAGE_WIDTH: &str = "3000";
@@ -18,7 +19,7 @@ const PREVIEW_IMAGE_ALT: &str = "Mamut Studio circular signal artwork";
 #[cfg(target_arch = "wasm32")]
 const THEME_STORAGE_KEY: &str = "mamut-theme";
 const HERO_DRUM_FLOW_STEPS: [HeroDrumFlowStep; 12] = [
-    HeroDrumFlowStep::active("PC4 MIDI", "Live intake"),
+    HeroDrumFlowStep::active("MIDI intake", "Live input"),
     HeroDrumFlowStep::active("Played part", "Your timing"),
     HeroDrumFlowStep::active("Groove-led", "Lock + adapt"),
     HeroDrumFlowStep::inactive("AIG frame", "Gesture intent"),
@@ -26,27 +27,27 @@ const HERO_DRUM_FLOW_STEPS: [HeroDrumFlowStep; 12] = [
     HeroDrumFlowStep::inactive("Surface", "Density + fills"),
     HeroDrumFlowStep::inactive("Timing feel", "Humanize"),
     HeroDrumFlowStep::active("Reactive state", "Next chunk"),
+    HeroDrumFlowStep::active("Bundle", "Trace + export"),
     HeroDrumFlowStep::active("MIDI lower", "Notes + velocity"),
-    HeroDrumFlowStep::active("mioXM", "Route to PC4"),
-    HeroDrumFlowStep::active("PC4", "Drum playback"),
-    HeroDrumFlowStep::active("AG03", "Monitor + record"),
+    HeroDrumFlowStep::active("MIDI out", "Target route"),
+    HeroDrumFlowStep::active("Synth + capture", "Play + record"),
 ];
 const HERO_DRUM_CHAIN_CARDS: [HeroDrumChainCard; 4] = [
     HeroDrumChainCard {
         label: "Input",
-        value: "PC4 MIDI live intake",
+        value: "MIDI live intake",
     },
     HeroDrumChainCard {
         label: "Engine",
         value: "Groove-led machine",
     },
     HeroDrumChainCard {
-        label: "Language",
-        value: "AIG frame + ADG drum dialect",
+        label: "Files",
+        value: "ADG bundle + AIG export",
     },
     HeroDrumChainCard {
         label: "Output",
-        value: "mioXM -> PC4 -> AG03",
+        value: "MIDI out -> synth target -> capture",
     },
 ];
 
@@ -104,6 +105,8 @@ pub enum Route {
     #[redirect("/drum-engine", || Route::DrumEngine {})]
     #[route("/programmable-drum-machine")]
     DrumEngine {},
+    #[route("/drum-studio")]
+    DrumStudio {},
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -175,8 +178,6 @@ pub fn App() -> Element {
 
 #[component]
 fn Home() -> Element {
-    let pc4_url = pc4_microkit_studio_url();
-
     rsx! {
         PageFrame {
             title: SITE_NAME.to_string(),
@@ -186,17 +187,16 @@ fn Home() -> Element {
             section { class: "signal-section",
                 div { class: "section-copy",
                     span { class: "section-kicker", "Current work" }
-                    h2 { "EPM1, drums, PC4MS, EPM2." }
-                    p { "EPM1 plays in the browser. The Reactive Programmable Drum Machine sends ADG/AIG drums to the PC4. PC4MS keeps the rig sessions organized, and EPM2 carries the hardware path." }
+                    h2 { "EPM1, drums, MIDI targets, EPM2." }
+                    p { "EPM1 plays in the browser. The Reactive Programmable Drum Machine turns ADG/AIG drum decisions into generated MIDI, Drum Studio keeps the session files readable, and EPM2 carries the hardware path." }
                 }
                 div { class: "feature-grid",
                     for area in HOME_WORK_AREAS {
-                        {home_work_card(area, pc4_url.as_deref())}
+                        {home_work_card(area)}
                     }
                 }
             }
             DrumEngineCaseSection {}
-            AdjacentProjectSection {}
             HomeUtilitySection {}
         }
     }
@@ -207,7 +207,7 @@ fn Notes() -> Element {
     rsx! {
         PageFrame {
             title: "Notes".to_string(),
-            description: "Working notes from the software runtime, hardware study path, and related rig work.".to_string(),
+            description: "Working notes from the software runtime, hardware study path, and related source work.".to_string(),
             current: Route::Notes {},
             PageIntroBlock {
                 kicker: BLOG_INTRO.kicker,
@@ -267,22 +267,6 @@ fn NotePost(slug: String) -> Element {
                                             li { "{bullet}" }
                                         }
                                     }
-                                    if post.slug == "reactive-programmable-drum-machine" && section.title == "Reference live preset" {
-                                        figure { class: "note-image-panel",
-                                            img {
-                                                class: "note-image",
-                                                src: "/pc4ms-screen1.png",
-                                                alt: "PC4MS live controls showing the Jeans 11/8 programmable drum-machine reference preset values",
-                                                width: "1419",
-                                                height: "960",
-                                                loading: "lazy",
-                                                decoding: "async",
-                                            }
-                                            figcaption {
-                                                "Reference live-set controls for the Jeans 11/8 programmable drum-machine pass: Groove-led mode, 143 BPM, four-bar chunks, and the saved macro/feel values used by the featured take."
-                                            }
-                                        }
-                                    }
                                     if post.slug == "pc4ms-touch-surface-live-rig" && section.title == "Tablet control surface" {
                                         figure { class: "note-image-panel",
                                             img {
@@ -324,10 +308,11 @@ fn NotePost(slug: String) -> Element {
                                 li { "{bullet}" }
                             }
                         }
-                        if post.series == "Programmable Drums" {
+                        if matches!(post.series, "Programmable Drums" | "Drum Studio" | "AIG / ADG" | "PC4MS" | "Research") {
                             div { class: "post-actions",
                                 Link { class: "button button-primary", to: Route::DrumEngine {}, "Open drum-machine case" }
-                                Link { class: "button button-secondary", to: Route::Notes {}, "All notes" }
+                                Link { class: "button button-secondary", to: Route::DrumStudio {}, "Open Drum Studio" }
+                                Link { class: "source-link", to: Route::Notes {}, "All notes" }
                             }
                         }
                     }
@@ -488,14 +473,14 @@ fn DrumEngine() -> Element {
     rsx! {
         PageFrame {
             title: "Reactive Programmable Drum Machine".to_string(),
-            description: "A PC4-playable programmable drum-machine case: ADG/AIG groove intent, reactive MIDI output, and public SoundCloud takes.".to_string(),
+            description: "A MIDI-playable programmable drum-machine case: ADG/AIG groove intent, reactive MIDI output, ADG bundle files, and public SoundCloud takes.".to_string(),
             current: Route::DrumEngine {},
             section { class: "drum-case-hero",
                 div { class: "section-copy",
                     span { class: "eyebrow", "Portfolio case" }
                     h1 { "Reactive Programmable Drum Machine" }
-                    p { class: "hero-body", "A PC4 rig drum system: ADG/AIG groove intent becomes MIDI, mioXM routes it, the Kurzweil PC4 plays it, and the Yamaha AG03 monitors the session." }
-                    p { class: "hero-status", "Player controls shape the take, correction feeds the next pass, and taste stays with the person working on the track." }
+                    p { class: "hero-body", "A MIDI drum workflow: ADG/AIG groove intent becomes generated MIDI, the ADG bundle stays with the take, and a synth target plus capture path make the session audible." }
+                    p { class: "hero-status", "Player controls shape the take, correction feeds the next pass, and the AIG handoff keeps Drum Studio and material-import roles clear." }
                     div { class: "hero-actions",
                         a {
                             class: "button button-primary",
@@ -504,13 +489,14 @@ fn DrumEngine() -> Element {
                             rel: "noopener noreferrer",
                             "Listen"
                         }
-                        Link { class: "button button-secondary", to: Route::Play {}, "Open EPM play" }
+                        Link { class: "button button-secondary", to: Route::DrumStudio {}, "Open Drum Studio" }
+                        Link { class: "source-link hero-link", to: Route::Play {}, "Open EPM play" }
                     }
                 }
                 div { class: "drum-flow-panel",
                     div { class: "card-topline", "Current loop" }
-                    h2 { "ADG/AIG to MIDI to PC4" }
-                    p { "The player path starts from drum intent, resolves it through the active profile, exports MIDI events, routes them through mioXM to the Kurzweil PC4, and monitors the result through the Yamaha AG03 audio path." }
+                    h2 { "ADG/AIG to bundle to MIDI" }
+                    p { "The player path starts from drum intent, resolves it through the active profile, writes the generated MIDI and ADG bundle, sends MIDI out, and captures the result for review." }
                     div { class: "drum-flow-steps",
                         article { class: "drum-flow-step",
                             span { "Intent" }
@@ -523,14 +509,14 @@ fn DrumEngine() -> Element {
                             p { "The live preset and manual corpus steer how tightly the machine locks in, adapts, and shapes fills." }
                         }
                         article { class: "drum-flow-step",
-                            span { "mioXM" }
-                            strong { "MIDI bridge" }
-                            p { "Generated note, velocity, timing, and fill decisions become MIDI for the rig interface." }
+                            span { "Bundle" }
+                            strong { "Session files" }
+                            p { "Generated MIDI is kept beside ADG events, summaries, live chunks, traces, runtime snapshot, and AIG export request." }
                         }
                         article { class: "drum-flow-step",
-                            span { "PC4 + AG03" }
-                            strong { "Rig audition" }
-                            p { "The Kurzweil PC4 plays the take locally while the Yamaha AG03 path makes the performance chain audible and recordable." }
+                            span { "Target + capture" }
+                            strong { "MIDI audition" }
+                            p { "The generated take is sent to a synth target while the capture path makes the performance chain audible and recordable." }
                         }
                     }
                 }
@@ -538,15 +524,40 @@ fn DrumEngine() -> Element {
 
             section { class: "drum-preset-section",
                 div { class: "section-copy",
-                    span { class: "section-kicker", "Reference live set" }
-                    h2 { "Reference live preset." }
-                    p { "These controls are the saved startup profile from the PC4, mioXM, and Yamaha AG03 drum-machine session used for the featured take." }
+                    span { class: "section-kicker", "AIG / ADG" }
+                    h2 { "What the drum language keeps before MIDI." }
+                    p { "AIG means Articulated Instrument Gesture: the wider model for timing, strength, relationships, protection flags, and render-ready gesture data." }
+                    p { "ADG means Articulated Drum Gesture: the drum dialect that names kick anchors, snare ghosts, hat breath, ride pressure, tom motion, cymbal flashes, surface feel, and phrase role before the take becomes MIDI." }
+                    Link {
+                        class: "source-link",
+                        to: Route::NotePost { slug: "drum-engine-aig-adg-flow".to_string() },
+                        "Read full flow note"
+                    }
                 }
-                div { class: "drum-control-grid",
-                    for control in DRUM_ENGINE_PRESET_CONTROLS {
-                        article { class: "drum-control-cell",
-                            span { class: "stat-label", "{control.label}" }
-                            strong { "{control.value}" }
+                div { class: "drum-flow-panel",
+                    div { class: "card-topline", "Language path" }
+                    h2 { "From intake to ADG to AIG." }
+                    p { "The Drum Engine reads live MIDI in meter-aware windows, proposes drum gestures, selects the lowerable winners, writes ADG beside generated MIDI, and sends the ADG bundle to AIG for the material pass." }
+                    div { class: "drum-flow-steps",
+                        article { class: "drum-flow-step",
+                            span { "Sense" }
+                            strong { "Windows and features" }
+                            p { "Each output cell reacts to the previous intake cell: density, register, velocity, onset count, and phrase pressure shape the next response." }
+                        }
+                        article { class: "drum-flow-step",
+                            span { "Choose" }
+                            strong { "Candidate gestures" }
+                            p { "Profile controls and source laws propose kick, snare, hat, ride, tom, and crash gestures; deterministic selection keeps one right-hand surface per tick." }
+                        }
+                        article { class: "drum-flow-step",
+                            span { "Write" }
+                            strong { "ADG plus MIDI" }
+                            p { "ADG keeps role, kind, timing, strength, surface, phrase role, variation identity, and reason while MIDI carries notes, gates, ticks, and velocity." }
+                        }
+                        article { class: "drum-flow-step",
+                            span { "Import" }
+                            strong { "AIG material lane" }
+                            p { "AIG narrows drum ADG into its beat-time dialect, runs semantic passes, builds gesture packets and atom specs, then renders reference audio for the material lane." }
                         }
                     }
                 }
@@ -556,7 +567,7 @@ fn DrumEngine() -> Element {
                 div { class: "section-copy",
                     span { class: "section-kicker", "System shape" }
                     h2 { "What the case connects." }
-                    p { "The case follows one working flow: ADG/AIG groove intent becomes MIDI, the PC4 plays it, and feedback shapes the next pass." }
+                    p { "The case follows one working flow: ADG/AIG groove intent becomes MIDI, the session files stay readable, the take is played on a target, and feedback shapes the next pass." }
                 }
                 div { class: "drum-case-grid",
                     for card in DRUM_ENGINE_EVIDENCE {
@@ -569,6 +580,27 @@ fn DrumEngine() -> Element {
                                 code { "{card.detail}" }
                             }
                         }
+                    }
+                }
+            }
+
+            section { class: "utility-band",
+                div { class: "section-copy",
+                    span { class: "section-kicker", "Since June 4" }
+                    h2 { "The drum lane now keeps the take and files together." }
+                    p { "The current session flow includes generated-live MIDI, ADG bundle directories, per-chunk traces, runtime snapshots, and an AIG export request that names the bridge consumer." }
+                }
+                div { class: "utility-links",
+                    Link { class: "button button-primary", to: Route::DrumStudio {}, "Open Drum Studio" }
+                    Link {
+                        class: "button button-secondary",
+                        to: Route::NotePost { slug: "pc4ms-drum-engine-since-june-4".to_string() },
+                        "Read session note"
+                    }
+                    Link {
+                        class: "source-link",
+                        to: Route::NotePost { slug: "adg-aig-bridge-truth-boundary".to_string() },
+                        "Bridge note"
                     }
                 }
             }
@@ -586,7 +618,7 @@ fn DrumEngine() -> Element {
                         class: "soundcloud-frame",
                         title: "SoundCloud player for jeans instability release candidate 1",
                         src: "{soundcloud_embed_src}",
-                        allow: "autoplay"
+                        allow: "autoplay; encrypted-media"
                     }
                 }
                 div { class: "track-list",
@@ -620,13 +652,87 @@ fn DrumEngine() -> Element {
 }
 
 #[component]
+fn DrumStudio() -> Element {
+    rsx! {
+        PageFrame {
+            title: "Drum Studio".to_string(),
+            description: "Current Drum Studio: ADG bundle files, generated MIDI, runtime traces, and the AIG handoff.".to_string(),
+            current: Route::DrumStudio {},
+            PageIntroBlock {
+                kicker: DRUM_STUDIO_INTRO.kicker,
+                title: DRUM_STUDIO_INTRO.title,
+                summary: DRUM_STUDIO_INTRO.summary,
+            }
+            section { class: "utility-band",
+                div { class: "section-copy",
+                    span { class: "section-kicker", "Session files" }
+                    h2 { "Generated MIDI with the files around it." }
+                    p { "The current drum work keeps the generated-live MIDI file beside ADG bundle material: manifest, live chunks, per-chunk traces, runtime snapshot, trace, and an AIG export request." }
+                }
+                div { class: "utility-links",
+                    Link { class: "button button-primary", to: Route::DrumEngine {}, "Open drum machine" }
+                    Link {
+                        class: "button button-secondary",
+                        to: Route::NotePost { slug: "drum-studio-runtime-aig-export".to_string() },
+                        "Read runtime note"
+                    }
+                    Link {
+                        class: "source-link",
+                        to: Route::NotePost { slug: "pc4ms-drum-engine-since-june-4".to_string() },
+                        "Session note"
+                    }
+                }
+            }
+            section { class: "doc-category",
+                div { class: "section-copy",
+                    span { class: "section-kicker", "Roles" }
+                    h2 { "What each part does." }
+                    p { "The export request keeps the roles clear: the drum engine writes the pass, Drum Studio assembles the session, AIG imports the material, and codec or neural work stays in its own lane." }
+                }
+                div { class: "products-grid",
+                    for card in DRUM_STUDIO_AUTHORITY_CARDS {
+                        LabCardView { card: *card }
+                    }
+                }
+            }
+            section { class: "doc-category",
+                div { class: "section-copy",
+                    span { class: "section-kicker", "Files" }
+                    h2 { "Current session files." }
+                    p { "This page keeps the public map close to the session: generated MIDI, ADG bundles, trace files, runtime snapshots, and the AIG handoff." }
+                }
+                div { class: "products-grid",
+                    for card in DRUM_STUDIO_ARTIFACT_CARDS {
+                        LabCardView { card: *card }
+                    }
+                }
+            }
+            section { class: "doc-category",
+                div { class: "section-copy",
+                    span { class: "section-kicker", "Notes" }
+                    h2 { "The current update set." }
+                    p { "These source notes cover the full AIG/ADG flow, runtime export, the ADG-to-AIG bridge, and neural preview research." }
+                }
+                div { class: "doc-grid",
+                    for slug in DRUM_STUDIO_NOTE_SLUGS {
+                        if let Some(post) = blog_post_by_slug(slug) {
+                            BlogCardView { post }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[component]
 fn DrumEngineNotesSection() -> Element {
     rsx! {
         section { class: "doc-category",
             div { class: "section-copy",
                 span { class: "section-kicker", "Lab notes" }
                 h2 { "Read the build notes." }
-                p { "These notes open the programmable drum-machine case into the player surface, ADG/AIG language, hardware rig flow, and feedback loop." }
+                p { "These notes open the programmable drum-machine case into the player surface, ADG/AIG language, MIDI workflow, and feedback loop." }
             }
             div { class: "doc-grid",
                 for slug in DRUM_ENGINE_NOTE_SLUGS {
@@ -751,7 +857,7 @@ fn nav_link_class(current: &Route, key: &str) -> &'static str {
     let active = match (key, current) {
         ("home", Route::Home {}) => true,
         ("play", Route::Play {}) => true,
-        ("drums", Route::DrumEngine {}) => true,
+        ("drums", Route::DrumEngine {} | Route::DrumStudio {}) => true,
         ("notes", Route::Notes {} | Route::NotePost { .. }) => true,
         ("lines", Route::Lines {}) => true,
         ("lab", Route::Lab {}) => true,
@@ -772,12 +878,13 @@ fn DrumEngineCaseSection() -> Element {
         section { class: "drum-engine-band",
             div { class: "section-copy",
                 span { class: "section-kicker", "Drums" }
-                h2 { "Reactive Programmable Drum Machine for the PC4 rig." }
-                p { "PC4 Microkit Studio now carries a concrete drum-machine flow: ADG/AIG intent, profile taste, MIDI through mioXM, PC4 playback, Yamaha AG03 monitoring, and public SoundCloud takes." }
+                h2 { "Reactive Programmable Drum Machine for MIDI targets." }
+                p { "The current drum-machine flow connects ADG/AIG intent, profile taste, generated MIDI, ADG bundles, AIG export requests, target playback, capture, and public SoundCloud takes." }
                 div { class: "utility-links",
                     Link { class: "button button-primary", to: Route::DrumEngine {}, "Open drum machine" }
+                    Link { class: "button button-secondary", to: Route::DrumStudio {}, "Open Drum Studio" }
                     a {
-                        class: "button button-secondary",
+                        class: "source-link",
                         href: "https://soundcloud.com/mamut_studio",
                         target: "_blank",
                         rel: "noopener noreferrer",
@@ -788,7 +895,7 @@ fn DrumEngineCaseSection() -> Element {
             div { class: "drum-case-summary",
                 div { class: "card-topline", "Reference profile" }
                 h3 { "Jeans Instability release candidate" }
-                p { "143 BPM, four-bar chunks, groove-led mode, high energy, dense surface, and deliberate humanization. The controls are saved as a player preset for the current PC4, mioXM, and AG03 drum-machine workflow." }
+                p { "143 BPM, four-bar chunks, groove-led mode, high energy, dense surface, and deliberate humanization. The current lane also keeps generated MIDI beside ADG bundle traces and AIG export metadata." }
                 div { class: "drum-mini-controls",
                     for control in DRUM_ENGINE_PRESET_CONTROLS.iter().take(6) {
                         span {
@@ -816,8 +923,8 @@ fn HeroSection() -> Element {
                     Link { class: "button button-secondary", to: Route::DrumEngine {}, "{HERO.secondary_cta}" }
                     Link {
                         class: "source-link hero-link",
-                        to: Route::NotePost { slug: "pc4-microkit-studio".to_string() },
-                        "Follow PC4MS"
+                        to: Route::DrumStudio {},
+                        "Open Drum Studio"
                     }
                 }
             }
@@ -825,8 +932,8 @@ fn HeroSection() -> Element {
                 div { class: "hero-surface" }
                 div { class: "hero-demo-header",
                     div { class: "card-topline", "Reactive programmable drum machine" }
-                    h3 { "AIG/ADG to PC4 rig" }
-                    p { "PC4 MIDI live intake - what you play - gives the groove context. The machine reacts groove-led, keeps the drum decision readable as ADG inside the wider AIG frame, lowers it to MIDI, routes it through mioXM to the PC4, and returns audio through AG03." }
+                    h3 { "AIG/ADG to MIDI target" }
+                    p { "MIDI live intake gives the groove context. The machine reacts groove-led, keeps the drum decision readable as ADG inside the wider AIG frame, writes bundle traces and AIG export metadata, lowers it to MIDI, sends it to a target, and captures the result." }
                 }
                 div { class: "hero-preview-ruler",
                     for step in 0..HERO_DRUM_FLOW_STEPS.len() {
@@ -864,71 +971,24 @@ fn HomeUtilitySection() -> Element {
             div { class: "section-copy",
                 span { class: "section-kicker", "Where to start" }
                 h2 { "Choose by listening path." }
-                p { "Use Play for EPM1, Drums for the PC4 drum-machine take, PC4MS for the rig notes, and Lab or Docs for the EPM2 hardware path." }
+                p { "Use Play for EPM1, Drums for the MIDI drum-machine take, Drum Studio for the generated session files, and Lab or Docs for the EPM2 hardware path." }
             }
             div { class: "utility-links",
                 Link { class: "button button-primary", to: Route::Play {}, "Play EPM1" }
                 Link { class: "button button-primary", to: Route::DrumEngine {}, "Hear drums" }
+                Link { class: "button button-secondary", to: Route::DrumStudio {}, "Drum Studio" }
                 Link {
                     class: "button button-secondary",
-                    to: Route::NotePost { slug: "pc4-microkit-studio".to_string() },
-                    "PC4MS note"
+                    to: Route::Lab {},
+                    "Open lab"
                 }
-                Link { class: "button button-secondary", to: Route::Lab {}, "Open lab" }
                 Link { class: "button button-secondary", to: Route::Docs {}, "Browse docs" }
             }
         }
     }
 }
 
-#[component]
-fn AdjacentProjectSection() -> Element {
-    let pc4_url = pc4_microkit_studio_url();
-
-    rsx! {
-        section { class: "adjacent-band",
-            div { class: "section-copy",
-                span { class: "section-kicker", "{PC4_BRIDGE.kicker}" }
-                h2 { "PC4 rig work lives in a separate repo." }
-                p { "PC4 Microkit Studio covers playback control, session files, and local rig flow for the live setup while keeping that work outside the instrument repos." }
-            }
-            article { class: "adjacent-card",
-                div { class: "card-topline", "{PC4_BRIDGE.kicker}" }
-                h3 { "{PC4_BRIDGE.title}" }
-                p { "{PC4_BRIDGE.summary}" }
-                ul {
-                    for bullet in PC4_BRIDGE.bullets {
-                        li { "{bullet}" }
-                    }
-                }
-                div { class: "adjacent-actions",
-                    Link {
-                        class: "button button-primary",
-                        to: Route::NotePost { slug: "pc4-microkit-studio".to_string() },
-                        "Read the note"
-                    }
-                    if let Some(url) = pc4_url.as_ref() {
-                        a {
-                            class: "source-link",
-                            href: "{url}",
-                            target: "_blank",
-                            rel: "noopener noreferrer",
-                            "Open repo"
-                        }
-                    }
-                }
-                if pc4_url.is_none() {
-                    div { class: "repo-meta",
-                        span { class: "repo-label", "Repo path" }
-                        code { "{PC4_BRIDGE.repo_path}" }
-                    }
-                }
-            }
-        }
-    }
-}
-
-fn home_work_card(area: &crate::content::HomeWorkArea, pc4_url: Option<&str>) -> Element {
+fn home_work_card(area: &crate::content::HomeWorkArea) -> Element {
     rsx! {
         article { class: "feature-card",
             div { class: "card-topline", "{area.kicker}" }
@@ -942,7 +1002,7 @@ fn home_work_card(area: &crate::content::HomeWorkArea, pc4_url: Option<&str>) ->
             div { class: "hero-actions",
                 {home_primary_action(area)}
                 if area.secondary_cta.is_some() {
-                    {home_secondary_action(area, pc4_url)}
+                    {home_secondary_action(area)}
                 }
             }
         }
@@ -957,10 +1017,10 @@ fn home_primary_action(area: &crate::content::HomeWorkArea) -> Element {
         "Drums" => rsx! {
             Link { class: "button button-primary", to: Route::DrumEngine {}, "{area.primary_cta}" }
         },
-        "PC4MS" => rsx! {
+        "MIDI Targets" => rsx! {
             Link {
                 class: "button button-primary",
-                to: Route::NotePost { slug: "pc4-microkit-studio".to_string() },
+                to: Route::DrumStudio {},
                 "{area.primary_cta}"
             }
         },
@@ -973,7 +1033,7 @@ fn home_primary_action(area: &crate::content::HomeWorkArea) -> Element {
     }
 }
 
-fn home_secondary_action(area: &crate::content::HomeWorkArea, pc4_url: Option<&str>) -> Element {
+fn home_secondary_action(area: &crate::content::HomeWorkArea) -> Element {
     let Some(label) = area.secondary_cta else {
         return rsx! {};
     };
@@ -983,29 +1043,15 @@ fn home_secondary_action(area: &crate::content::HomeWorkArea, pc4_url: Option<&s
             Link { class: "button button-secondary", to: Route::Lines {}, "{label}" }
         },
         "Drums" => rsx! {
-            a {
+            Link {
                 class: "button button-secondary",
-                href: "https://soundcloud.com/mamut_studio",
-                target: "_blank",
-                rel: "noopener noreferrer",
+                to: Route::DrumStudio {},
                 "{label}"
             }
         },
-        "PC4MS" => {
-            if let Some(url) = pc4_url {
-                rsx! {
-                    a {
-                        class: "button button-secondary",
-                        href: "{url}",
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                        "{label}"
-                    }
-                }
-            } else {
-                rsx! {}
-            }
-        }
+        "MIDI Targets" => rsx! {
+            Link { class: "button button-secondary", to: Route::DrumEngine {}, "{label}" }
+        },
         "EPM2" => rsx! {
             Link { class: "button button-secondary", to: Route::Docs {}, "{label}" }
         },
@@ -1161,11 +1207,12 @@ fn SiteFooter() -> Element {
             div { class: "footer-inner",
                 div {
                     span { class: "section-kicker", "{SITE_NAME}" }
-                    p { "Play the browser demo. Use Lab for the EPM2 hardware path, and Notes and Docs for current source material." }
+                    p { "Play the browser demo. Use Drums and Drum Studio for MIDI drum sessions, Lab for the EPM2 hardware path, and Notes and Docs for current source material." }
                 }
                 div { class: "footer-meta",
                     span { "EPM1 active" }
-                    span { "PC4MS related rig work" }
+                    span { "MIDI target workflow" }
+                    span { "Drum Studio sessions" }
                     span { "Browser demo online" }
                     span { "EPM2 hardware lab" }
                     span { "Notes for current sessions" }
@@ -1185,6 +1232,7 @@ fn route_path(route: &Route) -> String {
         Route::Docs {} => "/docs".to_string(),
         Route::Play {} => "/play".to_string(),
         Route::DrumEngine {} => "/programmable-drum-machine".to_string(),
+        Route::DrumStudio {} => "/drum-studio".to_string(),
     }
 }
 
@@ -1210,7 +1258,8 @@ fn hero_drum_flow_segment(index: usize) -> &'static str {
         0 | 1 => "In",
         2 | 3 => "Sense",
         4..=7 => "ADG",
-        8 | 9 => "Route",
+        8 | 9 => "Bundle",
+        10 => "Route",
         _ => "Audio",
     }
 }

@@ -101,15 +101,6 @@ pub struct BlogPostSection {
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
-pub struct AdjacentProject {
-    pub kicker: &'static str,
-    pub title: &'static str,
-    pub summary: &'static str,
-    pub repo_path: &'static str,
-    pub bullets: &'static [&'static str],
-}
-
-#[derive(Clone, Copy, PartialEq, Eq)]
 pub struct DrumEngineTrack {
     pub title: &'static str,
     pub url: &'static str,
@@ -119,9 +110,9 @@ pub struct DrumEngineTrack {
 
 pub const HERO: HeroContent = HeroContent {
     eyebrow: "Mamut Studio",
-    title: "Software, drums, and PC4 rig work.",
-    body: "EPM1 plays in the browser and desktop runtime. The Reactive Programmable Drum Machine turns ADG/AIG groove intent into MIDI for the Kurzweil PC4. PC4 Microkit Studio keeps the mioXM and Yamaha AG03 rig flow close to the sessions.",
-    status: "Start with EPM1 or the programmable drum-machine take, then use Notes for the rig and source notes.",
+    title: "Software instruments, drums, and MIDI targets.",
+    body: "EPM1 plays in the browser and desktop runtime. The Reactive Programmable Drum Machine turns ADG/AIG groove decisions into generated MIDI, with Drum Studio keeping the session files together.",
+    status: "Start with EPM1, the drum-machine case, or Drum Studio around the current MIDI drum workflow.",
     primary_cta: "Play EPM1",
     secondary_cta: "Hear drums",
 };
@@ -130,38 +121,38 @@ pub const HOME_WORK_AREAS: &[HomeWorkArea] = &[
     HomeWorkArea {
         kicker: "EPM1",
         title: "Play the software instrument.",
-        body: "EPM1 is the runnable instrument: browser demo, desktop runtime, patch bank, macro controls, and PC4-oriented MIDI work.",
+        body: "EPM1 is the runnable instrument: browser demo, desktop runtime, patch bank, macro controls, and MIDI-oriented control work.",
         bullets: &[
             "Eight live-set patches and one browser render path.",
             "Patch names and macro targets match the desktop runtime.",
-            "PC4 MIDI work keeps the software line close to the rig.",
+            "MIDI-oriented controls keep the software line close to playable instrument behavior.",
         ],
         primary_cta: "Open play",
         secondary_cta: Some("Open lines"),
     },
     HomeWorkArea {
         kicker: "Drums",
-        title: "Hear the programmable drum-machine take.",
-        body: "ADG/AIG groove intent becomes MIDI, mioXM routes it, the Kurzweil PC4 plays it, and Yamaha AG03 monitoring brings the take back into the session.",
+        title: "Follow the programmable drum-machine lane.",
+        body: "ADG/AIG groove intent becomes generated MIDI, a synth target plays it, and Drum Studio keeps the generated session files together.",
         bullets: &[
-            "Start with the Jeans Instability release-candidate take.",
-            "143 BPM, four-bar chunks, groove-led mode, and saved player controls.",
-            "Feedback and taste shape the next listening pass.",
+            "Generated MIDI now travels with ADG bundles, trace files, runtime snapshots, and AIG export requests.",
+            "Drum Studio is the focused operator surface around Live Groove, Take Studio, and Profile Lab.",
+            "AIG import is the handoff for the next material pass.",
         ],
         primary_cta: "Open drum machine",
-        secondary_cta: Some("Open SoundCloud"),
+        secondary_cta: Some("Open Drum Studio"),
     },
     HomeWorkArea {
-        kicker: "PC4MS",
-        title: "Follow the PC4 rig flow.",
-        body: "PC4 Microkit Studio keeps playback control, session files, local rig flow, and hardware bench notes outside the instrument repos.",
+        kicker: "MIDI Targets",
+        title: "Keep target playback explicit.",
+        body: "The drum lane treats MIDI output, synth targets, and capture as clear workflow steps instead of a single fixed setup.",
         bullets: &[
-            "PC4, mioXM, and Yamaha AG03 stay close to the working sessions.",
-            "Session files and playback control live in their own source home.",
-            "The rig notes connect EPM, drums, and hardware work.",
+            "MIDI intake and output stay readable in the session files.",
+            "Target playback is a concrete audition step, not the whole product story.",
+            "Capture and review stay attached to the generated take.",
         ],
-        primary_cta: "Read PC4MS note",
-        secondary_cta: Some("Open repo"),
+        primary_cta: "Open Drum Studio",
+        secondary_cta: Some("Hear drums"),
     },
     HomeWorkArea {
         kicker: "EPM2",
@@ -253,13 +244,13 @@ pub const PRODUCT_LINES: &[ProductLine] = &[
     ProductLine {
         code: "EPM1",
         title: "Software runtime",
-        summary: "Rust runtime for the current software instrument: standalone play, factory patches, live-set behavior, and PC4-oriented MIDI work.",
+        summary: "Rust runtime for the current software instrument: standalone play, factory patches, live-set behavior, and MIDI-oriented control work.",
         status: "Active: runnable software instrument",
         repo_path: "mamut-sint-sw",
         repo: RepoKind::Epm1,
         bullets: &[
             "Core workspace is in place: params, patch, identity, DSP, engine, and standalone.",
-            "Sprint 3 hardening and Sprint 4 runtime work are done; Sprint 6 centers the PC4 rig.",
+            "Sprint 3 hardening and Sprint 4 runtime work are done; current work keeps live control behavior explicit.",
             "Transport is locally frozen pending shared platform extraction.",
         ],
         source_path: "README.md",
@@ -283,19 +274,7 @@ pub const PRODUCT_LINES: &[ProductLine] = &[
 pub const BLOG_INTRO: PageIntro = PageIntro {
     kicker: "Notes",
     title: "Working notes.",
-    summary: "Short notes from the current software runtime, hardware path, and related rig work.",
-};
-
-pub const PC4_BRIDGE: AdjacentProject = AdjacentProject {
-    kicker: "Related repo",
-    title: "PC4 Microkit Studio",
-    summary: "A separate repo for PC4 rig integration, playback control, session logs, and local-first flow around the performance setup.",
-    repo_path: "pc4-microkit-studio",
-    bullets: &[
-        "Keeps rig orchestration and session files outside the instrument repo.",
-        "Covers playback control, musical control boundaries, and hardware bench workflow around the PC4 setup.",
-        "Keeps the performance setup in its own source home.",
-    ],
+    summary: "Short notes from the current software runtime, hardware path, drum work, and related source research.",
 };
 
 pub const DRUM_ENGINE_FEATURED_TRACK_ID: &str = "2332273322";
@@ -359,26 +338,86 @@ pub const DRUM_ENGINE_EVIDENCE: &[LabCard] = &[
     LabCard {
         label: "Intent",
         title: "ADG/AIG layer",
-        body: "ADG/AIG keeps the drum decision musical before it becomes MIDI for the PC4.",
+        body: "ADG/AIG keeps the drum decision musical before it becomes generated MIDI.",
         detail: "Groove intent before MIDI output.",
     },
     LabCard {
-        label: "Play",
-        title: "PC4 rig loop",
-        body: "mioXM routes the generated MIDI to the Kurzweil PC4, and the Yamaha AG03 monitors the session.",
-        detail: "Local MIDI and audio tied to the real rig.",
+        label: "Bundle",
+        title: "Session file lane",
+        body: "Generated-live MIDI travels with ADG TOML, event summaries, live chunks, per-chunk traces, and runtime snapshots.",
+        detail: "generated_live_adg_bundle.v1",
     },
     LabCard {
-        label: "Taste",
-        title: "Manual corpus",
-        body: "Selected material and live controls steer the machine toward takes that fit the track.",
-        detail: "Profile-led and intake-led choices stay readable.",
+        label: "Studio",
+        title: "Drum Studio runtime",
+        body: "The standalone Drum Studio path keeps the UI focused while the runtime assembles the session.",
+        detail: "Live Groove / Take Studio / Profile Lab",
     },
     LabCard {
-        label: "Memory",
-        title: "Feedback loop",
-        body: "Correction and comparison notes keep the next pass tied to what worked while the player keeps the taste call.",
-        detail: "Learning follows correction and preference from the player.",
+        label: "Bridge",
+        title: "AIG export request",
+        body: "The drum workflow writes session files, then hands the material to AIG through an explicit import request.",
+        detail: "aig_export_request.v1 -> importer",
+    },
+];
+
+pub const DRUM_STUDIO_INTRO: PageIntro = PageIntro {
+    kicker: "Drum Studio",
+    title: "Drum Studio.",
+    summary: "A current view of the drum lane: generated MIDI, ADG bundle files, runtime traces, and the AIG handoff around the standalone Drum Studio split.",
+};
+
+pub const DRUM_STUDIO_AUTHORITY_CARDS: &[LabCard] = &[
+    LabCard {
+        label: "Rhythm",
+        title: "Drum engine",
+        body: "The drum engine reads MIDI intake, applies the profile, and writes generated drum MIDI with ADG bundle files.",
+        detail: "rhythm: drum engine",
+    },
+    LabCard {
+        label: "Runtime",
+        title: "Drum Studio runtime",
+        body: "The Drum Studio runtime is host-side and UI-free. It assembles sessions around the drum engine result.",
+        detail: "runtime: session assembly",
+    },
+    LabCard {
+        label: "Material",
+        title: "AIG material lane",
+        body: "AIG reads the translated drum material after the generated pass, so the control flow stays easy to follow.",
+        detail: "material: aig-engine",
+    },
+    LabCard {
+        label: "Training",
+        title: "Offline codec lane",
+        body: "Codec training and neural preview work stay in the offline lane while the MIDI workflow remains the session reference.",
+        detail: "codec training: encodec-offline",
+    },
+];
+
+pub const DRUM_STUDIO_ARTIFACT_CARDS: &[LabCard] = &[
+    LabCard {
+        label: "Session",
+        title: "Since June 4",
+        body: "The lab now has 127 generated-live MIDI files and 27 ADG bundle directories under the session store.",
+        detail: "session count on 2026-06-19",
+    },
+    LabCard {
+        label: "Bundle",
+        title: "Latest bundle shape",
+        body: "The latest ADG bundle contains ADG TOML, ADG events, summaries, generated MIDI, live chunks, per-chunk traces, runtime snapshot, trace, manifest, and AIG export request.",
+        detail: "drum-live-1781874324777.adg-bundle",
+    },
+    LabCard {
+        label: "Ready",
+        title: "AIG import handoff",
+        body: "The bundle manifest marks the AIG export as ready for import while keeping the generated drum pass as the source.",
+        detail: "ready_for_aig_import",
+    },
+    LabCard {
+        label: "Listen",
+        title: "Current sound path",
+        body: "The SoundCloud takes remain the public listening path while renderer and EnCodec work continue in separate lanes.",
+        detail: "docs/AIG-CLAIMS-AND-EVIDENCE.md",
     },
 ];
 
@@ -416,11 +455,17 @@ pub const DRUM_ENGINE_TRACKS: &[DrumEngineTrack] = &[
 ];
 
 pub const DRUM_ENGINE_NOTE_SLUGS: &[&str] = &[
-    "pc4ms-touch-surface-live-rig",
+    "drum-engine-aig-adg-flow",
     "reactive-programmable-drum-machine",
     "adg-aig-drum-language",
-    "pc4-drum-rig-flow",
     "drum-engine-feedback-taste-memory",
+];
+
+pub const DRUM_STUDIO_NOTE_SLUGS: &[&str] = &[
+    "drum-engine-aig-adg-flow",
+    "drum-studio-runtime-aig-export",
+    "adg-aig-bridge-truth-boundary",
+    "magenta-neural-preview-bridge",
 ];
 
 pub const BLOG_POSTS: &[BlogPost] = &[
@@ -438,15 +483,80 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         ],
     },
     BlogPost {
+        slug: "pc4ms-drum-engine-since-june-4",
+        series: "PC4MS",
+        title: "PC4MS Drum Engine Sessions",
+        intro: "The current PC4MS drum lane keeps generated MIDI beside ADG bundle files, trace files, runtime snapshots, and AIG export requests.",
+        body: "This note follows the working loop from PC4 intake and profile choice to generated MIDI, bundle manifest, trace files, and the AIG import handoff.",
+        bullets: &[
+            "The PC4MS session store now contains 127 generated-live MIDI files and 27 ADG bundle directories.",
+            "The newest observed bundle is drum-live-1781874324777.adg-bundle from June 19, 2026.",
+            "Recent work added drum brief flow, render variation, runtime assembly, workbench performance workflows, and timing cleanup.",
+            "The latest bundle uses the pc4ms.generated_live_adg_bundle.v1 manifest family.",
+        ],
+    },
+    BlogPost {
+        slug: "drum-studio-runtime-aig-export",
+        series: "Drum Studio",
+        title: "Drum Studio Runtime And AIG Export",
+        intro: "Drum Studio is the standalone operator surface around Live Groove, Take Studio, and Profile Lab, with session files written around the drum engine.",
+        body: "The runtime is UI-free. It calls the drum engine, writes the session files, and creates the AIG export request for the next material pass.",
+        bullets: &[
+            "The latest export request schema is pc4ms.aig_export_request.v1.",
+            "The export request names pc4ms-drum-engine for rhythm and pc4ms-drum-studio-runtime for runtime.",
+            "AIG is named as the material consumer through aig-pc4ms-import.",
+            "EnCodec and neural preview work stay experimental and offline.",
+        ],
+    },
+    BlogPost {
+        slug: "adg-aig-bridge-truth-boundary",
+        series: "AIG / ADG",
+        title: "ADG To AIG Bridge",
+        intro: "The drum ADG dialect and AIG ADG use different shapes. The bridge translates the drum pass and keeps the source role visible.",
+        body: "PC4MS carries thirteen drum roles in tick time. AIG consumes a smaller gesture shape in beat time. The bridge can collapse roles, preserve source identity in the reason field, and report what changed.",
+        bullets: &[
+            "PC4MS DRUM ADG remains the drum-engine output dialect.",
+            "AIG ADG remains the material/import dialect.",
+            "Role collapse warnings and original role/kind preservation belong in the import report.",
+            "Renderer quality, EnCodec roundtrip, and neural preview stay in separate tracks.",
+        ],
+    },
+    BlogPost {
+        slug: "magenta-neural-preview-bridge",
+        series: "Research",
+        title: "Magenta As Neural Preview Bridge",
+        intro: "Magenta realtime work sits as a neural preview lane under the drum and AIG material flow.",
+        body: "This research lane can preview continuations, token-space texture, or file-backed realtime experiments while PC4MS keeps the rhythm shape and AIG keeps the import layer.",
+        bullets: &[
+            "Use Magenta realtime as preview research around the current drum flow.",
+            "Keep the AG03 48 kHz playback path as a local preview detail.",
+            "Keep PC4MS ADG bundles and AIG export requests as the source notes.",
+            "Bring it forward when there is a cleaned listening example.",
+        ],
+    },
+    BlogPost {
+        slug: "drum-engine-aig-adg-flow",
+        series: "Programmable Drums",
+        title: "Drum Engine, AIG, And ADG Flow",
+        intro: "The current drum lane starts with MIDI or JSON intake, writes ADG beside generated MIDI, then hands the ADG bundle to AIG for semantic passes, gesture packets, atom specs, and reference audio.",
+        body: "This note brings the current Drum Engine and AIG Mermaid docs into one readable source note. The Drum Engine decides the groove and writes the drum dialect. AIG imports that dialect, narrows it into its own gesture model, and prepares the material for reference rendering and offline material work.",
+        bullets: &[
+            "AIG means Articulated Instrument Gesture: the wider model for timing, strength, relationships, constraints, packets, and render-ready material.",
+            "ADG means Articulated Drum Gesture: the drum dialect for role, kind, timing, surface, density, phrase role, variation identity, and reason.",
+            "The Drum Engine outputs ADG, generated MIDI, and a decision trace; AIG consumes ADG through an explicit import path.",
+            "The current runtime keeps the live MIDI workflow separate from reference render, sample-material, EnCodec, and neural preview lanes.",
+        ],
+    },
+    BlogPost {
         slug: "reactive-programmable-drum-machine",
         series: "Programmable Drums",
         title: "Reactive Programmable Drum Machine",
-        intro: "Reactive Programmable Drum Machine is the PC4 rig drum system: live PC4 intake shapes the next generated MIDI pass while ADG/AIG keeps the drum decision editable before it becomes notes, gates, ticks, and velocities.",
+        intro: "Reactive Programmable Drum Machine is a MIDI drum workflow: live intake shapes the next generated MIDI pass while ADG/AIG keeps the drum decision editable before it becomes notes, gates, ticks, and velocities.",
         body: "This note follows drum-live-1780432493944, the Jeans release-candidate take. The machine reads the PC4 performance, keeps the groove decision in ADG/AIG, lowers the part to MIDI, routes it through mioXM to the Kurzweil PC4, and returns the session through the AG03/AG06 path.",
         bullets: &[
             "Uses the Jeans release-candidate take: 6:50.805 of 96 kHz stereo 24-bit PCM audio.",
             "Starts from PC4 live MIDI intake through mioXM, including 4416 captured events for the release candidate pass.",
-            "Connects the 143 BPM Groove-led Reference live preset to the Jeans 11/8 PC4 rig.",
+            "Connects the 143 BPM Groove-led control set to the Jeans 11/8 drum workflow.",
             "Keeps the generated MIDI, AIG/ADG decision layer, PC4 playback, AG03 capture, and SoundCloud listening reference tied to one take.",
         ],
     },
@@ -455,7 +565,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         series: "Programmable Drums",
         title: "ADG And AIG Drum Language",
         intro: "ADG/AIG holds the drum-machine decision before MIDI: groove intent, gesture role, surface, density, timing feel, and phrase relation.",
-        body: "AIG is the wider gesture frame. ADG is the drum dialect used by the current reactive machine. MIDI is the transport step that makes the decision playable on the Kurzweil PC4 through mioXM and audible through the AG03/AG06 path.",
+        body: "AIG is the wider gesture frame. ADG is the drum dialect used by the current reactive machine. MIDI is the transport step that makes the decision playable on a target and audible through capture.",
         bullets: &[
             "AIG carries articulated instrument gestures and traceable musical decisions.",
             "ADG is the drum dialect for role, kind, surface, density, contact, timing, phrase role, variation identity, relationships, and protection flags.",
@@ -492,7 +602,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
     BlogPost {
         slug: "core-stance",
         series: "Direction",
-        title: "Project Boundaries",
+        title: "Project Roles",
         intro: "The project keeps software, hardware, and rig work separated enough that each part can be tested on its own.",
         body: "EPM1, EPM2, and PC4 rig work have different jobs. The software runtime should stay runnable, the hardware path should stay tied to simulation and bench work, and related orchestration should stay in its own repo.",
         bullets: &[
@@ -553,7 +663,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
     BlogPost {
         slug: "boundaries-and-roles",
         series: "Direction",
-        title: "Boundaries And Roles",
+        title: "Roles And Source Homes",
         intro: "The split is useful only if each line keeps a clear job.",
         body: "EPM1 stays focused on runnable software instrument behavior. EPM2 stays focused on desktop hardware study and bench work. PC4 rig orchestration stays separate from both.",
         bullets: &[
@@ -621,7 +731,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         bullets: &[
             "Simulation playbooks are already documented.",
             "P1-specific notes and walkthroughs exist for the integrated chain.",
-            "Behavioral boundaries are being made explicit before deeper transistor work.",
+            "Behavior ranges are being made explicit before deeper transistor work.",
         ],
     },
     BlogPost {
@@ -653,7 +763,7 @@ pub const BLOG_POSTS: &[BlogPost] = &[
         series: "Adjacent Work",
         title: "PC4 Microkit Studio",
         intro: "PC4 Microkit Studio is related rig infrastructure, so it stays outside the EPM1 and EPM2 repos.",
-        body: "PC4 Microkit Studio is a host-first standalone repo for a studio rig. It centers typed contracts, musical control boundaries, session files, playback control, and hardware bench work around a PC4 setup.",
+        body: "PC4 Microkit Studio is a host-first standalone repo for a studio rig. It centers typed session files, musical control roles, playback control, and hardware bench work around a PC4 setup.",
         bullets: &[
             "Separate canonical repository and separate rig frame.",
             "Related to the performance setup and kept outside the EPM1/EPM2 repo split.",
@@ -691,7 +801,7 @@ pub const DOC_CATEGORIES: &[DocCategory] = &[
             },
             DocCard {
                 title: "Direction Notes",
-                summary: "The chosen direction for the desktop analog poly and the current V1 boundaries.",
+                summary: "The chosen direction for the desktop analog poly and the current V1 shape.",
                 source_path: "docs/product-direction.md",
                 repo: RepoKind::Epm2,
             },
@@ -804,6 +914,11 @@ pub fn blog_post_by_slug(slug: &str) -> Option<BlogPost> {
 pub fn blog_post_sections(slug: &str) -> &'static [BlogPostSection] {
     match canonical_blog_slug(slug) {
         "pc4ms-touch-surface-live-rig" => PC4MS_TOUCH_SURFACE_LIVE_RIG_SECTIONS,
+        "pc4ms-drum-engine-since-june-4" => PC4MS_DRUM_ENGINE_SINCE_JUNE_4_SECTIONS,
+        "drum-studio-runtime-aig-export" => DRUM_STUDIO_RUNTIME_AIG_EXPORT_SECTIONS,
+        "adg-aig-bridge-truth-boundary" => ADG_AIG_BRIDGE_TRUTH_BOUNDARY_SECTIONS,
+        "magenta-neural-preview-bridge" => MAGENTA_NEURAL_PREVIEW_BRIDGE_SECTIONS,
+        "drum-engine-aig-adg-flow" => DRUM_ENGINE_AIG_ADG_FLOW_SECTIONS,
         "reactive-programmable-drum-machine" => REACTIVE_PROGRAMMABLE_DRUM_MACHINE_SECTIONS,
         "adg-aig-drum-language" => ADG_AIG_DRUM_LANGUAGE_SECTIONS,
         "pc4-drum-rig-flow" => PC4_DRUM_RIG_FLOW_SECTIONS,
@@ -875,6 +990,104 @@ pub const PC4MS_TOUCH_SURFACE_LIVE_RIG_SECTIONS: &[BlogPostSection] = &[
             "Return to WebSocket telemetry after the live MIDI route is captured.",
         ],
         examples: NO_CODE_EXAMPLES,
+    },
+];
+
+pub const DRUM_AIG_ADG_PIPELINE_EXAMPLES: &[CodeExample] = &[
+    CodeExample {
+        label: "Drum Engine run",
+        source_path: "pc4-microkit-studio/crates/drum-engine/docs/03-pipeline.md",
+        language: "mermaid",
+        code: r#"flowchart TD
+  Intake["MIDI or JSON intake"] --> Windows["meter-aware windows"]
+  Profile["profile + source law pack"] --> Axes["law axes"]
+  Windows --> Features["previous-window features"]
+  Features --> Axes
+  Axes --> Candidates["ADG candidates"]
+  Candidates --> Select["deterministic selection"]
+  Select --> ADG["ADG gestures"]
+  ADG --> MIDI["generated MIDI"]
+  ADG --> Trace["decision trace"]"#,
+    },
+    CodeExample {
+        label: "Live chunk carry-forward",
+        source_path: "pc4-microkit-studio/crates/drum-engine/docs/14-live-chunk-and-rhythm-section.md",
+        language: "mermaid",
+        code: r#"sequenceDiagram
+  participant Host
+  participant Engine as run_drum_engine_live_chunk
+  participant Groove as advance_live_groove_state
+  Host->>Engine: source bars, output bars, prior groove state
+  Engine->>Groove: analyze chunk intake
+  Groove-->>Engine: next groove state
+  Engine-->>Host: ADG, MIDI, trace, next groove state"#,
+    },
+];
+
+pub const DRUM_AIG_ADG_EDIT_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "ADG edit and rerender",
+    source_path: "pc4-microkit-studio/external-docs/drum-engine-adg-edit-rerender-flow.md",
+    language: "mermaid",
+    code: r#"flowchart LR
+  Generate["generate drum take"] --> ADG["export .adg.toml"]
+  ADG --> Edit["edit role, kind, strength, timing, flags"]
+  Edit --> Validate["validate score against profile"]
+  Validate --> MIDI["rerender through profile midi_map"]
+  MIDI --> Trace["updated trace and ADG files"]"#,
+}];
+
+pub const DRUM_AIG_ADG_BRIDGE_PIPELINE_EXAMPLES: &[CodeExample] = &[
+    CodeExample {
+        label: "ADG bundle shape",
+        source_path: "aig-engine/docs/PC4MS-DRUM-STUDIO-INTEGRATION.md",
+        language: "text",
+        code: r#"<take>.adg-bundle/
+  manifest.json
+  <take>.adg.toml
+  <take>.adg-events.json
+  <take>.generated-live.mid
+  aig/
+    export-request.json"#,
+    },
+    CodeExample {
+        label: "Drum ADG into AIG",
+        source_path: "aig-engine/docs/engine/11-adg-bridge-drum-to-aig.md",
+        language: "mermaid",
+        code: r#"flowchart LR
+  Drum["Drum Engine ADG\n13 roles, ticks"] --> Import["aig-pc4ms-import"]
+  Import --> Map["role/kind map\ntick to beat"]
+  Map --> AIG["AIG ADG\n6 roles, beats"]
+  AIG --> IR["SemanticIr"]
+  IR --> Resolved["semantic passes"]
+  Resolved --> Packets["gesture packets"]
+  Packets --> Atoms["atom specs + reference audio"]"#,
+    },
+];
+
+pub const DRUM_AIG_RENDER_LANE_EXAMPLES: &[CodeExample] = &[
+    CodeExample {
+        label: "AIG render lane",
+        source_path: "aig-engine/docs/engine/03-pipeline.md",
+        language: "mermaid",
+        code: r#"flowchart LR
+  TOML["ADG TOML"] --> Doc["AdgDocument"]
+  Doc --> IR["SemanticIr"]
+  IR --> Passes["ResolvedIr + trace"]
+  Passes --> Packets["GesturePacketDocument"]
+  Packets --> AtomSpecs["AtomSpecDocument"]
+  AtomSpecs --> WAV["reference WAV + atom WAVs"]"#,
+    },
+    CodeExample {
+        label: "Gesture packets and atoms",
+        source_path: "aig-engine/docs/engine/07-gesture-packets-and-atoms.md",
+        language: "mermaid",
+        code: r#"stateDiagram-v2
+  direction LR
+  [*] --> BeatTime : ResolvedIr
+  BeatTime --> FrameTime : beats_to_frames
+  FrameTime --> Renderable : gesture packet
+  Renderable --> AtomSpec : tail frames + ports
+  AtomSpec --> [*]"#,
     },
 ];
 
@@ -1420,6 +1633,342 @@ live_groove_event_hash(&event.id) % 100 < threshold"#,
     },
 ];
 
+pub const PC4MS_ADG_BUNDLE_MANIFEST_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "Generated-live ADG bundle manifest",
+    source_path: ".pc4ms/session-store/workbench-session/generated-drum-midi-takes/*.adg-bundle/manifest.json",
+    language: "json",
+    code: r#"{
+  "schema": "pc4ms.generated_live_adg_bundle.v1",
+  "take_id": "drum-live-1781874324777",
+  "artifact_family": "adg_aig",
+  "artifact_level": "debug",
+  "aig_export": {
+    "schema": "pc4ms.generated_live_adg_bundle.aig_export.v1",
+    "status": "ready_for_aig_import",
+    "consumer": "aig-pc4ms-import"
+  }
+}"#,
+}];
+
+pub const PC4MS_AIG_EXPORT_REQUEST_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "AIG export request excerpt",
+    source_path: ".pc4ms/session-store/workbench-session/generated-drum-midi-takes/*.adg-bundle/aig/export-request.json",
+    language: "json",
+    code: r#"{
+  "schema": "pc4ms.aig_export_request.v1",
+  "authority": {
+    "rhythm": "pc4ms-drum-engine",
+    "runtime": "pc4ms-drum-studio-runtime",
+    "material": "aig-engine",
+    "codec_training": "encodec-offline"
+  },
+  "source": {
+    "profile_id": "jeans-ghost-braid-11-8-custom-4",
+    "tempo_bpm": 143,
+    "ppqn": 480,
+    "meter": { "numerator": 11, "denominator": 8, "grouping": [2, 2, 3, 2, 2] },
+    "output_channel": 9,
+    "event_count": 1288
+  }
+}"#,
+}];
+
+pub const ADG_AIG_BRIDGE_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "Bridge translation sketch",
+    source_path: "aig-engine/docs/engine/11-adg-bridge-drum-to-aig.md",
+    language: "yaml",
+    code: r#"pc4ms_drum_adg:
+  time_base: ticks
+  role_count: 13
+  owner: pc4ms-drum-engine
+
+aig_adg:
+  time_base: beats
+  role_count: 6
+  owner: aig-engine
+
+bridge_handoff:
+  action: translate
+  preserves: ["original_role", "original_kind", "source_reason"]
+  warns_on: ["role_collapse", "lossy_mapping"]
+  report: Pc4msImportReport"#,
+}];
+
+pub const MAGENTA_PREVIEW_BRIDGE_EXAMPLES: &[CodeExample] = &[CodeExample {
+    label: "Research preview lane",
+    source_path: "magenta-realtime/docs/pc4ms-live-ag03-bridge.md",
+    language: "yaml",
+    code: r#"control:
+  rhythm: pc4ms-drum-engine
+  import_layer: aig-engine
+  neural_preview: magenta-realtime
+
+preview_path:
+  audio_device: "Yamaha AG03"
+  sample_rate_hz: 48000
+  role: "semantic preview / continuation research"
+
+source_files:
+  - "PC4MS ADG bundle"
+  - "AIG export request""#,
+}];
+
+pub const PC4MS_DRUM_ENGINE_SINCE_JUNE_4_SECTIONS: &[BlogPostSection] = &[
+    BlogPostSection {
+        title: "What changed",
+        body: "The current PC4MS drum lane has moved from one reference take into a fuller session flow around the drum engine and Drum Studio.",
+        bullets: &[
+            "New commits added drum brief flow and render variation, drum brief compiler/runtime updates, runtime assembly, workbench drum performance workflows, and live timing cleanup.",
+            "The public page should now talk about generated MIDI, ADG bundle files, and the SoundCloud take.",
+            "The story stays close to the PC4MS/AIG working loop.",
+        ],
+        examples: NO_CODE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Local session files",
+        body: "The current PC4MS session store has many generated drum files. The key shape is the ADG bundle beside each generated-live MIDI take.",
+        bullets: &[
+            "Session count on June 19, 2026: 127 generated-live MIDI files.",
+            "Session count on June 19, 2026: 27 ADG bundle directories.",
+            "Latest observed bundle: drum-live-1781874324777.adg-bundle.",
+            "Bundle contents include ADG events, ADG summary, ADG TOML, generated MIDI, live chunks, per-chunk traces, runtime snapshot, trace, manifest, and AIG export request.",
+        ],
+        examples: PC4MS_ADG_BUNDLE_MANIFEST_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Timing cleanup",
+        body: "The cleanup work made the local timing story less hand-wavy. The reviewed bundles kept note collisions and invariant failures at zero, leaving the musical character questions in ghost density, surface motion, and live tempo ramps.",
+        bullets: &[
+            "The timing review checked local generated bundles rather than only describing the intended behavior.",
+            "Tuplets, humanize caps, and collision checks are source notes beside the taste call.",
+            "The listening decision still belongs to the player and the track.",
+        ],
+        examples: NO_CODE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Public shape",
+        body: "The public shape is simple: generated MIDI, ADG bundles, trace files, snapshots, and export requests are part of the current session flow.",
+        bullets: &[
+            "PC4MS carries the local session files and the PC4 rig flow.",
+            "AIG carries selected ADG/material transforms.",
+            "EnCodec and Magenta stay in research notes until a specific listening pass is ready.",
+        ],
+        examples: NO_CODE_EXAMPLES,
+    },
+];
+
+pub const DRUM_STUDIO_RUNTIME_AIG_EXPORT_SECTIONS: &[BlogPostSection] = &[
+    BlogPostSection {
+        title: "Standalone operator surface",
+        body: "Drum Studio is the smaller operator surface being split out of PC4MS. Its intended work areas are Live Groove, Take Studio, and Profile Lab.",
+        bullets: &[
+            "Live Groove is the performance-facing generated drum workflow.",
+            "Take Studio is the review and session-file lane.",
+            "Profile Lab is the profile and method editing lane.",
+            "pc4ms-workbench remains the larger operator surface around the full rig.",
+        ],
+        examples: NO_CODE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Runtime roles",
+        body: "The runtime writes the session files around the musical result. It calls the drum engine and records the material for the next pass.",
+        bullets: &[
+            "Rhythm generation belongs to pc4ms-drum-engine.",
+            "Session assembly belongs to pc4ms-drum-studio-runtime.",
+            "Material import belongs to aig-engine.",
+            "Codec training remains encodec-offline.",
+        ],
+        examples: PC4MS_AIG_EXPORT_REQUEST_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "AIG handoff",
+        body: "The bridge point is the export request under the ADG bundle. That file names the consumer, role split, profile, meter, tempo, PPQN, output channel, and event count.",
+        bullets: &[
+            "The latest export request is ready for aig-pc4ms-import.",
+            "The source profile is jeans-ghost-braid-11-8-custom-4.",
+            "The source meter stays the Jeans 11/8 grouping: 2+2+3+2+2.",
+            "The event count in the latest observed request is 1288.",
+        ],
+        examples: PC4MS_ADG_BUNDLE_MANIFEST_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "What stays offline",
+        body: "Private run folders, raw session dumps, and neural experiments stay out of the main public page. They can guide future copy after a cleaned listening pass is ready.",
+        bullets: &[
+            "Keep local absolute paths out of public text.",
+            "Keep AIG import separate from audio-renderer maturity.",
+            "Keep EnCodec and Magenta tied to specific research notes.",
+        ],
+        examples: NO_CODE_EXAMPLES,
+    },
+];
+
+pub const ADG_AIG_BRIDGE_TRUTH_BOUNDARY_SECTIONS: &[BlogPostSection] = &[
+    BlogPostSection {
+        title: "Two ADG dialects",
+        body: "The word ADG appears on both sides, but the objects have different jobs. PC4MS DRUM ADG is a drum-engine event language; AIG ADG is the material/import gesture language.",
+        bullets: &[
+            "PC4MS works in ticks and drum-specific roles.",
+            "AIG works in beat-time material gestures.",
+            "The bridge translates between them instead of sharing one struct.",
+        ],
+        examples: ADG_AIG_BRIDGE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Translation report",
+        body: "The bridge reports where conversion loses detail. Role collapse, original role/kind preservation, and import warnings stay visible in the source note.",
+        bullets: &[
+            "Collapsed roles should be visible in the import report.",
+            "Original role and kind should remain attached to the reason or provenance field.",
+            "The report belongs with the source files for the take.",
+        ],
+        examples: NO_CODE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Renderer lanes",
+        body: "This bridge is a control and file handoff. Renderer, neural preview, and codec roundtrip work each stay in their own lane.",
+        bullets: &[
+            "Renderer-independent backend work remains a separate track.",
+            "EnCodec roundtrip remains optional and experimental.",
+            "The Groove Creator UI language should keep Preview and Render (EnCodec - experimental) separate.",
+        ],
+        examples: NO_CODE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Working lanes",
+        body: "The public shape works best when PC4MS, AIG, and neural preview lanes are named separately. Future audio work can then land without changing the basic flow.",
+        bullets: &[
+            "PC4MS carries the rhythm/generation lane.",
+            "AIG carries the import/material lane.",
+            "Magenta or EnCodec can be preview or research lanes when a cleaned run supports that.",
+        ],
+        examples: NO_CODE_EXAMPLES,
+    },
+];
+
+pub const MAGENTA_NEURAL_PREVIEW_BRIDGE_SECTIONS: &[BlogPostSection] = &[
+    BlogPostSection {
+        title: "Research bridge",
+        body: "Magenta realtime work fits the site as a research note around the main drum-machine flow. It can be useful for neural continuation and preview texture around the same PC4MS/AIG material.",
+        bullets: &[
+            "The public lane should say preview bridge around the current renderer work.",
+            "Use this when a concrete local run is ready to show.",
+            "Keep the PC4MS ADG bundle as the stable source file.",
+        ],
+        examples: MAGENTA_PREVIEW_BRIDGE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "PC4MS control",
+        body: "The control order stays simple: PC4MS decides the live rhythm shape, AIG imports the material, and Magenta can sit below that as an experimental preview renderer.",
+        bullets: &[
+            "Keep the ADG/AIG handoff visible.",
+            "Describe Magenta as a preview lane around the drum engine.",
+            "Keep source ownership visible for any generated example.",
+        ],
+        examples: NO_CODE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "AG03 preview path",
+        body: "The local bridge notes mention AG03 playback at 48 kHz. That is useful as lab context and should stay tied to a specific listening pass.",
+        bullets: &[
+            "Treat AG03 48 kHz as a local preview detail.",
+            "Bring it forward when tied to a specific listening pass.",
+            "Keep the SoundCloud and PC4 rig path as the public listening path for now.",
+        ],
+        examples: NO_CODE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Current scope",
+        body: "The research lane should stay narrow until the site has a cleaned example and a source path that can be described plainly.",
+        bullets: &[
+            "Keep renderer language tied to a specific run.",
+            "Keep PC4MS ADG bundles in the source path.",
+            "Keep AI music language attached to the Mamut rig.",
+        ],
+        examples: NO_CODE_EXAMPLES,
+    },
+];
+
+pub const DRUM_ENGINE_AIG_ADG_FLOW_SECTIONS: &[BlogPostSection] = &[
+    BlogPostSection {
+        title: "One working lane",
+        body: "The current drum lane is split on purpose. Drum Studio hosts the take and writes the files. The Drum Engine decides the groove. ADG carries the drum decision before MIDI. AIG imports that decision into its wider gesture model for material and render work.",
+        bullets: &[
+            "Drum Studio is the operator surface and session-file runtime.",
+            "The Drum Engine is the deterministic groove generator.",
+            "ADG is the editable drum score between generation and playback.",
+            "AIG is the material lane that consumes ADG after the generated pass.",
+        ],
+        examples: DRUM_AIG_ADG_PIPELINE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "How the Drum Engine runs",
+        body: "The full path is `run_drum_engine_with_feel`. It validates the config and profile, normalizes incoming ticks to the profile PPQN, chooses the generation mode, then runs a window loop over the meter. Each output window reacts to features from the previous intake window, so the machine answers what the player just did without copying it one-for-one.",
+        bullets: &[
+            "Window features include onset count, register balance, velocity energy, density, and phrase pressure.",
+            "Macro controls and the selected source law pack become law axes such as energy, density, risk, fill pressure, and surface brightness.",
+            "Candidate generation proposes musical drum gestures: anchors, backbeats, ghosts, breath, pressure, flashes, flams, drags, and chokes.",
+            "Candidate selection sorts deterministically, rejects unmapped gestures, and keeps right-hand surface conflicts out of the same tick.",
+        ],
+        examples: DRUM_AIG_ADG_PIPELINE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "ADG before MIDI",
+        body: "ADG is the durable drum score. It keeps role, kind, tick, strength, body, transient, openness, density, micro-offset, velocity delta, protection flags, phrase role, variation identity, surface touch, and reason. MIDI is the playback file: channel, note number, tick, gate, and velocity.",
+        bullets: &[
+            "A kick anchor and a tom pressure event can both become MIDI notes, but ADG keeps their musical job visible.",
+            "ADG can be edited after listening, then rerendered through the same profile `midi_map` without regenerating the whole take.",
+            "The lowerer fails on unsupported role/kind requests instead of silently turning missing voices into a successful edit.",
+            "Finalization clamps timing, removes collisions, lowers MIDI again, refreshes trace windows, and checks invariants.",
+        ],
+        examples: DRUM_AIG_ADG_EDIT_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Live chunks and groove memory",
+        body: "The streaming path runs one bounded chunk at a time. A chunk request names the source bars to analyze, the output bars to render, the prior groove state, and the current feel controls. The response returns ADG, MIDI, trace, timing, and the next groove state for the following chunk.",
+        bullets: &[
+            "Learning chunks collect density, velocity energy, and accent cells.",
+            "Locked chunks keep the groove center stable and admit only bounded intake mirroring.",
+            "Bravura chunks open the response when the input has enough velocity, register lift, and density pressure.",
+            "The host feeds `next_groove_state` into the next request, so the drummer keeps memory across the live stream.",
+        ],
+        examples: DRUM_AIG_ADG_PIPELINE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "The ADG bundle handoff",
+        body: "A generated take writes an ADG bundle beside the generated MIDI. The bundle includes the manifest, ADG TOML, raw ADG events, generated-live MIDI, and an AIG export request. That request is the bridge point: AIG can import the bundle without Drum Studio becoming part of AIG.",
+        bullets: &[
+            "The importer accepts the export request, bundle directory, manifest, or raw ADG TOML.",
+            "The source drum dialect works in ticks with the larger drum-role vocabulary.",
+            "AIG narrows the stream to its beat-time ADG dialect and records role collapse or unsupported detail in the import report.",
+            "Original role, kind, event identity, and reason stay attached wherever the bridge can keep them.",
+        ],
+        examples: DRUM_AIG_ADG_BRIDGE_PIPELINE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "AIG semantic pass",
+        body: "Inside AIG, ADG TOML becomes an `AdgDocument`, then `SemanticIr`, then a resolved IR after ordered semantic passes. The current pass set covers nervousness, humanize timing, hat wash control, hat choke, and snare flam. Each pass is deterministic and records what changed in the trace.",
+        bullets: &[
+            "Nervousness and humanize timing add hash-seeded micro-timing instead of free random drift.",
+            "Hat wash and hat choke change cymbal duration, wash, openness, and contact behavior.",
+            "Snare flam creates quieter grace hits while preserving the total strength budget.",
+            "Default constraints protect kick anchors, finite render output, and the global strength budget.",
+        ],
+        examples: DRUM_AIG_RENDER_LANE_EXAMPLES,
+    },
+    BlogPostSection {
+        title: "Packets, atoms, and render lanes",
+        body: "After the AIG passes, the resolved gesture data still lives in beats. The compiler turns beats into frames, writes gesture packets, flattens ports into atom specs, and gives each role a tail budget. The reference renderer can then write a full WAV and isolated atom WAVs for the material lane.",
+        bullets: &[
+            "Gesture packets keep source event id, frame timing, a four-phase trajectory, common ports, dialect ports, and deterministic packet seed.",
+            "Common ports rename ADG values into backend-neutral material terms such as energy flux, impact flux, grain density, and air opening.",
+            "Atom specs add role-dependent tails: short hat chokes, longer ride and crash wash, and bounded kick, snare, and tom decay.",
+            "EnCodec, sample-material ranking, and neural preview stay downstream or offline; the live MIDI workflow remains separate.",
+        ],
+        examples: DRUM_AIG_RENDER_LANE_EXAMPLES,
+    },
+];
+
 pub const REACTIVE_PROGRAMMABLE_DRUM_MACHINE_SECTIONS: &[BlogPostSection] = &[
     BlogPostSection {
         title: "Release candidate take",
@@ -1448,7 +1997,7 @@ pub const REACTIVE_PROGRAMMABLE_DRUM_MACHINE_SECTIONS: &[BlogPostSection] = &[
             "The meter identity is Jeans-style 11/8.",
             "The MIDI map keeps the PC4 target concrete: kick anchor 36, snare 38, hats 42/44/46, ride 51/59/53, crash 49, and toms 45/48/41.",
             "The TOML defaults below are profile fallback posture.",
-            "The featured live take uses the Reference live preset values listed below.",
+            "The featured live take uses a 143 BPM Groove-led control set.",
         ],
         examples: JEANS_PROFILE_EXAMPLES,
     },
@@ -1464,21 +2013,11 @@ pub const REACTIVE_PROGRAMMABLE_DRUM_MACHINE_SECTIONS: &[BlogPostSection] = &[
         examples: JEANS_PROFILE_METHOD_EXAMPLES,
     },
     BlogPostSection {
-        title: "Reference live preset",
-        body: "The featured take uses the saved startup profile from the PC4, mioXM, and Yamaha AG03 drum-machine session: 143 BPM, four-bar chunks, Groove-led mode, energy 0.88, density 0.82, risk 0.95, fill 0.60, surface 0.80, humanize 0.42, timing 0.19, velocity 0.92, anti-repeat 0.90, and loose 0.20.",
-        bullets: &[
-            "Tempo and chunk size set the live window: 143 BPM over four-bar chunks.",
-            "Groove-led mode is the active posture for the featured take; the engine reacts while preserving the groove center.",
-            "Energy, density, risk, velocity, and anti-repeat are set high for an assertive pass.",
-        ],
-        examples: NO_CODE_EXAMPLES,
-    },
-    BlogPostSection {
         title: "Reactive loop",
         body: "Groove-led mode keeps the machine centered on the live-set groove. The captured PC4 performance supplies timing, emphasis, density, and phrase pressure for the next response. The Rust sketch shows the decision point: learn the groove, lock it, accept a shift, or open a bravura response.",
         bullets: &[
             "The engine reads phrase pressure from the intake: where the player leans, repeats, leaves space, or pushes density.",
-            "The Reference live preset constrains how far the machine can answer with fill, surface, risk, timing, velocity, anti-repeat, and looseness.",
+            "The saved control set constrains how far the machine can answer with fill, surface, risk, timing, velocity, anti-repeat, and looseness.",
             "The next chunk is a musical response first, then a MIDI file.",
         ],
         examples: REACTIVE_LOOP_RUST_EXAMPLES,
@@ -1551,14 +2090,14 @@ pub const ADG_AIG_DRUM_LANGUAGE_SECTIONS: &[BlogPostSection] = &[
         body: "For drum-live-1780432493944, the live MIDI intake has 4416 events from the PC4/mioXM path. The reactive machine answers that performance, then lowers the answer to generated MIDI.",
         bullets: &[
             "The player gives timing, pressure, repetition, and velocity shape through the PC4.",
-            "The reactive engine reads that shape against the Jeans 11/8 phrase law and the 143 BPM Groove-led Reference live preset.",
+            "The reactive engine reads that shape against the Jeans 11/8 phrase law and the 143 BPM Groove-led control set.",
             "The ADG decision then describes the machine answer before the answer is reduced to PC4 MIDI.",
         ],
         examples: ADG_RELATION_EXAMPLES,
     },
     BlogPostSection {
         title: "11/8 phrase law",
-        body: "The Jeans 11/8 profile uses an 11/8 grouping of 2+2+3+2+2. The machine follows phrase shape, not just equal grid cells.",
+        body: "The Jeans 11/8 profile uses an 11/8 grouping of 2+2+3+2+2. The machine follows phrase shape beyond equal grid cells.",
         bullets: &[
             "A kick anchor can hold the body of the phrase without making every strong point equally heavy.",
             "Hat and ride surfaces can explain the meter while leaving room for the player's own timing.",
@@ -1581,7 +2120,7 @@ pub const ADG_AIG_DRUM_LANGUAGE_SECTIONS: &[BlogPostSection] = &[
         body: "The Jeans 11/8 map also gives the right-hand surface and fill system more vocabulary. Ride breath lowers to note 51, ride open to 59, ride pressure to 53, crash flash to 49, low tom pressure to 45, high-mid tom flash to 48, and low floor tom to 41.",
         bullets: &[
             "Ride choices can keep the 11/8 motion visible when hats are too narrow for the phrase.",
-            "Crash flash is a phrase marker, not just a loud cymbal hit.",
+            "Crash flash is a phrase marker beyond the loud cymbal hit.",
             "Tom movement can carry pressure and answer behavior while staying connected to the same reactive phrase state.",
         ],
         examples: NO_CODE_EXAMPLES,
@@ -1748,10 +2287,4 @@ pub fn source_url(repo: RepoKind, path: &str) -> Option<String> {
         let (_, source_base) = normalize_repo_urls(input);
         format!("{source_base}/{path}")
     })
-}
-
-pub fn pc4_microkit_studio_url() -> Option<String> {
-    let configured = configured_url(option_env!("PC4_MICROKIT_STUDIO_URL"))
-        .unwrap_or("https://github.com/orange-dot/pc4-microkit-studio");
-    Some(normalize_repo_urls(configured).0)
 }
