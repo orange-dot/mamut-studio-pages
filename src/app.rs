@@ -1,16 +1,13 @@
 use crate::content::{
-    BLOG_INTRO, BLOG_POSTS, DOC_CATEGORIES, DRUM_ENGINE_EVIDENCE, DRUM_ENGINE_FEATURED_TRACK_ID,
-    DRUM_ENGINE_NOTE_SLUGS, DRUM_ENGINE_PRESET_CONTROLS, DRUM_ENGINE_TRACKS,
-    DRUM_STUDIO_ARTIFACT_CARDS, DRUM_STUDIO_AUTHORITY_CARDS, DRUM_STUDIO_INTRO,
-    DRUM_STUDIO_NOTE_SLUGS, EPM2_PUBLIC_REPO_URL, HERO, HOME_WORK_AREAS, LAB_INTRO, LAB_NEXT_STEPS,
-    LAB_RESULTS, LAB_STAGES, PRODUCT_LINES, PRODUCTS_INTRO, RepoKind, blog_post_by_slug,
-    blog_post_sections, repo_root_url, source_url,
+    BLOG_INTRO, DRUM_ENGINE_FEATURED_TRACK_ID, DRUM_ENGINE_PRESET_CONTROLS, DRUM_ENGINE_TRACKS,
+    EPM2_PUBLIC_REPO_URL, HERO, HOME_WORK_AREAS, NOTES_INDEX_SLUGS, WHAT_RUNS_TODAY,
+    WHERE_THIS_IS_GOING, blog_post_by_slug, blog_post_sections,
 };
 use crate::play::PlayPage;
 use dioxus::prelude::*;
 
-const SITE_NAME: &str = "Mamut EPM";
-const SITE_DESCRIPTION: &str = "Public home for Mamut Studio: play EPM1, hear programmable drums, follow Drum Studio, and read the EPM2 hardware path.";
+const SITE_NAME: &str = "Mamut Studio";
+const SITE_DESCRIPTION: &str = "Mamut Studio is a musical system that learns your taste, on your own machine. Drums play today; play EPM1 in the browser or hear the current takes.";
 const DEFAULT_SITE_BASE_URL: &str = "https://mamut-studio.com";
 const PREVIEW_IMAGE_PATH: &str = "/og-default.png";
 const PREVIEW_IMAGE_WIDTH: &str = "3000";
@@ -18,73 +15,13 @@ const PREVIEW_IMAGE_HEIGHT: &str = "3000";
 const PREVIEW_IMAGE_ALT: &str = "Mamut Studio circular signal artwork";
 #[cfg(target_arch = "wasm32")]
 const THEME_STORAGE_KEY: &str = "mamut-theme";
-const HERO_DRUM_FLOW_STEPS: [HeroDrumFlowStep; 12] = [
-    HeroDrumFlowStep::active("MIDI intake", "Live input"),
-    HeroDrumFlowStep::active("Played part", "Your timing"),
-    HeroDrumFlowStep::active("Groove-led", "Lock + adapt"),
-    HeroDrumFlowStep::inactive("AIG frame", "Gesture intent"),
-    HeroDrumFlowStep::active("ADG dialect", "Drum decision"),
-    HeroDrumFlowStep::inactive("Surface", "Density + fills"),
-    HeroDrumFlowStep::inactive("Timing feel", "Humanize"),
-    HeroDrumFlowStep::active("Reactive state", "Next chunk"),
-    HeroDrumFlowStep::active("Bundle", "Trace + export"),
-    HeroDrumFlowStep::active("MIDI lower", "Notes + velocity"),
-    HeroDrumFlowStep::active("MIDI out", "Target route"),
-    HeroDrumFlowStep::active("Synth + capture", "Play + record"),
-];
-const HERO_DRUM_CHAIN_CARDS: [HeroDrumChainCard; 4] = [
-    HeroDrumChainCard {
-        label: "Input",
-        value: "MIDI live intake",
-    },
-    HeroDrumChainCard {
-        label: "Engine",
-        value: "Groove-led machine",
-    },
-    HeroDrumChainCard {
-        label: "Files",
-        value: "ADG bundle + AIG export",
-    },
-    HeroDrumChainCard {
-        label: "Output",
-        value: "MIDI out -> synth target -> capture",
-    },
-];
-
-#[derive(Clone, Copy)]
-struct HeroDrumFlowStep {
-    label: &'static str,
-    value: &'static str,
-    active: bool,
-}
-
-impl HeroDrumFlowStep {
-    const fn active(label: &'static str, value: &'static str) -> Self {
-        Self {
-            label,
-            value,
-            active: true,
-        }
-    }
-
-    const fn inactive(label: &'static str, value: &'static str) -> Self {
-        Self {
-            label,
-            value,
-            active: false,
-        }
-    }
-}
-
-#[derive(Clone, Copy)]
-struct HeroDrumChainCard {
-    label: &'static str,
-    value: &'static str,
-}
-
 #[derive(Clone, Debug, PartialEq, Routable)]
 pub enum Route {
     #[redirect("/control-plane", || Route::Home {})]
+    #[redirect("/lines", || Route::Home {})]
+    #[redirect("/products", || Route::Home {})]
+    #[redirect("/lab", || Route::Home {})]
+    #[redirect("/docs", || Route::Home {})]
     #[route("/")]
     Home {},
     #[redirect("/blog", || Route::Notes {})]
@@ -93,20 +30,16 @@ pub enum Route {
     #[redirect("/blog/:slug", |slug: String| Route::NotePost { slug })]
     #[route("/notes/:slug")]
     NotePost { slug: String },
-    #[redirect("/products", || Route::Lines {})]
-    #[route("/lines")]
-    Lines {},
-    #[route("/lab")]
-    Lab {},
-    #[route("/docs")]
-    Docs {},
     #[route("/play")]
     Play {},
-    #[redirect("/drum-engine", || Route::DrumEngine {})]
-    #[route("/programmable-drum-machine")]
-    DrumEngine {},
-    #[route("/drum-studio")]
-    DrumStudio {},
+    #[redirect("/programmable-drum-machine", || Route::Listen {})]
+    #[redirect("/drum-engine", || Route::Listen {})]
+    #[redirect("/drum-studio", || Route::Listen {})]
+    #[redirect("/drums", || Route::Listen {})]
+    #[route("/listen")]
+    Listen {},
+    #[route("/how-it-works")]
+    HowItWorks {},
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -186,9 +119,9 @@ fn Home() -> Element {
             HeroSection {}
             section { class: "signal-section",
                 div { class: "section-copy",
-                    span { class: "section-kicker", "Current work" }
-                    h2 { "EPM1, drums, MIDI targets, EPM2." }
-                    p { "EPM1 plays in the browser. The Reactive Programmable Drum Machine turns ADG/AIG drum decisions into generated MIDI, Drum Studio keeps the session files readable, and EPM2 carries the hardware path." }
+                    span { class: "section-kicker", "Where to start" }
+                    h2 { "Play it, hear it, see where it goes." }
+                    p { "EPM1 plays in the browser today. The drum engine already turns a groove decision into MIDI the rig plays, and the same taste loop is built to carry more instruments next." }
                 }
                 div { class: "feature-grid",
                     for area in HOME_WORK_AREAS {
@@ -196,8 +129,55 @@ fn Home() -> Element {
                     }
                 }
             }
-            DrumEngineCaseSection {}
-            HomeUtilitySection {}
+            section { class: "doc-category",
+                div { class: "section-copy",
+                    span { class: "section-kicker", "Honest status" }
+                    h2 { "What runs today, and where it goes." }
+                    p { "Drums are the first voice. Everything here is either playing now or named as the next step." }
+                }
+                div { class: "products-grid",
+                    article { class: "detail-panel",
+                        div { class: "card-topline", "What runs today" }
+                        ul {
+                            for item in WHAT_RUNS_TODAY {
+                                li { "{item}" }
+                            }
+                        }
+                    }
+                    article { class: "detail-panel",
+                        div { class: "card-topline", "Where this is going" }
+                        ul {
+                            for item in WHERE_THIS_IS_GOING {
+                                li { "{item}" }
+                            }
+                        }
+                    }
+                }
+            }
+            BackgroundSection {}
+        }
+    }
+}
+
+#[component]
+fn BackgroundSection() -> Element {
+    rsx! {
+        section { class: "utility-band",
+            div { class: "section-copy",
+                span { class: "section-kicker", "Background" }
+                h2 { "Where this came from." }
+                p { "Mamut Studio grew out of a long line of instrument and rig work: the EPM1 software runtime, the PC4 live setup, and an EPM2 hardware study. The taste system is what that work converged on." }
+            }
+            div { class: "utility-links",
+                Link { class: "button button-primary", to: Route::HowItWorks {}, "How it works" }
+                a {
+                    class: "button button-secondary",
+                    href: EPM2_PUBLIC_REPO_URL,
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                    "EPM2 hardware source"
+                }
+            }
         }
     }
 }
@@ -207,7 +187,7 @@ fn Notes() -> Element {
     rsx! {
         PageFrame {
             title: "Notes".to_string(),
-            description: "Working notes from the software runtime, hardware study path, and related source work.".to_string(),
+            description: "A few working notes on the drum engine, the taste loop, and the language that keeps a groove decision musical before MIDI.".to_string(),
             current: Route::Notes {},
             PageIntroBlock {
                 kicker: BLOG_INTRO.kicker,
@@ -215,8 +195,10 @@ fn Notes() -> Element {
                 summary: BLOG_INTRO.summary,
             }
             section { class: "blog-grid",
-                for post in BLOG_POSTS {
-                    BlogCardView { post: *post }
+                for slug in NOTES_INDEX_SLUGS {
+                    if let Some(post) = blog_post_by_slug(slug) {
+                        BlogCardView { post }
+                    }
                 }
             }
         }
@@ -310,8 +292,8 @@ fn NotePost(slug: String) -> Element {
                         }
                         if matches!(post.series, "Programmable Drums" | "Drum Studio" | "AIG / ADG" | "PC4MS" | "Research") {
                             div { class: "post-actions",
-                                Link { class: "button button-primary", to: Route::DrumEngine {}, "Open drum-machine case" }
-                                Link { class: "button button-secondary", to: Route::DrumStudio {}, "Open Drum Studio" }
+                                Link { class: "button button-primary", to: Route::Listen {}, "Hear the drums" }
+                                Link { class: "button button-secondary", to: Route::HowItWorks {}, "How it works" }
                                 Link { class: "source-link", to: Route::Notes {}, "All notes" }
                             }
                         }
@@ -332,116 +314,87 @@ fn NotePost(slug: String) -> Element {
 }
 
 #[component]
-fn Lines() -> Element {
+fn HowItWorks() -> Element {
     rsx! {
         PageFrame {
-            title: "Lines".to_string(),
-            description: "Current split between EPM1, the runnable software instrument, and EPM2, the hardware build track.".to_string(),
-            current: Route::Lines {},
-            PageIntroBlock {
-                kicker: PRODUCTS_INTRO.kicker,
-                title: PRODUCTS_INTRO.title,
-                summary: PRODUCTS_INTRO.summary,
+            title: "How it works".to_string(),
+            description: "How Mamut Studio learns your taste: it keeps the takes you choose, leans that way next time, and stays local and undoable.".to_string(),
+            current: Route::HowItWorks {},
+            section { class: "page-intro",
+                span { class: "eyebrow", "How it works" }
+                h1 { "It learns your taste from the takes you keep." }
+                p { "You play, you listen, you keep some takes and pass over others. Mamut Studio remembers those choices and leans that way on the next pass, on your own machine, with every step one you can undo." }
             }
-            section { class: "products-grid",
-                for line in PRODUCT_LINES {
-                    ProductCardView { line: *line }
+            section { class: "doc-category",
+                div { class: "section-copy",
+                    span { class: "section-kicker", "The loop" }
+                    h2 { "Choose, learn, lean." }
+                    p { "Nothing is retrained in the cloud and nothing leaves your machine. The system updates from a single choice, and you can roll it back." }
+                }
+                div { class: "products-grid",
+                    article { class: "detail-panel",
+                        div { class: "card-topline", "Choose" }
+                        h3 { "You keep what sounds like you." }
+                        p { "Pick the take that fits, pass over the one that does not. That choice is the only input the loop needs." }
+                    }
+                    article { class: "detail-panel",
+                        div { class: "card-topline", "Learn" }
+                        h3 { "It updates on the spot." }
+                        p { "The taste loop shifts toward what you kept, locally and right away, without a training run or a model upload." }
+                    }
+                    article { class: "detail-panel",
+                        div { class: "card-topline", "Lean" }
+                        h3 { "The next pass leans your way." }
+                        p { "The following set is re-ranked toward your taste. If it drifts, you undo the step and it returns." }
+                    }
                 }
             }
-        }
-    }
-}
-
-#[component]
-fn Lab() -> Element {
-    rsx! {
-        PageFrame {
-            title: "Lab".to_string(),
-            description: "EPM2 hardware lab: P1 VCO simulation, KiCad capture, bench expectations, and public source notes.".to_string(),
-            current: Route::Lab {},
-            PageIntroBlock {
-                kicker: LAB_INTRO.kicker,
-                title: LAB_INTRO.title,
-                summary: LAB_INTRO.summary,
+            section { class: "doc-category",
+                div { class: "section-copy",
+                    span { class: "section-kicker", "The learning" }
+                    h2 { "It learns in memory, as you go." }
+                    p { "The taste lives in memory, in a small map that a single choice nudges on the spot. The next note builds on the last, and the earlier taste carries forward as new taste settles in. That is what continual learning means here: each choice adds, and the past stays. This is early, local work, but the shape is deliberate." }
+                }
+                div { class: "products-grid",
+                    article { class: "detail-panel",
+                        div { class: "card-topline", "In memory" }
+                        h3 { "No training run." }
+                        p { "The system updates a small in-memory map from one choice at a time. There is no training pass and nothing uploaded; the change lands where you are, in milliseconds, while you keep playing." }
+                    }
+                    article { class: "detail-panel",
+                        div { class: "card-topline", "Continual" }
+                        h3 { "It keeps what it learned." }
+                        p { "Each choice adds to the taste and leaves the last in place. New preferences settle in beside the old ones, so the system grows with you instead of forgetting the earlier feel every time it learns." }
+                    }
+                    article { class: "detail-panel",
+                        div { class: "card-topline", "Bounded and local" }
+                        h3 { "Small enough to stay with you." }
+                        p { "The map stays bounded and runs on a regular laptop, with the same shape built to fit small hardware later. Nothing leaves the room, and every step is written down, so you can roll any of it back." }
+                    }
+                }
+                p { class: "learning-note",
+                    "The map is laid out the way a CPU likes it. The hot core — the few cells a choice touches — stays small and packed, small enough to sit in L1 and L2 cache, while the colder bulk of the map rests in L3 and main memory. A single choice moves only a handful of cache lines, so the update lands in the gap between two notes, with nothing waiting on disk or a network."
+                }
             }
             section { class: "utility-band",
                 div { class: "section-copy",
-                    span { class: "section-kicker", "Public source" }
-                    h2 { "EPM2 hardware source." }
-                    p { "The EPM2 public repo carries docs, ngspice studies, KiCad capture, bench expectations, and helper tools. Deploy config, investor notes, and local workspace state stay outside that repo." }
+                    span { class: "section-kicker", "First voice, then more" }
+                    h2 { "Drums today; the same loop for other instruments." }
+                    p { "Drums are where the loop runs now. The same approach is built to carry piano and other instruments next, so the taste you teach in one place can carry across the rest." }
                 }
                 div { class: "utility-links",
-                    a {
-                        class: "button button-primary",
-                        href: EPM2_PUBLIC_REPO_URL,
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                        "Open hardware repo"
-                    }
-                    Link { class: "button button-secondary", to: Route::Docs {}, "Browse docs" }
+                    Link { class: "button button-primary", to: Route::Listen {}, "Hear the drums" }
+                    Link { class: "button button-secondary", to: Route::Play {}, "Play EPM1" }
                 }
             }
             section { class: "doc-category",
                 div { class: "section-copy",
-                    span { class: "section-kicker", "Path" }
-                    h2 { "Simulation, capture, bench." }
-                    p { "The lab page follows the hardware work step by step, with source notes tied to each stage." }
+                    span { class: "section-kicker", "The language underneath" }
+                    h2 { "ADG/AIG keeps a groove decision musical before MIDI." }
+                    p { "Under the hood, a small drum language (ADG, inside the wider AIG frame) holds the groove decision, gesture, surface, density, and timing feel before any of it becomes MIDI. It is what lets the system learn taste in musical terms instead of raw notes. The notes go deeper for anyone who wants the detail." }
                 }
-                div { class: "products-grid",
-                    for card in LAB_STAGES {
-                        LabCardView { card: *card }
-                    }
-                }
-            }
-            section { class: "doc-category",
-                div { class: "section-copy",
-                    span { class: "section-kicker", "P1 VCO" }
-                    h2 { "Current technical references." }
-                    p { "These are the main study anchors behind the first oscillator block." }
-                }
-                div { class: "products-grid",
-                    for card in LAB_RESULTS {
-                        LabCardView { card: *card }
-                    }
-                }
-            }
-            section { class: "detail-panel",
-                div { class: "card-topline", "Next bench posture" }
-                h2 { "Keep the first oscillator honest." }
-                ul {
-                    for item in LAB_NEXT_STEPS {
-                        li { "{item}" }
-                    }
-                }
-            }
-        }
-    }
-}
-
-#[component]
-fn Docs() -> Element {
-    rsx! {
-        PageFrame {
-            title: "Docs".to_string(),
-            description: "Current EPM2 hardware source library.".to_string(),
-            current: Route::Docs {},
-            PageIntroBlock {
-                kicker: "Docs",
-                title: "Source library for the current hardware notes.",
-                summary: "Docs links to the current EPM2 source material while keeping the landing page compact."
-            }
-            for category in DOC_CATEGORIES {
-                section { class: "doc-category",
-                    div { class: "section-copy",
-                        span { class: "section-kicker", "{category.title}" }
-                        h2 { "{category.title}" }
-                        p { "{category.body}" }
-                    }
-                    div { class: "doc-grid",
-                        for doc in category.docs {
-                            DocCardView { doc: *doc }
-                        }
-                    }
+                div { class: "utility-links",
+                    Link { class: "button button-secondary", to: Route::Notes {}, "Read the notes" }
                 }
             }
         }
@@ -453,7 +406,7 @@ fn Play() -> Element {
     rsx! {
         PageFrame {
             title: "Play".to_string(),
-            description: "Offline-render browser demo built from the current Mamut EPM software runtime.".to_string(),
+            description: "The EPM1 software instrument, playing in the browser: eight patches, macro controls, one render path.".to_string(),
             current: Route::Play {},
             PlayPage {}
         }
@@ -461,7 +414,7 @@ fn Play() -> Element {
 }
 
 #[component]
-fn DrumEngine() -> Element {
+fn Listen() -> Element {
     let soundcloud_embed_src = format!(
         "https://w.soundcloud.com/player/?visual=true&url=https%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F{}&show_artwork=true",
         DRUM_ENGINE_FEATURED_TRACK_ID
@@ -472,151 +425,19 @@ fn DrumEngine() -> Element {
 
     rsx! {
         PageFrame {
-            title: "Reactive Programmable Drum Machine".to_string(),
-            description: "A MIDI-playable programmable drum-machine case: ADG/AIG groove intent, reactive MIDI output, ADG bundle files, and public SoundCloud takes.".to_string(),
-            current: Route::DrumEngine {},
-            section { class: "drum-case-hero",
-                div { class: "section-copy",
-                    span { class: "eyebrow", "Portfolio case" }
-                    h1 { "Reactive Programmable Drum Machine" }
-                    p { class: "hero-body", "A MIDI drum workflow: ADG/AIG groove intent becomes generated MIDI, the ADG bundle stays with the take, and a synth target plus capture path make the session audible." }
-                    p { class: "hero-status", "Player controls shape the take, correction feeds the next pass, and the AIG handoff keeps Drum Studio and material-import roles clear." }
-                    div { class: "hero-actions",
-                        a {
-                            class: "button button-primary",
-                            href: "https://soundcloud.com/mamut_studio/jeans-instability-release",
-                            target: "_blank",
-                            rel: "noopener noreferrer",
-                            "Listen"
-                        }
-                        Link { class: "button button-secondary", to: Route::DrumStudio {}, "Open Drum Studio" }
-                        Link { class: "source-link hero-link", to: Route::Play {}, "Open EPM play" }
-                    }
-                }
-                div { class: "drum-flow-panel",
-                    div { class: "card-topline", "Current loop" }
-                    h2 { "ADG/AIG to bundle to MIDI" }
-                    p { "The player path starts from drum intent, resolves it through the active profile, writes the generated MIDI and ADG bundle, sends MIDI out, and captures the result for review." }
-                    div { class: "drum-flow-steps",
-                        article { class: "drum-flow-step",
-                            span { "Intent" }
-                            strong { "Groove shape" }
-                            p { "ADG/AIG keeps density, fill pressure, surface, timing feel, and response posture readable before note output." }
-                        }
-                        article { class: "drum-flow-step",
-                            span { "Profile" }
-                            strong { "Taste layer" }
-                            p { "The live preset and manual corpus steer how tightly the machine locks in, adapts, and shapes fills." }
-                        }
-                        article { class: "drum-flow-step",
-                            span { "Bundle" }
-                            strong { "Session files" }
-                            p { "Generated MIDI is kept beside ADG events, summaries, live chunks, traces, runtime snapshot, and AIG export request." }
-                        }
-                        article { class: "drum-flow-step",
-                            span { "Target + capture" }
-                            strong { "MIDI audition" }
-                            p { "The generated take is sent to a synth target while the capture path makes the performance chain audible and recordable." }
-                        }
-                    }
-                }
+            title: "Listen".to_string(),
+            description: "Hear the drums Mamut Studio plays today: the saved 143 BPM live set on SoundCloud, release-candidate take first.".to_string(),
+            current: Route::Listen {},
+            section { class: "page-intro",
+                span { class: "eyebrow", "Listen" }
+                h1 { "The drums it plays today." }
+                p { "The drum engine turns a groove decision into MIDI, the PC4 plays it, and the takes land here. Start with the release-candidate take from the saved 143 BPM live set." }
             }
-
-            section { class: "drum-preset-section",
-                div { class: "section-copy",
-                    span { class: "section-kicker", "AIG / ADG" }
-                    h2 { "What the drum language keeps before MIDI." }
-                    p { "AIG means Articulated Instrument Gesture: the wider model for timing, strength, relationships, protection flags, and render-ready gesture data." }
-                    p { "ADG means Articulated Drum Gesture: the drum dialect that names kick anchors, snare ghosts, hat breath, ride pressure, tom motion, cymbal flashes, surface feel, and phrase role before the take becomes MIDI." }
-                    Link {
-                        class: "source-link",
-                        to: Route::NotePost { slug: "drum-engine-aig-adg-flow".to_string() },
-                        "Read full flow note"
-                    }
-                }
-                div { class: "drum-flow-panel",
-                    div { class: "card-topline", "Language path" }
-                    h2 { "From intake to ADG to AIG." }
-                    p { "The Drum Engine reads live MIDI in meter-aware windows, proposes drum gestures, selects the lowerable winners, writes ADG beside generated MIDI, and sends the ADG bundle to AIG for the material pass." }
-                    div { class: "drum-flow-steps",
-                        article { class: "drum-flow-step",
-                            span { "Sense" }
-                            strong { "Windows and features" }
-                            p { "Each output cell reacts to the previous intake cell: density, register, velocity, onset count, and phrase pressure shape the next response." }
-                        }
-                        article { class: "drum-flow-step",
-                            span { "Choose" }
-                            strong { "Candidate gestures" }
-                            p { "Profile controls and source laws propose kick, snare, hat, ride, tom, and crash gestures; deterministic selection keeps one right-hand surface per tick." }
-                        }
-                        article { class: "drum-flow-step",
-                            span { "Write" }
-                            strong { "ADG plus MIDI" }
-                            p { "ADG keeps role, kind, timing, strength, surface, phrase role, variation identity, and reason while MIDI carries notes, gates, ticks, and velocity." }
-                        }
-                        article { class: "drum-flow-step",
-                            span { "Import" }
-                            strong { "AIG material lane" }
-                            p { "AIG narrows drum ADG into its beat-time dialect, runs semantic passes, builds gesture packets and atom specs, then renders reference audio for the material lane." }
-                        }
-                    }
-                }
-            }
-
-            section { class: "doc-category",
-                div { class: "section-copy",
-                    span { class: "section-kicker", "System shape" }
-                    h2 { "What the case connects." }
-                    p { "The case follows one working flow: ADG/AIG groove intent becomes MIDI, the session files stay readable, the take is played on a target, and feedback shapes the next pass." }
-                }
-                div { class: "drum-case-grid",
-                    for card in DRUM_ENGINE_EVIDENCE {
-                        article { class: "drum-case-card",
-                            div { class: "card-topline", "{card.label}" }
-                            h3 { "{card.title}" }
-                            p { "{card.body}" }
-                            div { class: "repo-meta",
-                                span { class: "repo-label", "Reference" }
-                                code { "{card.detail}" }
-                            }
-                        }
-                    }
-                }
-            }
-
-            section { class: "utility-band",
-                div { class: "section-copy",
-                    span { class: "section-kicker", "Since June 4" }
-                    h2 { "The drum lane now keeps the take and files together." }
-                    p { "The current session flow includes generated-live MIDI, ADG bundle directories, per-chunk traces, runtime snapshots, and an AIG export request that names the bridge consumer." }
-                }
-                div { class: "utility-links",
-                    Link { class: "button button-primary", to: Route::DrumStudio {}, "Open Drum Studio" }
-                    Link {
-                        class: "button button-secondary",
-                        to: Route::NotePost { slug: "pc4ms-drum-engine-since-june-4".to_string() },
-                        "Read session note"
-                    }
-                    Link {
-                        class: "source-link",
-                        to: Route::NotePost { slug: "adg-aig-bridge-truth-boundary".to_string() },
-                        "Bridge note"
-                    }
-                }
-            }
-
-            DrumEngineNotesSection {}
-
             section { class: "listen-section",
-                div { class: "section-copy",
-                    span { class: "section-kicker", "Listen" }
-                    h2 { "SoundCloud takes from the programmable drum-machine flow." }
-                    p { "Start with the release-candidate take. The other Jeans Instability tracks are linked below for nearby versions and live jams." }
-                }
                 div { class: "soundcloud-frame-shell",
                     iframe {
                         class: "soundcloud-frame",
-                        title: "SoundCloud player for jeans instability release candidate 1",
+                        title: "SoundCloud player for the jeans instability release-candidate take",
                         src: "{soundcloud_embed_src}",
                         allow: "autoplay; encrypted-media"
                     }
@@ -647,98 +468,30 @@ fn DrumEngine() -> Element {
                     p { class: "source-hint", "Featured source: {featured_track.url}" }
                 }
             }
-        }
-    }
-}
-
-#[component]
-fn DrumStudio() -> Element {
-    rsx! {
-        PageFrame {
-            title: "Drum Studio".to_string(),
-            description: "Current Drum Studio: ADG bundle files, generated MIDI, runtime traces, and the AIG handoff.".to_string(),
-            current: Route::DrumStudio {},
-            PageIntroBlock {
-                kicker: DRUM_STUDIO_INTRO.kicker,
-                title: DRUM_STUDIO_INTRO.title,
-                summary: DRUM_STUDIO_INTRO.summary,
-            }
-            section { class: "utility-band",
-                div { class: "section-copy",
-                    span { class: "section-kicker", "Session files" }
-                    h2 { "Generated MIDI with the files around it." }
-                    p { "The current drum work keeps the generated-live MIDI file beside ADG bundle material: manifest, live chunks, per-chunk traces, runtime snapshot, trace, and an AIG export request." }
-                }
-                div { class: "utility-links",
-                    Link { class: "button button-primary", to: Route::DrumEngine {}, "Open drum machine" }
-                    Link {
-                        class: "button button-secondary",
-                        to: Route::NotePost { slug: "drum-studio-runtime-aig-export".to_string() },
-                        "Read runtime note"
-                    }
-                    Link {
-                        class: "source-link",
-                        to: Route::NotePost { slug: "pc4ms-drum-engine-since-june-4".to_string() },
-                        "Session note"
-                    }
-                }
-            }
             section { class: "doc-category",
                 div { class: "section-copy",
-                    span { class: "section-kicker", "Roles" }
-                    h2 { "What each part does." }
-                    p { "The export request keeps the roles clear: the drum engine writes the pass, Drum Studio assembles the session, AIG imports the material, and codec or neural work stays in its own lane." }
+                    span { class: "section-kicker", "Reference take" }
+                    h2 { "The live set behind the featured take." }
+                    p { "The release-candidate take comes from a saved 143 BPM live set: four-bar chunks, groove-led, played on the rig and captured." }
                 }
-                div { class: "products-grid",
-                    for card in DRUM_STUDIO_AUTHORITY_CARDS {
-                        LabCardView { card: *card }
-                    }
-                }
-            }
-            section { class: "doc-category",
-                div { class: "section-copy",
-                    span { class: "section-kicker", "Files" }
-                    h2 { "Current session files." }
-                    p { "This page keeps the public map close to the session: generated MIDI, ADG bundles, trace files, runtime snapshots, and the AIG handoff." }
-                }
-                div { class: "products-grid",
-                    for card in DRUM_STUDIO_ARTIFACT_CARDS {
-                        LabCardView { card: *card }
-                    }
-                }
-            }
-            section { class: "doc-category",
-                div { class: "section-copy",
-                    span { class: "section-kicker", "Notes" }
-                    h2 { "The current update set." }
-                    p { "These source notes cover the full AIG/ADG flow, runtime export, the ADG-to-AIG bridge, and neural preview research." }
-                }
-                div { class: "doc-grid",
-                    for slug in DRUM_STUDIO_NOTE_SLUGS {
-                        if let Some(post) = blog_post_by_slug(slug) {
-                            BlogCardView { post }
+                div { class: "drum-mini-controls",
+                    for control in DRUM_ENGINE_PRESET_CONTROLS.iter().take(6) {
+                        span {
+                            strong { "{control.value}" }
+                            small { "{control.label}" }
                         }
                     }
                 }
             }
-        }
-    }
-}
-
-#[component]
-fn DrumEngineNotesSection() -> Element {
-    rsx! {
-        section { class: "doc-category",
-            div { class: "section-copy",
-                span { class: "section-kicker", "Lab notes" }
-                h2 { "Read the build notes." }
-                p { "These notes open the programmable drum-machine case into the player surface, ADG/AIG language, MIDI workflow, and feedback loop." }
-            }
-            div { class: "doc-grid",
-                for slug in DRUM_ENGINE_NOTE_SLUGS {
-                    if let Some(post) = blog_post_by_slug(slug) {
-                        BlogCardView { post }
-                    }
+            section { class: "utility-band",
+                div { class: "section-copy",
+                    span { class: "section-kicker", "How it gets here" }
+                    h2 { "From a groove decision to a take you can keep." }
+                    p { "How it works walks the loop: you keep the takes that sound like you, and the next pass leans that way." }
+                }
+                div { class: "utility-links",
+                    Link { class: "button button-primary", to: Route::HowItWorks {}, "How it works" }
+                    Link { class: "button button-secondary", to: Route::Notes {}, "Read the notes" }
                 }
             }
         }
@@ -813,9 +566,9 @@ fn SiteHeader(current: Route) -> Element {
         header { class: "site-header",
             nav { class: "site-nav",
                 Link { class: "brand", to: Route::Home {},
-                    img { class: "brand-mark", src: "{brand_mark_path}", alt: "Mamut EPM mark" }
+                    img { class: "brand-mark", src: "{brand_mark_path}", alt: "Mamut Studio mark" }
                     div { class: "brand-copy",
-                        span { class: "brand-kicker", "Current build" }
+                        span { class: "brand-kicker", "Learns your taste" }
                         span { class: "brand-title", "{SITE_NAME}" }
                     }
                 }
@@ -823,11 +576,9 @@ fn SiteHeader(current: Route) -> Element {
                     div { class: "nav-links",
                         Link { class: nav_link_class(&current, "home"), to: Route::Home {}, "Home" }
                         Link { class: nav_link_class(&current, "play"), to: Route::Play {}, "Play" }
-                        Link { class: nav_link_class(&current, "drums"), to: Route::DrumEngine {}, "Drums" }
+                        Link { class: nav_link_class(&current, "listen"), to: Route::Listen {}, "Listen" }
+                        Link { class: nav_link_class(&current, "how"), to: Route::HowItWorks {}, "How it works" }
                         Link { class: nav_link_class(&current, "notes"), to: Route::Notes {}, "Notes" }
-                        Link { class: nav_link_class(&current, "lines"), to: Route::Lines {}, "Lines" }
-                        Link { class: nav_link_class(&current, "lab"), to: Route::Lab {}, "Lab" }
-                        Link { class: nav_link_class(&current, "docs"), to: Route::Docs {}, "Docs" }
                     }
                     button {
                         class: "theme-toggle",
@@ -857,11 +608,9 @@ fn nav_link_class(current: &Route, key: &str) -> &'static str {
     let active = match (key, current) {
         ("home", Route::Home {}) => true,
         ("play", Route::Play {}) => true,
-        ("drums", Route::DrumEngine {} | Route::DrumStudio {}) => true,
+        ("listen", Route::Listen {}) => true,
+        ("how", Route::HowItWorks {}) => true,
         ("notes", Route::Notes {} | Route::NotePost { .. }) => true,
-        ("lines", Route::Lines {}) => true,
-        ("lab", Route::Lab {}) => true,
-        ("docs", Route::Docs {}) => true,
         _ => false,
     };
 
@@ -869,43 +618,6 @@ fn nav_link_class(current: &Route, key: &str) -> &'static str {
         "nav-link is-active"
     } else {
         "nav-link"
-    }
-}
-
-#[component]
-fn DrumEngineCaseSection() -> Element {
-    rsx! {
-        section { class: "drum-engine-band",
-            div { class: "section-copy",
-                span { class: "section-kicker", "Drums" }
-                h2 { "Reactive Programmable Drum Machine for MIDI targets." }
-                p { "The current drum-machine flow connects ADG/AIG intent, profile taste, generated MIDI, ADG bundles, AIG export requests, target playback, capture, and public SoundCloud takes." }
-                div { class: "utility-links",
-                    Link { class: "button button-primary", to: Route::DrumEngine {}, "Open drum machine" }
-                    Link { class: "button button-secondary", to: Route::DrumStudio {}, "Open Drum Studio" }
-                    a {
-                        class: "source-link",
-                        href: "https://soundcloud.com/mamut_studio",
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                        "Open SoundCloud"
-                    }
-                }
-            }
-            div { class: "drum-case-summary",
-                div { class: "card-topline", "Reference profile" }
-                h3 { "Jeans Instability release candidate" }
-                p { "143 BPM, four-bar chunks, groove-led mode, high energy, dense surface, and deliberate humanization. The current lane also keeps generated MIDI beside ADG bundle traces and AIG export metadata." }
-                div { class: "drum-mini-controls",
-                    for control in DRUM_ENGINE_PRESET_CONTROLS.iter().take(6) {
-                        span {
-                            strong { "{control.value}" }
-                            small { "{control.label}" }
-                        }
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -920,69 +632,32 @@ fn HeroSection() -> Element {
                 p { class: "hero-status", "{HERO.status}" }
                 div { class: "hero-actions",
                     Link { class: "button button-primary", to: Route::Play {}, "{HERO.primary_cta}" }
-                    Link { class: "button button-secondary", to: Route::DrumEngine {}, "{HERO.secondary_cta}" }
+                    Link { class: "button button-secondary", to: Route::Listen {}, "{HERO.secondary_cta}" }
                     Link {
                         class: "source-link hero-link",
-                        to: Route::DrumStudio {},
-                        "Open Drum Studio"
+                        to: Route::HowItWorks {},
+                        "How it works"
                     }
                 }
             }
-            div { class: "hero-panel hero-panel-demo",
-                div { class: "hero-surface" }
-                div { class: "hero-demo-header",
-                    div { class: "card-topline", "Reactive programmable drum machine" }
-                    h3 { "AIG/ADG to MIDI target" }
-                    p { "MIDI live intake gives the groove context. The machine reacts groove-led, keeps the drum decision readable as ADG inside the wider AIG frame, writes bundle traces and AIG export metadata, lowers it to MIDI, sends it to a target, and captures the result." }
-                }
-                div { class: "hero-preview-ruler",
-                    for step in 0..HERO_DRUM_FLOW_STEPS.len() {
-                        span {
-                            class: if step % 4 == 0 { "ruler-step is-anchor" } else { "ruler-step" },
-                            {hero_drum_flow_segment(step)}
-                        }
+            div { class: "hero-panel",
+                div { class: "card-topline", "What runs today" }
+                ul { class: "hero-today",
+                    for item in WHAT_RUNS_TODAY {
+                        li { "{item}" }
                     }
                 }
-                div { class: "hero-preview-grid",
-                    for (index, step) in HERO_DRUM_FLOW_STEPS.iter().enumerate() {
-                        article { class: hero_preview_step_class(index, step.active),
-                            span { class: "hero-preview-index", "{step.label}" }
-                            strong { "{step.value}" }
-                        }
-                    }
+                div { class: "hero-panel-divider" }
+                div { class: "card-topline", "The shape" }
+                ul { class: "hero-today",
+                    li { "Local — it runs on your machine, nothing uploaded." }
+                    li { "Reversible — every step is one you can undo." }
+                    li { "Continual — it keeps learning as you go, without retraining." }
                 }
-                div { class: "stat-grid",
-                    for stat in HERO_DRUM_CHAIN_CARDS {
-                        article { class: "stat-card",
-                            span { class: "stat-label", "{stat.label}" }
-                            strong { "{stat.value}" }
-                        }
-                    }
+                div { class: "hero-panel-divider" }
+                p { class: "hero-panel-note",
+                    "Drums are the first voice. Piano and other instruments are the next, on the same loop."
                 }
-            }
-        }
-    }
-}
-
-#[component]
-fn HomeUtilitySection() -> Element {
-    rsx! {
-        section { class: "utility-band",
-            div { class: "section-copy",
-                span { class: "section-kicker", "Where to start" }
-                h2 { "Choose by listening path." }
-                p { "Use Play for EPM1, Drums for the MIDI drum-machine take, Drum Studio for the generated session files, and Lab or Docs for the EPM2 hardware path." }
-            }
-            div { class: "utility-links",
-                Link { class: "button button-primary", to: Route::Play {}, "Play EPM1" }
-                Link { class: "button button-primary", to: Route::DrumEngine {}, "Hear drums" }
-                Link { class: "button button-secondary", to: Route::DrumStudio {}, "Drum Studio" }
-                Link {
-                    class: "button button-secondary",
-                    to: Route::Lab {},
-                    "Open lab"
-                }
-                Link { class: "button button-secondary", to: Route::Docs {}, "Browse docs" }
             }
         }
     }
@@ -1011,24 +686,14 @@ fn home_work_card(area: &crate::content::HomeWorkArea) -> Element {
 
 fn home_primary_action(area: &crate::content::HomeWorkArea) -> Element {
     match area.kicker {
-        "EPM1" => rsx! {
+        "Play" => rsx! {
             Link { class: "button button-primary", to: Route::Play {}, "{area.primary_cta}" }
         },
         "Drums" => rsx! {
-            Link { class: "button button-primary", to: Route::DrumEngine {}, "{area.primary_cta}" }
-        },
-        "MIDI Targets" => rsx! {
-            Link {
-                class: "button button-primary",
-                to: Route::DrumStudio {},
-                "{area.primary_cta}"
-            }
-        },
-        "EPM2" => rsx! {
-            Link { class: "button button-primary", to: Route::Lab {}, "{area.primary_cta}" }
+            Link { class: "button button-primary", to: Route::Listen {}, "{area.primary_cta}" }
         },
         _ => rsx! {
-            Link { class: "button button-primary", to: Route::Notes {}, "{area.primary_cta}" }
+            Link { class: "button button-primary", to: Route::HowItWorks {}, "{area.primary_cta}" }
         },
     }
 }
@@ -1038,24 +703,8 @@ fn home_secondary_action(area: &crate::content::HomeWorkArea) -> Element {
         return rsx! {};
     };
 
-    match area.kicker {
-        "EPM1" => rsx! {
-            Link { class: "button button-secondary", to: Route::Lines {}, "{label}" }
-        },
-        "Drums" => rsx! {
-            Link {
-                class: "button button-secondary",
-                to: Route::DrumStudio {},
-                "{label}"
-            }
-        },
-        "MIDI Targets" => rsx! {
-            Link { class: "button button-secondary", to: Route::DrumEngine {}, "{label}" }
-        },
-        "EPM2" => rsx! {
-            Link { class: "button button-secondary", to: Route::Docs {}, "{label}" }
-        },
-        _ => rsx! {},
+    rsx! {
+        Link { class: "button button-secondary", to: Route::HowItWorks {}, "{label}" }
     }
 }
 
@@ -1089,133 +738,25 @@ fn BlogCardView(post: crate::content::BlogPost) -> Element {
 }
 
 #[component]
-fn ProductCardView(line: crate::content::ProductLine) -> Element {
-    let repo_url = repo_root_url(line.repo);
-    let source_link = source_url(line.repo, line.source_path);
-    let show_repo_meta = repo_url.is_none();
-    let show_source_meta = source_link.is_none();
-    let is_epm2 = line.repo == RepoKind::Epm2;
-
-    rsx! {
-        article { class: "product-card",
-            div { class: "product-header",
-                div { class: "product-title-block",
-                    div { class: "card-topline", "{line.code}" }
-                    h2 { "{line.title}" }
-                }
-                p { class: "product-status", "{line.status}" }
-            }
-            p { "{line.summary}" }
-            ul {
-                for bullet in line.bullets {
-                    li { "{bullet}" }
-                }
-            }
-            div { class: "product-actions",
-                if is_epm2 {
-                    Link {
-                        class: "button button-primary",
-                        to: Route::Lab {},
-                        "Open lab"
-                    }
-                }
-                if let Some(url) = repo_url.as_ref() {
-                    a {
-                        class: "button button-secondary",
-                        href: "{url}",
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                        "Open repo"
-                    }
-                }
-                if let Some(url) = source_link.as_ref() {
-                    a {
-                        class: "source-link",
-                        href: "{url}",
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                        "Open source"
-                    }
-                }
-            }
-            if show_repo_meta {
-                div { class: "repo-meta",
-                    span { class: "repo-label", "Repo path" }
-                    code { "{line.repo_path}" }
-                }
-            }
-            if show_source_meta {
-                div { class: "repo-meta",
-                    span { class: "repo-label", "Source path" }
-                    code { "{line.source_path}" }
-                }
-            }
-        }
-    }
-}
-
-#[component]
-fn LabCardView(card: crate::content::LabCard) -> Element {
-    rsx! {
-        article { class: "product-card",
-            div { class: "product-header",
-                div { class: "product-title-block",
-                    div { class: "card-topline", "{card.label}" }
-                    h3 { "{card.title}" }
-                }
-            }
-            p { "{card.body}" }
-            div { class: "repo-meta",
-                span { class: "repo-label", "Reference" }
-                code { "{card.detail}" }
-            }
-        }
-    }
-}
-
-#[component]
-fn DocCardView(doc: crate::content::DocCard) -> Element {
-    let repo_url = source_url(doc.repo, doc.source_path);
-
-    rsx! {
-        article { class: "doc-card",
-            div { class: "card-topline", "Source doc" }
-            h3 { "{doc.title}" }
-            p { "{doc.summary}" }
-            if let Some(url) = repo_url {
-                a {
-                    class: "source-link",
-                    href: "{url}",
-                    target: "_blank",
-                    rel: "noopener noreferrer",
-                    "Open source"
-                }
-            } else {
-                div { class: "repo-meta",
-                    span { class: "repo-label", "Path" }
-                    code { "{doc.source_path}" }
-                }
-            }
-        }
-    }
-}
-
-#[component]
 fn SiteFooter() -> Element {
     rsx! {
         footer { class: "site-footer",
             div { class: "footer-inner",
                 div {
                     span { class: "section-kicker", "{SITE_NAME}" }
-                    p { "Play the browser demo. Use Drums and Drum Studio for MIDI drum sessions, Lab for the EPM2 hardware path, and Notes and Docs for current source material." }
+                    p { "A musical system that learns your taste, on your own machine. Play EPM1, hear the drums, or read how the taste loop works." }
                 }
                 div { class: "footer-meta",
-                    span { "EPM1 active" }
-                    span { "MIDI target workflow" }
-                    span { "Drum Studio sessions" }
-                    span { "Browser demo online" }
-                    span { "EPM2 hardware lab" }
-                    span { "Notes for current sessions" }
+                    span { "EPM1 plays in the browser" }
+                    span { "Drum takes on SoundCloud" }
+                    span { "Local and undoable" }
+                    span { "Drums first, more next" }
+                    a {
+                        href: EPM2_PUBLIC_REPO_URL,
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        "EPM2 hardware source"
+                    }
                 }
             }
         }
@@ -1227,12 +768,9 @@ fn route_path(route: &Route) -> String {
         Route::Home {} => "/".to_string(),
         Route::Notes {} => "/notes".to_string(),
         Route::NotePost { slug } => format!("/notes/{slug}"),
-        Route::Lines {} => "/lines".to_string(),
-        Route::Lab {} => "/lab".to_string(),
-        Route::Docs {} => "/docs".to_string(),
         Route::Play {} => "/play".to_string(),
-        Route::DrumEngine {} => "/programmable-drum-machine".to_string(),
-        Route::DrumStudio {} => "/drum-studio".to_string(),
+        Route::Listen {} => "/listen".to_string(),
+        Route::HowItWorks {} => "/how-it-works".to_string(),
     }
 }
 
@@ -1253,19 +791,8 @@ fn public_path(path: &str) -> String {
     }
 }
 
-fn hero_drum_flow_segment(index: usize) -> &'static str {
-    match index {
-        0 | 1 => "In",
-        2 | 3 => "Sense",
-        4..=7 => "ADG",
-        8 | 9 => "Bundle",
-        10 => "Route",
-        _ => "Audio",
-    }
-}
-
 fn initial_theme_mode() -> ThemeMode {
-    stored_theme_mode().unwrap_or(ThemeMode::Dark)
+    stored_theme_mode().unwrap_or(ThemeMode::Light)
 }
 
 #[cfg(target_arch = "wasm32")]
@@ -1308,13 +835,4 @@ fn update_theme_color_meta(_mode: ThemeMode) {}
 fn apply_theme_side_effects(mode: ThemeMode) {
     persist_theme_mode(mode);
     update_theme_color_meta(mode);
-}
-
-fn hero_preview_step_class(index: usize, enabled: bool) -> &'static str {
-    match (enabled, index % 4 == 0) {
-        (true, true) => "hero-preview-step is-active is-anchor",
-        (true, false) => "hero-preview-step is-active",
-        (false, true) => "hero-preview-step is-anchor",
-        (false, false) => "hero-preview-step",
-    }
 }

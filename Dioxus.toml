@@ -5,7 +5,7 @@ out_dir = "dist"
 asset_dir = "public"
 
 [web.app]
-title = "Mamut EPM"
+title = "Mamut Studio"
 
 [web.resource]
 style = [

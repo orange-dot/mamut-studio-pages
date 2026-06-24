@@ -1,3 +1,7 @@
+// Authored EPM1/EPM2/hardware copy is kept here for the Background page and a
+// future hardware surface even when the current routes do not render all of it.
+#![allow(dead_code)]
+
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum RepoKind {
     Epm1,
@@ -110,61 +114,71 @@ pub struct DrumEngineTrack {
 
 pub const HERO: HeroContent = HeroContent {
     eyebrow: "Mamut Studio",
-    title: "Software instruments, drums, and MIDI targets.",
-    body: "EPM1 plays in the browser and desktop runtime. The Reactive Programmable Drum Machine turns ADG/AIG groove decisions into generated MIDI, with Drum Studio keeping the session files together.",
-    status: "Start with EPM1, the drum-machine case, or Drum Studio around the current MIDI drum workflow.",
+    title: "A musical system that learns your taste.",
+    body: "It learns from the takes you keep and the ones you pass over, on your own machine, and every step is one you can undo. Drums play today; the same system is built to carry other instruments next.",
+    status: "Play EPM1 in the browser, or hear the current drum takes.",
     primary_cta: "Play EPM1",
-    secondary_cta: "Hear drums",
+    secondary_cta: "Hear the drums",
 };
+
+pub const WHAT_RUNS_TODAY: &[&str] = &[
+    "EPM1 plays in the browser: eight patches, macro controls, one render path.",
+    "The drum engine turns groove intent into MIDI; the saved 143 BPM live set is on SoundCloud.",
+    "The taste loop is early and local: it remembers which takes you kept and leans that way on the next pass.",
+];
+
+pub const WHERE_THIS_IS_GOING: &[&str] = &[
+    "A live pass where the system learns your taste from A/B choices, then re-ranks the next set.",
+    "The same system carrying piano and other instruments, not only drums.",
+    "More takes side by side, so the difference is something you hear.",
+];
+
+pub const NOTES_INDEX_SLUGS: &[&str] = &[
+    "drum-engine-feedback-taste-memory",
+    "reactive-programmable-drum-machine",
+    "drum-engine-aig-adg-flow",
+    "adg-aig-drum-language",
+    "pc4-drum-rig-flow",
+    "core-stance",
+    "why-two-lines-exist",
+];
 
 pub const HOME_WORK_AREAS: &[HomeWorkArea] = &[
     HomeWorkArea {
-        kicker: "EPM1",
-        title: "Play the software instrument.",
-        body: "EPM1 is the runnable instrument: browser demo, desktop runtime, patch bank, macro controls, and MIDI-oriented control work.",
+        kicker: "Play",
+        title: "Play EPM1 in the browser.",
+        body: "EPM1 is the runnable instrument: eight live-set patches, macro controls, and one browser render path.",
         bullets: &[
-            "Eight live-set patches and one browser render path.",
-            "Patch names and macro targets match the desktop runtime.",
-            "MIDI-oriented controls keep the software line close to playable instrument behavior.",
+            "Eight patches with macro controls you can move.",
+            "One render path, straight in the browser.",
+            "Patch names and macros match the desktop runtime.",
         ],
         primary_cta: "Open play",
-        secondary_cta: Some("Open lines"),
+        secondary_cta: Some("How it works"),
     },
     HomeWorkArea {
         kicker: "Drums",
-        title: "Follow the programmable drum-machine lane.",
-        body: "ADG/AIG groove intent becomes generated MIDI, a synth target plays it, and Drum Studio keeps the generated session files together.",
+        title: "Hear the drums it plays now.",
+        body: "The drum engine turns groove intent into MIDI, plays it on the rig, and the saved 143 BPM live set sits on SoundCloud.",
         bullets: &[
-            "Generated MIDI now travels with ADG bundles, trace files, runtime snapshots, and AIG export requests.",
-            "Drum Studio is the focused operator surface around Live Groove, Take Studio, and Profile Lab.",
-            "AIG import is the handoff for the next material pass.",
+            "Groove intent becomes MIDI the PC4 plays.",
+            "The saved live set carries the current takes.",
+            "Each pass leans on the takes you kept before.",
         ],
-        primary_cta: "Open drum machine",
-        secondary_cta: Some("Open Drum Studio"),
+        primary_cta: "Hear the drums",
+        secondary_cta: Some("How it works"),
     },
     HomeWorkArea {
-        kicker: "MIDI Targets",
-        title: "Keep target playback explicit.",
-        body: "The drum lane treats MIDI output, synth targets, and capture as clear workflow steps instead of a single fixed setup.",
+        kicker: "Direction",
+        title: "Where this is going.",
+        body: "Drums are the first voice. The same taste loop is built to carry piano and other instruments next, local and yours the whole way.",
         bullets: &[
-            "MIDI intake and output stay readable in the session files.",
-            "Target playback is a concrete audition step, not the whole product story.",
-            "Capture and review stay attached to the generated take.",
+            "A live pass that learns your taste from A/B choices.",
+            "The same system carrying more than drums.",
+            "Local, on your machine, every step undoable.",
         ],
-        primary_cta: "Open Drum Studio",
-        secondary_cta: Some("Hear drums"),
-    },
-    HomeWorkArea {
-        kicker: "EPM2",
-        title: "Read the hardware lab.",
-        body: "EPM2 follows the hardware path for the later physical instrument: P1 VCO simulation, KiCad capture, bench expectations, and public source notes.",
-        bullets: &[
-            "P1 VCO study and KiCad capture are the active path.",
-            "Bench notes keep ramp window, reset level, sync, and range visible.",
-            "The public repo keeps docs, sim, KiCad, bench notes, and tools together.",
-        ],
-        primary_cta: "Open lab",
-        secondary_cta: Some("Browse docs"),
+        primary_cta: "How it works",
+        secondary_cta: None,
     },
 ];
 
@@ -274,7 +288,7 @@ pub const PRODUCT_LINES: &[ProductLine] = &[
 pub const BLOG_INTRO: PageIntro = PageIntro {
     kicker: "Notes",
     title: "Working notes.",
-    summary: "Short notes from the current software runtime, hardware path, drum work, and related source research.",
+    summary: "A few notes on the drum work, the taste loop, and how a groove decision stays musical before it becomes MIDI.",
 };
 
 pub const DRUM_ENGINE_FEATURED_TRACK_ID: &str = "2332273322";
