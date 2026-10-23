@@ -33,6 +33,8 @@ VCF_ZIP = ART / "mamut-vcf-1-release/20261017T145452.041965Z.zip"
 VCF_ROOT = "20261017T145452.041965Z"
 VCA_SCHEMATIC = ART / "mamut-vca-1-work/t12-sch-live-check/mamut-vca-1-a0-tht-schematic.pdf"
 VCA_BOARD = ART / "mamut-vca-1-work/t10-board-11"
+VCA_RUN = ART / "mamut-vca-1-sim/20261020T054307.251840Z-vca1-full"
+VCA_CASES = ART.parent / "sim/mamut-vca-1-tht/cases.json"
 VCA_RENDERS = ART / "mamut-vca-1-photoreal/20261020T171344Z/cad"
 VCA_AI = ART / "mamut-vca-1-photoreal/20261020T171344Z/photo"
 VCO_AI = ART / "mamut-vco-b1-tht-photoreal/20261016T144822Z/photo"
@@ -181,6 +183,16 @@ def vca(tmp: Path) -> Module:
         (VCA_RENDERS / "01-top-perspective.png", "render-top", "KiCad 3D render from the board file, top three-quarter view. A planned assembly, not a built board.", BOARD_WIDTH),
         (VCA_RENDERS / "03-top-orthographic.png", "render-ortho", "KiCad 3D render, orthographic top view", BOARD_WIDTH),
         (VCA_BOARD / "routed.png", "pcb-routed", "Routed copper, both layers", BOARD_WIDTH),
+    ])
+    # The run stores raw waveforms but no plots; draw them from the rawfiles.
+    plots_dir = tmp / "vca-plots"
+    listing = subprocess.run(
+        [sys.executable, "-I", str(SITE / "scripts/plot_vca_1.py"), str(VCA_RUN), str(VCA_CASES), str(plots_dir)],
+        check=True, capture_output=True, text=True,
+    ).stdout
+    m.group("Simulation", [
+        (plots_dir / f"{name}.png", f"sim-{name}", caption, PLOT_WIDTH)
+        for name, caption in (line.split("\t", 1) for line in listing.splitlines())
     ])
     m.ai_images([
         (VCA_AI / "01-hero.png", "ai-hero", "Whole board."),
