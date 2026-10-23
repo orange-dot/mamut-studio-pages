@@ -55,6 +55,30 @@ pub struct Module {
     pub summary: &'static str,
     pub facts: &'static [Fact],
     pub open: &'static [&'static str],
+    pub sections: &'static [Section],
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub struct Section {
+    pub title: &'static str,
+    pub body: &'static str,
+    pub points: &'static [&'static str],
+    pub code: Option<&'static str>,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub struct Figure {
+    pub src: &'static str,
+    pub alt: &'static str,
+    pub caption: &'static str,
+    pub width: u32,
+    pub height: u32,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub struct FigureGroup {
+    pub title: &'static str,
+    pub figures: &'static [Figure],
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -87,6 +111,7 @@ pub const VOICE_MODULES: &[Module] = &[
             Fact { label: "CAD checks", value: "ERC, DRC, unconnected items, parity: 0" },
             Fact { label: "Print package", value: "16 pages: schematic, assembly, copper, drilling, parts list" },
         ],
+        sections: &[],
         open: &[
             "The CV input is linear; it does not track 1 V/oct. The control board closes that loop.",
             "No board has been built or measured.",
@@ -104,19 +129,76 @@ pub const VOICE_MODULES: &[Module] = &[
             Fact { label: "CAD checks", value: "ERC, DRC, unconnected items, parity: 0" },
             Fact { label: "Release", value: "2026-10-17" },
         ],
+        sections: &[],
         open: &["No board has been built or measured."],
     },
     Module {
         slug: "vca-1",
         code: "VCA-1 THT",
         role: "Amplifier and envelope",
-        stage: Stage::Plan,
-        summary: "Linear voltage-controlled amplifier with an on-board ADSR envelope.",
+        stage: Stage::CadRelease,
+        summary: "Linear voltage-controlled amplifier with a built-in ADSR envelope. A discrete translinear gain cell, exponential envelope converters with temperature compensation, and a buffered 0 to 5 V envelope output. Every part is leaded.",
         facts: &[
-            Fact { label: "Plan", value: "Reviewed 2026-10-17" },
-            Fact { label: "Ports", value: "Not frozen yet" },
+            Fact { label: "Board", value: "339 × 334 mm, 2 layers, 734 positions, all through-hole" },
+            Fact { label: "Model run", value: "100 cases, 0 failed; 22 requirement groups (2026-10-20)" },
+            Fact { label: "Run cost", value: "251 MB of results, 2 h 51 min" },
+            Fact { label: "CAD checks", value: "ERC, DRC, unconnected items, parity: 0" },
+            Fact { label: "SPICE parity", value: "Exported netlist identical to the assessed circuit (703 elements)" },
+            Fact { label: "Schematic", value: "34 wired sheets; ERC 0; 734 parts and 409 nets match the simulated circuit" },
+            Fact { label: "Supply", value: "+12 V, at most 58.4 mA with the gate high" },
         ],
-        open: &["No circuit model, CAD or hardware yet."],
+        sections: &[
+            Section {
+                title: "Signal and control path",
+                body: "Audio is amplified about six times, converted to a current and multiplied by the control current in the gain cell. The envelope, a level CV and an offset are summed, clamped to 0..1 and converted to that control current.",
+                points: &[],
+                code: Some("AUDIO_IN → input amp (×6) → V-to-I → gain cell → I-to-V buffer → AC coupling → AUDIO_OUT\n                                         ↑ I_CTRL\nENV + LEVEL_CV + OFFSET → summer → clamp 0..1 → V-to-I"),
+            },
+            Section {
+                title: "Gain cell",
+                body: "A linearized current-mode cell from matched discrete transistors: a diode pair and an output pair. The gain is linear in the control current and does not depend on the thermal voltage. The input current is kept at 70 % of the diode current or less at the 1 Vpp maximum clean input.",
+                points: &[],
+                code: Some("i_out  = i_in · I_CTRL / I_DIODE\nG_full = (R_OUT / R_IN) · (I_CTRL_MAX / I_DIODE)"),
+            },
+            Section {
+                title: "Envelope",
+                body: "Attack, decay and release pots drive exponential converters with PTC compensation. Three transconductance followers charge one timing capacitor, read through a JFET buffer. A Schmitt trigger and an attack latch select the segment; a peak comparator ends the attack.",
+                points: &[
+                    "Times from 1 ms to 20 s, each within 20 % of target in the model",
+                    "Attack aims 1 % above full scale, so the peak arrives at 0.668 × the attack time; the shape error before the peak is at most 1 % of full scale",
+                    "A new gate during release restarts the attack from the current level",
+                    "A 1 ms gate gives a complete event; a held gate does not retrigger",
+                ],
+                code: None,
+            },
+            Section {
+                title: "What the model run checks",
+                body: "The 2026-10-20 run covers 100 cases. Selected limits, all met:",
+                points: &[
+                    "Gain law monotonic, linearity within 2 % of full scale; full gain within 0.5 dB",
+                    "Off state at most −70 dB at 1 kHz and −60 dB at 10 kHz",
+                    "THD at most 1 % at 1 Vpp, 0.3 % at 0.1 Vpp; response within 1 dB from 20 Hz to 20 kHz",
+                    "Control feedthrough with 1 ms segments: peak at most 20 mV, settled step at most 10 mV",
+                    "10 / 25 / 40 °C and part corners with fixed trims: gain drift at most 10 %, envelope times within 15 %",
+                    "Misuse: reverse supply and ±12 V on the control inputs stay inside part limits",
+                    "In the chain with VCO-1 and VCF-1: oscillator frequency moves at most 0.0063 %, amplitude at most 0.59 %",
+                    "Halving the simulation time step changes the results by at most 2 %",
+                ],
+                code: None,
+            },
+            Section {
+                title: "Relation to the software voice",
+                body: "The module is a functional analog interpretation of the amplifier and envelope in the analog voice model. It is not a copy of the software transfer functions, and it does not claim to sound the same: the hardware attack ends earlier by design, and no listening comparison exists.",
+                points: &[],
+                code: None,
+            },
+        ],
+        open: &[
+            "One full run before this one failed 95 of 100 cases on metric and measurement errors; it is kept as evidence.",
+            "Matched-pair thermal bonding and the remaining assembly steps are open.",
+            "Panel pot linearity is not specified yet.",
+            "No board has been built or measured.",
+        ],
     },
     Module {
         slug: "ctl-1",
@@ -128,6 +210,7 @@ pub const VOICE_MODULES: &[Module] = &[
             Fact { label: "Ports", value: "Frozen" },
             Fact { label: "Work", value: "Third task stage in progress" },
         ],
+        sections: &[],
         open: &["Firmware has not run on target hardware."],
     },
     Module {
@@ -140,6 +223,7 @@ pub const VOICE_MODULES: &[Module] = &[
             Fact { label: "Ports", value: "Frozen" },
             Fact { label: "Work", value: "Third task stage in progress" },
         ],
+        sections: &[],
         open: &["No released model or CAD yet."],
     },
     Module {
@@ -153,6 +237,7 @@ pub const VOICE_MODULES: &[Module] = &[
             Fact { label: "+12 V", value: "12 A rated for 32 voices (8.25 A estimated)" },
             Fact { label: "Other rails", value: "−12 V 2 A, +5 V 3 A, +24 V auxiliary" },
         ],
+        sections: &[],
         open: &["Baseline waits for confirmation. No circuit, simulation or hardware yet."],
     },
 ];

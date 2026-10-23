@@ -1654,3 +1654,58 @@ p {
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.85rem;
 }
+
+.figure-group {
+  margin: 40px 0;
+}
+
+.figure-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.figure-card {
+  position: relative;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-solid);
+}
+
+.figure-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+  background: #f5f4ef;
+}
+
+.figure-card figcaption {
+  margin-top: 8px;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+}
+
+.figure-card.is-ai {
+  border-color: var(--accent-line);
+}
+
+.ai-badge {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ai-note {
+  color: var(--accent-hot);
+}

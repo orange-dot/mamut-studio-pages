@@ -4,7 +4,10 @@ use crate::content::{
     KEYBOARD_INTRO, KEYBOARD_STAGES, Module, NOTES, PHYSICAL_NOTE, SOURCES, SOURCES_INTRO, Stage,
     TONEWHEEL91_REPO_URL, VOICE_INTRO, VOICE_MODULES, VOICE_SIGNAL_PATH, module_by_slug,
 };
+use crate::research_assets::{gallery, schematic_pdf};
 use dioxus::prelude::*;
+
+const AI_GROUP_TITLE: &str = "AI-generated images";
 
 const SITE_NAME: &str = "Mamut Studio";
 const SITE_DESCRIPTION: &str = "Mamut: a keyboard instrument built from discrete analog circuits, a sensing key surface and C instrument models. Designs, model runs and their limits.";
@@ -138,8 +141,8 @@ fn Home() -> Element {
                 div { class: "hero-panel",
                     div { class: "card-topline", "State on 2026-10-23" }
                     ul { class: "hero-today",
-                        li { "Oscillator and filter boards: CAD released, model runs pass." }
-                        li { "Amplifier, control, drive and supply: planned or in progress." }
+                        li { "Oscillator, filter and amplifier boards: routed, full model runs pass." }
+                        li { "Control, drive stage and supply: in progress or planned." }
                         li { "Sensing key surface: receiver boards routed, sensor stack not validated." }
                         li { "Organ, electric piano and analog voice model play live in C." }
                     }
@@ -256,6 +259,59 @@ fn VoiceModule(slug: String) -> Element {
                 h1 { "{module.code}" }
                 p { "{module.summary}" }
                 StageBadge { stage: module.stage }
+            }
+            for section in module.sections {
+                section { class: "post-section detail-panel",
+                    h2 { "{section.title}" }
+                    p { "{section.body}" }
+                    if let Some(code) = section.code {
+                        pre { class: "code-example-body",
+                            code { "{code}" }
+                        }
+                    }
+                    if !section.points.is_empty() {
+                        ul {
+                            for point in section.points {
+                                li { "{point}" }
+                            }
+                        }
+                    }
+                }
+            }
+            if let Some(pdf) = schematic_pdf(module.slug) {
+                div { class: "utility-links",
+                    a { class: "button button-secondary", href: "{pdf}", target: "_blank", rel: "noopener", "Full schematic (PDF)" }
+                }
+            }
+            for group in gallery(module.slug) {
+                section { class: "figure-group",
+                    div { class: "section-copy",
+                        span { class: "section-kicker", "{group.title}" }
+                        if group.title == AI_GROUP_TITLE {
+                            p { class: "ai-note", "These images are AI-generated from the CAD data. They are not photographs; no board has been built." }
+                        }
+                    }
+                    div { class: "figure-grid",
+                        for figure in group.figures {
+                            figure { class: if group.title == AI_GROUP_TITLE { "figure-card is-ai" } else { "figure-card" },
+                                a { href: "{figure.src}", target: "_blank", rel: "noopener",
+                                    img {
+                                        src: "{figure.src}",
+                                        alt: "{figure.alt}",
+                                        width: "{figure.width}",
+                                        height: "{figure.height}",
+                                        loading: "lazy",
+                                        decoding: "async",
+                                    }
+                                }
+                                if group.title == AI_GROUP_TITLE {
+                                    span { class: "ai-badge", "AI-generated" }
+                                }
+                                figcaption { "{figure.caption}" }
+                            }
+                        }
+                    }
+                }
             }
             section { class: "products-grid",
                 article { class: "detail-panel",

@@ -3,6 +3,7 @@
 mod app;
 mod archive;
 mod content;
+mod research_assets;
 
 use dioxus::prelude::*;
 use dioxus_logger::tracing;
