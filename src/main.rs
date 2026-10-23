@@ -1,8 +1,8 @@
 #![allow(non_snake_case)]
 
 mod app;
+mod archive;
 mod content;
-mod play;
 
 use dioxus::prelude::*;
 use dioxus_logger::tracing;

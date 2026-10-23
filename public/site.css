@@ -1588,3 +1588,69 @@ p {
 .utility-band .section-copy p {
   max-width: var(--reading-width);
 }
+
+/* Phase 1 additions; replaced by the new design system in phase 2. */
+.detail-panel .card-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.stage {
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-soft);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.stage-release,
+.stage-playable {
+  border-color: var(--ok);
+  color: var(--ok);
+}
+
+.stage-model,
+.stage-progress {
+  border-color: var(--accent-line);
+  color: var(--accent-hot);
+}
+
+.fact-list {
+  display: grid;
+  grid-template-columns: minmax(120px, max-content) 1fr;
+  gap: 8px 20px;
+  margin: 0;
+}
+
+.fact-list dt {
+  color: var(--text-faint);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.82rem;
+}
+
+.fact-list dd {
+  margin: 0;
+  color: var(--text);
+}
+
+.signal-path {
+  display: block;
+  overflow-x: auto;
+  margin: 12px 0;
+  font-family: "IBM Plex Mono", monospace;
+  color: var(--text);
+}
+
+.physical-note,
+.archive-banner {
+  color: var(--text-faint);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.85rem;
+}

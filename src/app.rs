@@ -1,13 +1,13 @@
+use crate::archive::{BlogPost, NOTES_INDEX_SLUGS, blog_post_by_slug, blog_post_sections};
 use crate::content::{
-    BLOG_INTRO, DRUM_ENGINE_FEATURED_TRACK_ID, DRUM_ENGINE_PRESET_CONTROLS, DRUM_ENGINE_TRACKS,
-    EPM2_PUBLIC_REPO_URL, HERO, HOME_WORK_AREAS, NOTES_INDEX_SLUGS, WHAT_RUNS_TODAY,
-    WHERE_THIS_IS_GOING, blog_post_by_slug, blog_post_sections,
+    ASSEMBLY_POLICY, CLAIM_LEVELS, HERO_BODY, HERO_TITLE, INSTRUMENTS, INSTRUMENTS_INTRO, Item,
+    KEYBOARD_INTRO, KEYBOARD_STAGES, Module, NOTES, PHYSICAL_NOTE, SOURCES, SOURCES_INTRO, Stage,
+    TONEWHEEL91_REPO_URL, VOICE_INTRO, VOICE_MODULES, VOICE_SIGNAL_PATH, module_by_slug,
 };
-use crate::play::PlayPage;
 use dioxus::prelude::*;
 
 const SITE_NAME: &str = "Mamut Studio";
-const SITE_DESCRIPTION: &str = "Mamut Studio is a musical system that learns your taste, on your own machine. Drums play today; play EPM1 in the browser or hear the current takes.";
+const SITE_DESCRIPTION: &str = "Mamut: a keyboard instrument built from discrete analog circuits, a sensing key surface and C instrument models. Designs, model runs and their limits.";
 const DEFAULT_SITE_BASE_URL: &str = "https://mamut-studio.com";
 const PREVIEW_IMAGE_PATH: &str = "/og-default.png";
 const PREVIEW_IMAGE_WIDTH: &str = "3000";
@@ -24,22 +24,31 @@ pub enum Route {
     #[redirect("/docs", || Route::Home {})]
     #[route("/")]
     Home {},
+    #[route("/voice")]
+    Voice {},
+    #[route("/voice/:slug")]
+    VoiceModule { slug: String },
+    #[route("/keyboard")]
+    Keyboard {},
+    #[route("/sources")]
+    Sources {},
+    #[redirect("/play", || Route::Instruments {})]
+    #[redirect("/listen", || Route::Instruments {})]
+    #[redirect("/programmable-drum-machine", || Route::Instruments {})]
+    #[redirect("/drum-engine", || Route::Instruments {})]
+    #[redirect("/drum-studio", || Route::Instruments {})]
+    #[redirect("/drums", || Route::Instruments {})]
+    #[route("/instruments")]
+    Instruments {},
     #[redirect("/blog", || Route::Notes {})]
     #[route("/notes")]
     Notes {},
     #[redirect("/blog/:slug", |slug: String| Route::NotePost { slug })]
     #[route("/notes/:slug")]
     NotePost { slug: String },
-    #[route("/play")]
-    Play {},
-    #[redirect("/programmable-drum-machine", || Route::Listen {})]
-    #[redirect("/drum-engine", || Route::Listen {})]
-    #[redirect("/drum-studio", || Route::Listen {})]
-    #[redirect("/drums", || Route::Listen {})]
-    #[route("/listen")]
-    Listen {},
-    #[route("/how-it-works")]
-    HowItWorks {},
+    #[redirect("/how-it-works", || Route::About {})]
+    #[route("/about")]
+    About {},
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -116,69 +125,262 @@ fn Home() -> Element {
             title: SITE_NAME.to_string(),
             description: SITE_DESCRIPTION.to_string(),
             current: Route::Home {},
-            HeroSection {}
+            section { class: "hero",
+                div { class: "hero-copy",
+                    span { class: "eyebrow", "Mamut" }
+                    h1 { "{HERO_TITLE}" }
+                    p { class: "hero-body", "{HERO_BODY}" }
+                    div { class: "hero-actions",
+                        Link { class: "button button-primary", to: Route::Voice {}, "The voice boards" }
+                        Link { class: "button button-secondary", to: Route::Instruments {}, "Instruments that play" }
+                    }
+                }
+                div { class: "hero-panel",
+                    div { class: "card-topline", "State on 2026-10-23" }
+                    ul { class: "hero-today",
+                        li { "Oscillator and filter boards: CAD released, model runs pass." }
+                        li { "Amplifier, control, drive and supply: planned or in progress." }
+                        li { "Sensing key surface: receiver boards routed, sensor stack not validated." }
+                        li { "Organ, electric piano and analog voice model play live in C." }
+                    }
+                    div { class: "hero-panel-divider" }
+                    p { class: "hero-panel-note", "{PHYSICAL_NOTE} for any hardware item." }
+                }
+            }
             section { class: "signal-section",
                 div { class: "section-copy",
-                    span { class: "section-kicker", "Where to start" }
-                    h2 { "Play it, hear it, see where it goes." }
-                    p { "EPM1 plays in the browser today. The drum engine already turns a groove decision into MIDI the rig plays, and the same taste loop is built to carry more instruments next." }
+                    span { class: "section-kicker", "Four lines of work" }
+                    h2 { "Hardware, touch, sources, and instruments you can play now." }
                 }
                 div { class: "feature-grid",
-                    for area in HOME_WORK_AREAS {
-                        {home_work_card(area)}
-                    }
+                    {area_card("Voice-1", "Discrete analog voice", VOICE_INTRO, Route::Voice {}, "Open the voice")}
+                    {area_card("Keyboard", "Sensing key surface", KEYBOARD_INTRO, Route::Keyboard {}, "Open the keyboard")}
+                    {area_card("Sources", "Physical sound sources", SOURCES_INTRO, Route::Sources {}, "Open the sources")}
+                    {area_card("tonewheel91", "C instrument models", INSTRUMENTS_INTRO, Route::Instruments {}, "Open the instruments")}
                 }
             }
-            section { class: "doc-category",
-                div { class: "section-copy",
-                    span { class: "section-kicker", "Honest status" }
-                    h2 { "What runs today, and where it goes." }
-                    p { "Drums are the first voice. Everything here is either playing now or named as the next step." }
-                }
-                div { class: "products-grid",
-                    article { class: "detail-panel",
-                        div { class: "card-topline", "What runs today" }
-                        ul {
-                            for item in WHAT_RUNS_TODAY {
-                                li { "{item}" }
-                            }
-                        }
-                    }
-                    article { class: "detail-panel",
-                        div { class: "card-topline", "Where this is going" }
-                        ul {
-                            for item in WHERE_THIS_IS_GOING {
-                                li { "{item}" }
-                            }
-                        }
-                    }
-                }
+        }
+    }
+}
+
+fn area_card(
+    kicker: &'static str,
+    title: &'static str,
+    body: &'static str,
+    to: Route,
+    cta: &'static str,
+) -> Element {
+    rsx! {
+        article { class: "feature-card",
+            div { class: "card-topline", "{kicker}" }
+            h3 { "{title}" }
+            p { "{body}" }
+            div { class: "hero-actions",
+                Link { class: "source-link", to: to, "{cta}" }
             }
-            BackgroundSection {}
         }
     }
 }
 
 #[component]
-fn BackgroundSection() -> Element {
+fn Voice() -> Element {
     rsx! {
-        section { class: "utility-band",
-            div { class: "section-copy",
-                span { class: "section-kicker", "Background" }
-                h2 { "Where this came from." }
-                p { "Mamut Studio grew out of a long line of instrument and rig work: the EPM1 software runtime, the PC4 live setup, and an EPM2 hardware study. The taste system is what that work converged on." }
+        PageFrame {
+            title: "Voice-1".to_string(),
+            description: VOICE_INTRO.to_string(),
+            current: Route::Voice {},
+            section { class: "page-intro",
+                span { class: "eyebrow", "Voice-1" }
+                h1 { "A discrete analog voice, board by board." }
+                p { "{VOICE_INTRO}" }
             }
-            div { class: "utility-links",
-                Link { class: "button button-primary", to: Route::HowItWorks {}, "How it works" }
-                a {
-                    class: "button button-secondary",
-                    href: EPM2_PUBLIC_REPO_URL,
-                    target: "_blank",
-                    rel: "noopener noreferrer",
-                    "EPM2 hardware source"
+            section { class: "doc-category",
+                div { class: "section-copy",
+                    span { class: "section-kicker", "Signal path" }
+                    code { class: "signal-path", "{VOICE_SIGNAL_PATH}" }
+                    p { "{ASSEMBLY_POLICY}" }
+                }
+                div { class: "products-grid",
+                    for module in VOICE_MODULES {
+                        {module_card(module)}
+                    }
                 }
             }
         }
+    }
+}
+
+fn module_card(module: &'static Module) -> Element {
+    rsx! {
+        article { class: "detail-panel",
+            div { class: "card-topline",
+                span { "{module.role}" }
+                StageBadge { stage: module.stage }
+            }
+            h3 { "{module.code}" }
+            p { "{module.summary}" }
+            Link {
+                class: "source-link",
+                to: Route::VoiceModule { slug: module.slug.to_string() },
+                "Details"
+            }
+        }
+    }
+}
+
+#[component]
+fn VoiceModule(slug: String) -> Element {
+    let Some(module) = module_by_slug(&slug) else {
+        return rsx! {
+            PageFrame {
+                title: "Module".to_string(),
+                description: "Requested module was not found.".to_string(),
+                current: Route::Voice {},
+                section { class: "page-intro",
+                    span { class: "eyebrow", "Voice-1" }
+                    h1 { "Requested module was not found." }
+                    Link { class: "button button-secondary", to: Route::Voice {}, "All modules" }
+                }
+            }
+        };
+    };
+
+    rsx! {
+        PageFrame {
+            title: module.code.to_string(),
+            description: module.summary.to_string(),
+            current: Route::VoiceModule { slug: module.slug.to_string() },
+            section { class: "page-intro",
+                Link { class: "source-link post-back", to: Route::Voice {}, "Voice-1" }
+                span { class: "eyebrow", "{module.role}" }
+                h1 { "{module.code}" }
+                p { "{module.summary}" }
+                StageBadge { stage: module.stage }
+            }
+            section { class: "products-grid",
+                article { class: "detail-panel",
+                    div { class: "card-topline", "Recorded" }
+                    dl { class: "fact-list",
+                        for fact in module.facts {
+                            dt { "{fact.label}" }
+                            dd { "{fact.value}" }
+                        }
+                    }
+                }
+                article { class: "detail-panel",
+                    div { class: "card-topline", "Open" }
+                    ul {
+                        for item in module.open {
+                            li { "{item}" }
+                        }
+                        li { "{PHYSICAL_NOTE}." }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[component]
+fn Keyboard() -> Element {
+    rsx! {
+        PageFrame {
+            title: "Sensing keyboard".to_string(),
+            description: KEYBOARD_INTRO.to_string(),
+            current: Route::Keyboard {},
+            section { class: "page-intro",
+                span { class: "eyebrow", "Keyboard" }
+                h1 { "Touch as control and as sound." }
+                p { "{KEYBOARD_INTRO}" }
+            }
+            ItemGrid { items: KEYBOARD_STAGES }
+            p { class: "physical-note", "{PHYSICAL_NOTE} for any sensor or receiver board." }
+        }
+    }
+}
+
+#[component]
+fn Sources() -> Element {
+    rsx! {
+        PageFrame {
+            title: "Sound sources".to_string(),
+            description: SOURCES_INTRO.to_string(),
+            current: Route::Sources {},
+            section { class: "page-intro",
+                span { class: "eyebrow", "Sources" }
+                h1 { "Physical mechanisms as sound sources." }
+                p { "{SOURCES_INTRO}" }
+            }
+            ItemGrid { items: SOURCES }
+            section { class: "doc-category",
+                div { class: "section-copy",
+                    span { class: "section-kicker", "How claims are marked" }
+                    h2 { "Five levels, from a cited effect to a measured sample." }
+                }
+                dl { class: "fact-list",
+                    for level in CLAIM_LEVELS {
+                        dt { "{level.label}" }
+                        dd { "{level.value}" }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[component]
+fn Instruments() -> Element {
+    rsx! {
+        PageFrame {
+            title: "Instruments".to_string(),
+            description: INSTRUMENTS_INTRO.to_string(),
+            current: Route::Instruments {},
+            section { class: "page-intro",
+                span { class: "eyebrow", "tonewheel91" }
+                h1 { "Instruments that play today." }
+                p { "{INSTRUMENTS_INTRO}" }
+                div { class: "hero-actions",
+                    a {
+                        class: "button button-primary",
+                        href: TONEWHEEL91_REPO_URL,
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        "Source on GitHub"
+                    }
+                }
+            }
+            ItemGrid { items: INSTRUMENTS }
+        }
+    }
+}
+
+#[component]
+fn ItemGrid(items: &'static [Item]) -> Element {
+    rsx! {
+        section { class: "products-grid",
+            for item in items {
+                article { class: "detail-panel",
+                    div { class: "card-topline",
+                        span { "{item.code}" }
+                        StageBadge { stage: item.stage }
+                    }
+                    h3 { "{item.title}" }
+                    p { "{item.summary}" }
+                    ul {
+                        for point in item.points {
+                            li { "{point}" }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[component]
+fn StageBadge(stage: Stage) -> Element {
+    rsx! {
+        span { class: stage.class(), "{stage.label()}" }
     }
 }
 
@@ -187,17 +389,35 @@ fn Notes() -> Element {
     rsx! {
         PageFrame {
             title: "Notes".to_string(),
-            description: "A few working notes on the drum engine, the taste loop, and the language that keeps a groove decision musical before MIDI.".to_string(),
+            description: "Working notes on the Mamut hardware and instrument models, and the archive of the earlier software line.".to_string(),
             current: Route::Notes {},
-            PageIntroBlock {
-                kicker: BLOG_INTRO.kicker,
-                title: BLOG_INTRO.title,
-                summary: BLOG_INTRO.summary,
+            section { class: "page-intro",
+                span { class: "eyebrow", "Notes" }
+                h1 { "Working notes." }
+                p { "Short write-ups when a board, a model run or an instrument reaches a milestone." }
             }
-            section { class: "blog-grid",
-                for slug in NOTES_INDEX_SLUGS {
-                    if let Some(post) = blog_post_by_slug(slug) {
-                        BlogCardView { post }
+            if !NOTES.is_empty() {
+                section { class: "blog-grid",
+                    for note in NOTES {
+                        article { class: "blog-card",
+                            div { class: "card-topline", "{note.date}" }
+                            h3 { "{note.title}" }
+                            p { "{note.summary}" }
+                        }
+                    }
+                }
+            }
+            section { class: "doc-category",
+                div { class: "section-copy",
+                    span { class: "section-kicker", "Archive" }
+                    h2 { "The earlier software line." }
+                    p { "Notes from the EPM1 software instrument and the drum engine. That line is retired; the notes stay for reference." }
+                }
+                section { class: "blog-grid",
+                    for slug in NOTES_INDEX_SLUGS {
+                        if let Some(post) = blog_post_by_slug(slug) {
+                            BlogCardView { post }
+                        }
                     }
                 }
             }
@@ -231,6 +451,7 @@ fn NotePost(slug: String) -> Element {
             if let Some(post) = post {
                 section { class: "post-shell",
                     Link { class: "source-link post-back", to: Route::Notes {}, "Back to notes" }
+                    p { class: "archive-banner", "Archived note from the retired EPM1 / drum-engine line." }
                     section { class: "page-intro post-intro",
                         span { class: "eyebrow", "Note / {post.series}" }
                         h1 { "{post.title}" }
@@ -239,44 +460,42 @@ fn NotePost(slug: String) -> Element {
                     article { class: "detail-panel post-panel",
                         div { class: "card-topline", "{post.series}" }
                         p { "{post.body}" }
-                        if !sections.is_empty() {
-                            for section in sections {
-                                section { class: "post-section",
-                                    h2 { "{section.title}" }
-                                    p { "{section.body}" }
-                                    ul {
-                                        for bullet in section.bullets {
-                                            li { "{bullet}" }
+                        for section in sections {
+                            section { class: "post-section",
+                                h2 { "{section.title}" }
+                                p { "{section.body}" }
+                                ul {
+                                    for bullet in section.bullets {
+                                        li { "{bullet}" }
+                                    }
+                                }
+                                if post.slug == "pc4ms-touch-surface-live-rig" && section.title == "Tablet control surface" {
+                                    figure { class: "note-image-panel",
+                                        img {
+                                            class: "note-image",
+                                            src: "/pc4ms-touch-surface-live-rig-app-2026-06-03.jpg",
+                                            alt: "Android tablet running the PC4MS touch-control surface on the PC4 and mioXM live rig",
+                                            width: "1600",
+                                            height: "720",
+                                            loading: "lazy",
+                                            decoding: "async",
+                                        }
+                                        figcaption {
+                                            "Android touch-control surface running on the tablet while the PC4 and mioXM rig is active. The sliders send macro MIDI into Workbench without taking over the performer MIDI path."
                                         }
                                     }
-                                    if post.slug == "pc4ms-touch-surface-live-rig" && section.title == "Tablet control surface" {
-                                        figure { class: "note-image-panel",
-                                            img {
-                                                class: "note-image",
-                                                src: "/pc4ms-touch-surface-live-rig-app-2026-06-03.jpg",
-                                                alt: "Android tablet running the PC4MS touch-control surface on the PC4 and mioXM live rig",
-                                                width: "1600",
-                                                height: "720",
-                                                loading: "lazy",
-                                                decoding: "async",
-                                            }
-                                            figcaption {
-                                                "Android touch-control surface running on the tablet while the PC4 and mioXM rig is active. The sliders send macro MIDI into Workbench without taking over the performer MIDI path."
-                                            }
-                                        }
-                                    }
-                                    if !section.examples.is_empty() {
-                                        div { class: "code-example-stack",
-                                            for example in section.examples {
-                                                figure { class: "code-example",
-                                                    figcaption { class: "code-example-head",
-                                                        span { class: "code-example-label", "{example.label}" }
-                                                        span { class: "code-example-language", "{example.language}" }
-                                                    }
-                                                    code { class: "code-example-path", "{example.source_path}" }
-                                                    pre { class: "code-example-body",
-                                                        code { "{example.code}" }
-                                                    }
+                                }
+                                if !section.examples.is_empty() {
+                                    div { class: "code-example-stack",
+                                        for example in section.examples {
+                                            figure { class: "code-example",
+                                                figcaption { class: "code-example-head",
+                                                    span { class: "code-example-label", "{example.label}" }
+                                                    span { class: "code-example-language", "{example.language}" }
+                                                }
+                                                code { class: "code-example-path", "{example.source_path}" }
+                                                pre { class: "code-example-body",
+                                                    code { "{example.code}" }
                                                 }
                                             }
                                         }
@@ -288,13 +507,6 @@ fn NotePost(slug: String) -> Element {
                         ul {
                             for bullet in post.bullets {
                                 li { "{bullet}" }
-                            }
-                        }
-                        if matches!(post.series, "Programmable Drums" | "Drum Studio" | "AIG / ADG" | "PC4MS" | "Research") {
-                            div { class: "post-actions",
-                                Link { class: "button button-primary", to: Route::Listen {}, "Hear the drums" }
-                                Link { class: "button button-secondary", to: Route::HowItWorks {}, "How it works" }
-                                Link { class: "source-link", to: Route::Notes {}, "All notes" }
                             }
                         }
                     }
@@ -314,184 +526,32 @@ fn NotePost(slug: String) -> Element {
 }
 
 #[component]
-fn HowItWorks() -> Element {
+fn About() -> Element {
     rsx! {
         PageFrame {
-            title: "How it works".to_string(),
-            description: "How Mamut Studio learns your taste: it keeps the takes you choose, leans that way next time, and stays local and undoable.".to_string(),
-            current: Route::HowItWorks {},
+            title: "About".to_string(),
+            description: "Who builds Mamut, what the project is after, and how its claims are marked.".to_string(),
+            current: Route::About {},
             section { class: "page-intro",
-                span { class: "eyebrow", "How it works" }
-                h1 { "It learns your taste from the takes you keep." }
-                p { "You play, you listen, you keep some takes and pass over others. Mamut Studio remembers those choices and leans that way on the next pass, on your own machine, with every step one you can undo." }
+                span { class: "eyebrow", "About" }
+                h1 { "One instrument, built in the open where it can be." }
+                p { "Mamut Studio is an independent instrument lab. The aim is a keyboard instrument made to order, with analog electronics, digital processing and a sound source of its own." }
             }
-            section { class: "doc-category",
-                div { class: "section-copy",
-                    span { class: "section-kicker", "The loop" }
-                    h2 { "Choose, learn, lean." }
-                    p { "Nothing is retrained in the cloud and nothing leaves your machine. The system updates from a single choice, and you can roll it back." }
-                }
-                div { class: "products-grid",
-                    article { class: "detail-panel",
-                        div { class: "card-topline", "Choose" }
-                        h3 { "You keep what sounds like you." }
-                        p { "Pick the take that fits, pass over the one that does not. That choice is the only input the loop needs." }
-                    }
-                    article { class: "detail-panel",
-                        div { class: "card-topline", "Learn" }
-                        h3 { "It updates on the spot." }
-                        p { "The taste loop shifts toward what you kept, locally and right away, without a training run or a model upload." }
-                    }
-                    article { class: "detail-panel",
-                        div { class: "card-topline", "Lean" }
-                        h3 { "The next pass leans your way." }
-                        p { "The following set is re-ranked toward your taste. If it drifts, you undo the step and it returns." }
+            section { class: "products-grid",
+                article { class: "detail-panel",
+                    div { class: "card-topline", "What is public" }
+                    p { "The tonewheel91 instrument models are open source. The hardware research is not; this site publishes its results, figures and limits." }
+                    a {
+                        class: "source-link",
+                        href: TONEWHEEL91_REPO_URL,
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        "tonewheel91 on GitHub"
                     }
                 }
-            }
-            section { class: "doc-category",
-                div { class: "section-copy",
-                    span { class: "section-kicker", "The learning" }
-                    h2 { "It learns in memory, as you go." }
-                    p { "The taste lives in memory, in a small map that a single choice nudges on the spot. The next note builds on the last, and the earlier taste carries forward as new taste settles in. That is what continual learning means here: each choice adds, and the past stays. This is early, local work, but the shape is deliberate." }
-                }
-                div { class: "products-grid",
-                    article { class: "detail-panel",
-                        div { class: "card-topline", "In memory" }
-                        h3 { "No training run." }
-                        p { "The system updates a small in-memory map from one choice at a time. There is no training pass and nothing uploaded; the change lands where you are, in milliseconds, while you keep playing." }
-                    }
-                    article { class: "detail-panel",
-                        div { class: "card-topline", "Continual" }
-                        h3 { "It keeps what it learned." }
-                        p { "Each choice adds to the taste and leaves the last in place. New preferences settle in beside the old ones, so the system grows with you instead of forgetting the earlier feel every time it learns." }
-                    }
-                    article { class: "detail-panel",
-                        div { class: "card-topline", "Bounded and local" }
-                        h3 { "Small enough to stay with you." }
-                        p { "The map stays bounded and runs on a regular laptop, with the same shape built to fit small hardware later. Nothing leaves the room, and every step is written down, so you can roll any of it back." }
-                    }
-                }
-                p { class: "learning-note",
-                    "The map is laid out the way a CPU likes it. The hot core — the few cells a choice touches — stays small and packed, small enough to sit in L1 and L2 cache, while the colder bulk of the map rests in L3 and main memory. A single choice moves only a handful of cache lines, so the update lands in the gap between two notes, with nothing waiting on disk or a network."
-                }
-            }
-            section { class: "utility-band",
-                div { class: "section-copy",
-                    span { class: "section-kicker", "First voice, then more" }
-                    h2 { "Drums today; the same loop for other instruments." }
-                    p { "Drums are where the loop runs now. The same approach is built to carry piano and other instruments next, so the taste you teach in one place can carry across the rest." }
-                }
-                div { class: "utility-links",
-                    Link { class: "button button-primary", to: Route::Listen {}, "Hear the drums" }
-                    Link { class: "button button-secondary", to: Route::Play {}, "Play EPM1" }
-                }
-            }
-            section { class: "doc-category",
-                div { class: "section-copy",
-                    span { class: "section-kicker", "The language underneath" }
-                    h2 { "ADG/AIG keeps a groove decision musical before MIDI." }
-                    p { "Under the hood, a small drum language (ADG, inside the wider AIG frame) holds the groove decision, gesture, surface, density, and timing feel before any of it becomes MIDI. It is what lets the system learn taste in musical terms instead of raw notes. The notes go deeper for anyone who wants the detail." }
-                }
-                div { class: "utility-links",
-                    Link { class: "button button-secondary", to: Route::Notes {}, "Read the notes" }
-                }
-            }
-        }
-    }
-}
-
-#[component]
-fn Play() -> Element {
-    rsx! {
-        PageFrame {
-            title: "Play".to_string(),
-            description: "The EPM1 software instrument, playing in the browser: eight patches, macro controls, one render path.".to_string(),
-            current: Route::Play {},
-            PlayPage {}
-        }
-    }
-}
-
-#[component]
-fn Listen() -> Element {
-    let soundcloud_embed_src = format!(
-        "https://w.soundcloud.com/player/?visual=true&url=https%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F{}&show_artwork=true",
-        DRUM_ENGINE_FEATURED_TRACK_ID
-    );
-    let featured_track = DRUM_ENGINE_TRACKS
-        .iter()
-        .find(|track| track.track_id == DRUM_ENGINE_FEATURED_TRACK_ID);
-
-    rsx! {
-        PageFrame {
-            title: "Listen".to_string(),
-            description: "Hear the drums Mamut Studio plays today: the saved 143 BPM live set on SoundCloud, release-candidate take first.".to_string(),
-            current: Route::Listen {},
-            section { class: "page-intro",
-                span { class: "eyebrow", "Listen" }
-                h1 { "The drums it plays today." }
-                p { "The drum engine turns a groove decision into MIDI, the PC4 plays it, and the takes land here. Start with the release-candidate take from the saved 143 BPM live set." }
-            }
-            section { class: "listen-section",
-                div { class: "soundcloud-frame-shell",
-                    iframe {
-                        class: "soundcloud-frame",
-                        title: "SoundCloud player for the jeans instability release-candidate take",
-                        src: "{soundcloud_embed_src}",
-                        allow: "autoplay; encrypted-media"
-                    }
-                }
-                div { class: "track-list",
-                    for track in DRUM_ENGINE_TRACKS {
-                        article { class: "track-card",
-                            div { class: "card-topline",
-                                if track.track_id == DRUM_ENGINE_FEATURED_TRACK_ID {
-                                    "Featured"
-                                } else {
-                                    "SoundCloud"
-                                }
-                            }
-                            h3 { "{track.title}" }
-                            p { "{track.note}" }
-                            a {
-                                class: "source-link",
-                                href: "{track.url}",
-                                target: "_blank",
-                                rel: "noopener noreferrer",
-                                "Open track"
-                            }
-                        }
-                    }
-                }
-                if let Some(featured_track) = featured_track {
-                    p { class: "source-hint", "Featured source: {featured_track.url}" }
-                }
-            }
-            section { class: "doc-category",
-                div { class: "section-copy",
-                    span { class: "section-kicker", "Reference take" }
-                    h2 { "The live set behind the featured take." }
-                    p { "The release-candidate take comes from a saved 143 BPM live set: four-bar chunks, groove-led, played on the rig and captured." }
-                }
-                div { class: "drum-mini-controls",
-                    for control in DRUM_ENGINE_PRESET_CONTROLS.iter().take(6) {
-                        span {
-                            strong { "{control.value}" }
-                            small { "{control.label}" }
-                        }
-                    }
-                }
-            }
-            section { class: "utility-band",
-                div { class: "section-copy",
-                    span { class: "section-kicker", "How it gets here" }
-                    h2 { "From a groove decision to a take you can keep." }
-                    p { "How it works walks the loop: you keep the takes that sound like you, and the next pass leans that way." }
-                }
-                div { class: "utility-links",
-                    Link { class: "button button-primary", to: Route::HowItWorks {}, "How it works" }
-                    Link { class: "button button-secondary", to: Route::Notes {}, "Read the notes" }
+                article { class: "detail-panel",
+                    div { class: "card-topline", "How to read the figures" }
+                    p { "A passing model run means the circuit meets its stated criteria inside the model's limits. It is not a measurement. Every hardware page says what has and has not been tested." }
                 }
             }
         }
@@ -568,17 +628,18 @@ fn SiteHeader(current: Route) -> Element {
                 Link { class: "brand", to: Route::Home {},
                     img { class: "brand-mark", src: "{brand_mark_path}", alt: "Mamut Studio mark" }
                     div { class: "brand-copy",
-                        span { class: "brand-kicker", "Learns your taste" }
+                        span { class: "brand-kicker", "Instrument lab" }
                         span { class: "brand-title", "{SITE_NAME}" }
                     }
                 }
                 div { class: "nav-cluster",
                     div { class: "nav-links",
-                        Link { class: nav_link_class(&current, "home"), to: Route::Home {}, "Home" }
-                        Link { class: nav_link_class(&current, "play"), to: Route::Play {}, "Play" }
-                        Link { class: nav_link_class(&current, "listen"), to: Route::Listen {}, "Listen" }
-                        Link { class: nav_link_class(&current, "how"), to: Route::HowItWorks {}, "How it works" }
+                        Link { class: nav_link_class(&current, "voice"), to: Route::Voice {}, "Voice" }
+                        Link { class: nav_link_class(&current, "keyboard"), to: Route::Keyboard {}, "Keyboard" }
+                        Link { class: nav_link_class(&current, "sources"), to: Route::Sources {}, "Sources" }
+                        Link { class: nav_link_class(&current, "instruments"), to: Route::Instruments {}, "Instruments" }
                         Link { class: nav_link_class(&current, "notes"), to: Route::Notes {}, "Notes" }
+                        Link { class: nav_link_class(&current, "about"), to: Route::About {}, "About" }
                     }
                     button {
                         class: "theme-toggle",
@@ -606,11 +667,12 @@ fn SiteHeader(current: Route) -> Element {
 
 fn nav_link_class(current: &Route, key: &str) -> &'static str {
     let active = match (key, current) {
-        ("home", Route::Home {}) => true,
-        ("play", Route::Play {}) => true,
-        ("listen", Route::Listen {}) => true,
-        ("how", Route::HowItWorks {}) => true,
+        ("voice", Route::Voice {} | Route::VoiceModule { .. }) => true,
+        ("keyboard", Route::Keyboard {}) => true,
+        ("sources", Route::Sources {}) => true,
+        ("instruments", Route::Instruments {}) => true,
         ("notes", Route::Notes {} | Route::NotePost { .. }) => true,
+        ("about", Route::About {}) => true,
         _ => false,
     };
 
@@ -622,108 +684,10 @@ fn nav_link_class(current: &Route, key: &str) -> &'static str {
 }
 
 #[component]
-fn HeroSection() -> Element {
-    rsx! {
-        section { class: "hero",
-            div { class: "hero-copy",
-                span { class: "eyebrow", "{HERO.eyebrow}" }
-                h1 { "{HERO.title}" }
-                p { class: "hero-body", "{HERO.body}" }
-                p { class: "hero-status", "{HERO.status}" }
-                div { class: "hero-actions",
-                    Link { class: "button button-primary", to: Route::Play {}, "{HERO.primary_cta}" }
-                    Link { class: "button button-secondary", to: Route::Listen {}, "{HERO.secondary_cta}" }
-                    Link {
-                        class: "source-link hero-link",
-                        to: Route::HowItWorks {},
-                        "How it works"
-                    }
-                }
-            }
-            div { class: "hero-panel",
-                div { class: "card-topline", "What runs today" }
-                ul { class: "hero-today",
-                    for item in WHAT_RUNS_TODAY {
-                        li { "{item}" }
-                    }
-                }
-                div { class: "hero-panel-divider" }
-                div { class: "card-topline", "The shape" }
-                ul { class: "hero-today",
-                    li { "Local — it runs on your machine, nothing uploaded." }
-                    li { "Reversible — every step is one you can undo." }
-                    li { "Continual — it keeps learning as you go, without retraining." }
-                }
-                div { class: "hero-panel-divider" }
-                p { class: "hero-panel-note",
-                    "Drums are the first voice. Piano and other instruments are the next, on the same loop."
-                }
-            }
-        }
-    }
-}
-
-fn home_work_card(area: &crate::content::HomeWorkArea) -> Element {
-    rsx! {
-        article { class: "feature-card",
-            div { class: "card-topline", "{area.kicker}" }
-            h3 { "{area.title}" }
-            p { "{area.body}" }
-            ul {
-                for bullet in area.bullets {
-                    li { "{bullet}" }
-                }
-            }
-            div { class: "hero-actions",
-                {home_primary_action(area)}
-                if area.secondary_cta.is_some() {
-                    {home_secondary_action(area)}
-                }
-            }
-        }
-    }
-}
-
-fn home_primary_action(area: &crate::content::HomeWorkArea) -> Element {
-    match area.kicker {
-        "Play" => rsx! {
-            Link { class: "button button-primary", to: Route::Play {}, "{area.primary_cta}" }
-        },
-        "Drums" => rsx! {
-            Link { class: "button button-primary", to: Route::Listen {}, "{area.primary_cta}" }
-        },
-        _ => rsx! {
-            Link { class: "button button-primary", to: Route::HowItWorks {}, "{area.primary_cta}" }
-        },
-    }
-}
-
-fn home_secondary_action(area: &crate::content::HomeWorkArea) -> Element {
-    let Some(label) = area.secondary_cta else {
-        return rsx! {};
-    };
-
-    rsx! {
-        Link { class: "button button-secondary", to: Route::HowItWorks {}, "{label}" }
-    }
-}
-
-#[component]
-fn PageIntroBlock(kicker: &'static str, title: &'static str, summary: &'static str) -> Element {
-    rsx! {
-        section { class: "page-intro",
-            span { class: "eyebrow", "{kicker}" }
-            h1 { "{title}" }
-            p { "{summary}" }
-        }
-    }
-}
-
-#[component]
-fn BlogCardView(post: crate::content::BlogPost) -> Element {
+fn BlogCardView(post: BlogPost) -> Element {
     rsx! {
         article { class: "blog-card",
-            div { class: "card-topline", "Note / {post.series}" }
+            div { class: "card-topline", "Archive / {post.series}" }
             h3 { "{post.title}" }
             p { "{post.intro}" }
             div { class: "blog-card-footer",
@@ -744,18 +708,16 @@ fn SiteFooter() -> Element {
             div { class: "footer-inner",
                 div {
                     span { class: "section-kicker", "{SITE_NAME}" }
-                    p { "A musical system that learns your taste, on your own machine. Play EPM1, hear the drums, or read how the taste loop works." }
+                    p { "Discrete analog voice boards, a sensing key surface, physical sound sources and C instrument models." }
                 }
                 div { class: "footer-meta",
-                    span { "EPM1 plays in the browser" }
-                    span { "Drum takes on SoundCloud" }
-                    span { "Local and undoable" }
-                    span { "Drums first, more next" }
+                    span { "Hardware: designed and simulated" }
+                    span { "{PHYSICAL_NOTE}" }
                     a {
-                        href: EPM2_PUBLIC_REPO_URL,
+                        href: TONEWHEEL91_REPO_URL,
                         target: "_blank",
                         rel: "noopener noreferrer",
-                        "EPM2 hardware source"
+                        "tonewheel91 source"
                     }
                 }
             }
@@ -766,11 +728,14 @@ fn SiteFooter() -> Element {
 fn route_path(route: &Route) -> String {
     match route {
         Route::Home {} => "/".to_string(),
+        Route::Voice {} => "/voice".to_string(),
+        Route::VoiceModule { slug } => format!("/voice/{slug}"),
+        Route::Keyboard {} => "/keyboard".to_string(),
+        Route::Sources {} => "/sources".to_string(),
+        Route::Instruments {} => "/instruments".to_string(),
         Route::Notes {} => "/notes".to_string(),
         Route::NotePost { slug } => format!("/notes/{slug}"),
-        Route::Play {} => "/play".to_string(),
-        Route::Listen {} => "/listen".to_string(),
-        Route::HowItWorks {} => "/how-it-works".to_string(),
+        Route::About {} => "/about".to_string(),
     }
 }
 
